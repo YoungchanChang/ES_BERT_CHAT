@@ -9,6 +9,8 @@ PosFeature = namedtuple('PosFeature', [
     'idx_pos',
 ])
 
+NODE_POS = 0
+NODE_EXPRESSION = 1
 FEATURE_POS = 0
 FEATURE_EXPRESSION = 7
 IDX_POS_FEATURE = 1
@@ -105,8 +107,8 @@ class MeCabValueExtractor:
         self.tagger = _mecab.Tagger(argument)
 
     def parse(self, sentence):
-        token_list = sentence.split()
-        pos_feature_list = list()
+        sentence_space_token_list = sentence.split()
+        word_feature_list = list()
         lattice = _create_lattice(sentence)
 
         if not self.tagger.parse(lattice):
@@ -114,20 +116,17 @@ class MeCabValueExtractor:
 
         for idx_node, node in enumerate(lattice):
             node_surface, node_extract_feature = (node.surface, _extract_pos_expression(node))
-            for idx_token, token_item in enumerate(token_list):
-                if (index_string := token_item.find(node_surface)) != STRING_NOT_FOUND:
-                    replace_item = string_replacer(token_item, node_surface, index_string, nofail=False)
-                    token_list[idx_token] = replace_item
-                    pos_feature_list.append((node_surface,
-                                             PosFeature(pos=node_extract_feature[0], expression=node_extract_feature[1],
+            for idx_token, sentence_space_token_item in enumerate(sentence_space_token_list):
+                if (index_string := sentence_space_token_item.find(node_surface)) != STRING_NOT_FOUND:
+                    sentence_space_token_list[idx_token] = string_replacer(sentence_space_token_item, node_surface, index_string, nofail=False)
+                    word_feature_list.append((node_surface,
+                                             PosFeature(pos=node_extract_feature[NODE_POS], expression=node_extract_feature[NODE_EXPRESSION],
                                                         reading=node_surface, idx_original=idx_token,
                                                         idx_pos=idx_node)))
                     break
-        return pos_feature_list
-
+        return word_feature_list
 
     def get_sentence_pos(self, sentence):
-
         compound_include_list = self.parse(sentence)
         for compound_include_item in compound_include_list:
             if "+" in compound_include_item[IDX_POS_FEATURE].expression:
