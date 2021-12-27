@@ -83,19 +83,19 @@ def reverse_parse(parse_token):
 def reverse_compound_parse(parse_token):
     mecab_restoration = MeCabRestoration()
     tmp_compound = None
+
     for parse_token_item in parse_token:
         if not parse_token_item[IS_COMPOUND]:
             mecab_restoration.append(parse_token_item[IDX_COMPOUND_POS_FEATURE].idx_original, parse_token_item[IDX_TOKEN])
             tmp_compound = None
-        else:
-            if tmp_compound == parse_token_item[IDX_COMPOUND_POS_FEATURE].reading:
-                continue
+            continue
+
+        if tmp_compound != parse_token_item[IDX_COMPOUND_POS_FEATURE].reading:
             mecab_restoration.append(parse_token_item[IDX_COMPOUND_POS_FEATURE].idx_original, parse_token_item[IDX_COMPOUND_POS_FEATURE].reading)
             tmp_compound = parse_token_item[IDX_COMPOUND_POS_FEATURE].reading
 
-
-
     return mecab_restoration.mecab_reverse()
+
 
 class MeCabValueExtractor:
     def __init__(self, dicpath=''):
@@ -126,7 +126,7 @@ class MeCabValueExtractor:
                     break
         return word_feature_list
 
-    def get_sentence_pos(self, sentence):
+    def gen_compound_parse(self, sentence):
         compound_include_list = self.parse(sentence)
         for compound_include_item in compound_include_list:
             if "+" in compound_include_item[IDX_POS_FEATURE].expression:
@@ -140,7 +140,7 @@ class MeCabValueExtractor:
 
 
     def parse_compound(self, sentence):
-        compound_parse_list = [x for x in self.get_sentence_pos(sentence)]
+        compound_parse_list = [x for x in self.gen_compound_parse(sentence)]
         return compound_parse_list
 
 
@@ -148,15 +148,15 @@ if __name__ == "__main__":
     # user_sentence, parse_sentence, restore_sentence
     user_sentence = "나는 서울대병원에 가야했었어"
     mecab_value_extractor = MeCabValueExtractor()
-    # compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
-    # parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])
-    # print(parse_sentence)
-    # restore_sentence = reverse_compound_parse(compound_parse_list)
-    # print(restore_sentence)
+    compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
+    parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])
+    print(parse_sentence)
+    restore_sentence = reverse_compound_parse(compound_parse_list)
+    print(restore_sentence)
 
-    mecab_parsed = mecab_value_extractor.parse(user_sentence)
-    parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
-    restore_sentence = reverse_parse(mecab_parsed)
-    print("user sentence : " + user_sentence)
-    print("parse sentence : " + parse_sentence)
-    print("restore sentence : " + restore_sentence)
+    # mecab_parsed = mecab_value_extractor.parse(user_sentence)
+    # parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
+    # restore_sentence = reverse_parse(mecab_parsed)
+    # print("user sentence : " + user_sentence)
+    # print("parse sentence : " + parse_sentence)
+    # print("restore sentence : " + restore_sentence)
