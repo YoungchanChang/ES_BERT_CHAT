@@ -1,5 +1,17 @@
 import _mecab
 from collections import namedtuple, defaultdict
+import mecab
+
+Feature = namedtuple('Feature', [
+    'pos',
+    'semantic',
+    'has_jongseong',
+    'reading',
+    'type',
+    'start_pos',
+    'end_pos',
+    'expression',
+])
 
 PosFeature = namedtuple('PosFeature', [
     'pos',
@@ -11,8 +23,6 @@ PosFeature = namedtuple('PosFeature', [
 
 NODE_POS = 0
 NODE_EXPRESSION = 1
-FEATURE_POS = 0
-FEATURE_EXPRESSION = 7
 IDX_POS_FEATURE = 1
 IDX_COMPOUND_POS_FEATURE = 3
 IDX_TOKEN = 0
@@ -35,8 +45,13 @@ def _extract_pos_expression(node):
 
     # feature = <pos>,<semantic>,<has_jongseong>,<reading>,<type>,<start_pos>,<end_pos>,<expression>
     values = node.feature.split(',')
-    assert len(values) >= 8
-    return values[FEATURE_POS], values[FEATURE_EXPRESSION]
+    assert len(values) == 8
+
+    values = [value if value != '*' else None for value in values]
+    feature = dict(zip(Feature._fields, values))
+    feature['has_jongseong'] = {'T': True, 'F': False}.get(feature['has_jongseong'])
+
+    return Feature(**feature)
 
 
 class MeCabError(Exception):
@@ -115,13 +130,13 @@ class MeCabValueExtractor:
             raise MeCabError(self.tagger.what())
 
         for idx_node, node in enumerate(lattice):
-            node_surface, node_extract_feature = (node.surface, _extract_pos_expression(node))
+            node_extract_feature = _extract_pos_expression(node)
             for idx_token, sentence_space_token_item in enumerate(sentence_space_token_list):
-                if (index_string := sentence_space_token_item.find(node_surface)) != STRING_NOT_FOUND:
-                    sentence_space_token_list[idx_token] = string_replacer(sentence_space_token_item, node_surface, index_string, nofail=False)
-                    word_feature_list.append((node_surface,
-                                             PosFeature(pos=node_extract_feature[NODE_POS], expression=node_extract_feature[NODE_EXPRESSION],
-                                                        reading=node_surface, idx_original=idx_token,
+                if (index_string := sentence_space_token_item.find(node_extract_feature.reading)) != STRING_NOT_FOUND:
+                    sentence_space_token_list[idx_token] = string_replacer(sentence_space_token_item, node_extract_feature.reading, index_string, nofail=False)
+                    word_feature_list.append((node_extract_feature.reading,
+                                             PosFeature(pos=node_extract_feature.pos, expression=node_extract_feature.expression,
+                                                        reading=node_extract_feature.reading, idx_original=idx_token,
                                                         idx_pos=idx_node)))
                     break
         return word_feature_list
@@ -143,20 +158,13 @@ class MeCabValueExtractor:
         compound_parse_list = [x for x in self.gen_compound_parse(sentence)]
         return compound_parse_list
 
-
 if __name__ == "__main__":
     # user_sentence, parse_sentence, restore_sentence
     user_sentence = "나는 서울대병원에 가야했었어"
     mecab_value_extractor = MeCabValueExtractor()
-    compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
-    parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])
-    print(parse_sentence)
-    restore_sentence = reverse_compound_parse(compound_parse_list)
-    print(restore_sentence)
-
-    # mecab_parsed = mecab_value_extractor.parse(user_sentence)
-    # parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
-    # restore_sentence = reverse_parse(mecab_parsed)
-    # print("user sentence : " + user_sentence)
-    # print("parse sentence : " + parse_sentence)
-    # print("restore sentence : " + restore_sentence)
+    mecab_parsed = mecab_value_extractor.parse(user_sentence)
+    parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
+    restore_sentence = reverse_parse(mecab_parsed)
+    print("user sentence : " + user_sentence)
+    print("parse sentence : " + parse_sentence)
+    print("restore sentence : " + restore_sentence)
