@@ -136,11 +136,11 @@ class MeCabValueExtractor:
             raise MeCabError(self.tagger.what())
 
         for idx_node, node in enumerate(lattice):
-            node_extract_feature = _extract_pos_expression(node)
+            node_surface, node_extract_feature = node.surface, _extract_pos_expression(node)
             for idx_token, sentence_space_token_item in enumerate(sentence_space_token_list):
-                if (index_string := sentence_space_token_item.find(node_extract_feature.reading)) != STRING_NOT_FOUND:
-                    sentence_space_token_list[idx_token] = string_replacer(sentence_space_token_item, node_extract_feature.reading, index_string, nofail=False)
-                    word_feature_list.append((node_extract_feature.reading,
+                if (index_string := sentence_space_token_item.find(node_surface)) != STRING_NOT_FOUND:
+                    sentence_space_token_list[idx_token] = string_replacer(sentence_space_token_item, node_surface, index_string, nofail=False)
+                    word_feature_list.append((node_surface,
                                              PosFeature(pos=node_extract_feature.pos, semantic=node_extract_feature.semantic,
                                                         has_jongseong=node_extract_feature.has_jongseong, reading=node_extract_feature.reading,
                                                         type=node_extract_feature.type, start_pos=node_extract_feature.start_pos,
@@ -177,10 +177,10 @@ if __name__ == "__main__":
     restore_sentence = reverse_compound_parse(compound_parse_list)
     print(restore_sentence)
 
-    #     mecab_parsed = mecab_value_extractor.parse(user_sentence)
-    #     parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
-    #     restore_sentence = reverse_parse(mecab_parsed)
-    #     print("user sentence : " + user_sentence)
-    #     print("parse sentence : " + parse_sentence)
-    #     print("restore sentence : " + restore_sentence)
+    mecab_parsed = mecab_value_extractor.parse(user_sentence)
+    parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
+    restore_sentence = reverse_parse(mecab_parsed)
+    print("user sentence : " + user_sentence)
+    print("parse sentence : " + parse_sentence)
+    print("restore sentence : " + restore_sentence)
 
