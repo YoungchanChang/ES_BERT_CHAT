@@ -22,8 +22,8 @@ def get_sentence_entities():
 def write_csv(csv_list):
     with open('./test_file/call_center.csv', 'w', encoding='utf-8-sig', newline='') as writer_csv:
         writer = csv.writer(writer_csv, delimiter=',')
-        for csv_item in csv_list:
-            writer.writerow(csv_item)
+        for idx, csv_item in enumerate(csv_list):
+            writer.writerow([idx, *csv_item])
 
 
 if __name__ == "__main__":
