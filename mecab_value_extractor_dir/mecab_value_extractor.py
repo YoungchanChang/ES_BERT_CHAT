@@ -33,6 +33,7 @@ IDX_COMPOUND_POS_FEATURE = 3
 IDX_TOKEN = 0
 IS_COMPOUND = 2
 STRING_NOT_FOUND = -1
+pos_split = ["Compound", "Inflect"]
 
 def _create_lattice(sentence):
     lattice = _mecab.Lattice()
@@ -151,7 +152,7 @@ class MeCabValueExtractor:
     def gen_compound_parse(self, sentence):
         compound_include_list = self.parse(sentence)
         for compound_include_item in compound_include_list:
-            if "+" in compound_include_item[IDX_POS_FEATURE].expression:
+            if compound_include_item[IDX_POS_FEATURE].type in pos_split:
                 compound_item_list = compound_include_item[IDX_POS_FEATURE].expression.split("+")
                 for compound_item in compound_item_list:
                     word, pos_tag, _ = compound_item.split("/")
@@ -169,9 +170,17 @@ if __name__ == "__main__":
     # user_sentence, parse_sentence, restore_sentence
     user_sentence = "나는 서울대병원에 가야했었어"
     mecab_value_extractor = MeCabValueExtractor()
-    mecab_parsed = mecab_value_extractor.parse(user_sentence)
-    parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
-    restore_sentence = reverse_parse(mecab_parsed)
+    compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
+    parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])
     print("user sentence : " + user_sentence)
-    print("parse sentence : " + parse_sentence)
-    print("restore sentence : " + restore_sentence)
+    print(parse_sentence)
+    restore_sentence = reverse_compound_parse(compound_parse_list)
+    print(restore_sentence)
+
+    #     mecab_parsed = mecab_value_extractor.parse(user_sentence)
+    #     parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
+    #     restore_sentence = reverse_parse(mecab_parsed)
+    #     print("user sentence : " + user_sentence)
+    #     print("parse sentence : " + parse_sentence)
+    #     print("restore sentence : " + restore_sentence)
+
