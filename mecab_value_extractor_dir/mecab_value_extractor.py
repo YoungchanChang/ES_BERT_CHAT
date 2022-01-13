@@ -15,8 +15,13 @@ Feature = namedtuple('Feature', [
 
 PosFeature = namedtuple('PosFeature', [
     'pos',
-    'expression',
+    'semantic',
+    'has_jongseong',
     'reading',
+    'type',
+    'start_pos',
+    'end_pos',
+    'expression',
     'idx_original',
     'idx_pos',
 ])
@@ -135,9 +140,11 @@ class MeCabValueExtractor:
                 if (index_string := sentence_space_token_item.find(node_extract_feature.reading)) != STRING_NOT_FOUND:
                     sentence_space_token_list[idx_token] = string_replacer(sentence_space_token_item, node_extract_feature.reading, index_string, nofail=False)
                     word_feature_list.append((node_extract_feature.reading,
-                                             PosFeature(pos=node_extract_feature.pos, expression=node_extract_feature.expression,
-                                                        reading=node_extract_feature.reading, idx_original=idx_token,
-                                                        idx_pos=idx_node)))
+                                             PosFeature(pos=node_extract_feature.pos, semantic=node_extract_feature.semantic,
+                                                        has_jongseong=node_extract_feature.has_jongseong, reading=node_extract_feature.reading,
+                                                        type=node_extract_feature.type, start_pos=node_extract_feature.start_pos,
+                                                        end_pos=node_extract_feature.end_pos, expression=node_extract_feature.expression,
+                                                        idx_original=idx_token, idx_pos=idx_node)))
                     break
         return word_feature_list
 
