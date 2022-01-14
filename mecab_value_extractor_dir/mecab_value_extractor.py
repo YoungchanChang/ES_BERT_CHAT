@@ -29,9 +29,7 @@ PosFeature = namedtuple('PosFeature', [
 NODE_POS = 0
 NODE_EXPRESSION = 1
 IDX_POS_FEATURE = 1
-IDX_COMPOUND_POS_FEATURE = 3
 IDX_TOKEN = 0
-IS_COMPOUND = 2
 STRING_NOT_FOUND = -1
 pos_split = ["Compound", "Inflect"]
 
@@ -101,19 +99,23 @@ def reverse_parse(parse_token):
         mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_TOKEN])
     return mecab_restoration.mecab_reverse()
 
+
 def reverse_compound_parse(parse_token):
     mecab_restoration = MeCabRestoration()
     tmp_compound = None
+    idx_original = None
 
     for parse_token_item in parse_token:
-        if not parse_token_item[IS_COMPOUND]:
-            mecab_restoration.append(parse_token_item[IDX_COMPOUND_POS_FEATURE].idx_original, parse_token_item[IDX_TOKEN])
+        if parse_token_item[IDX_POS_FEATURE].type is None:
+            mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_POS_FEATURE].reading)
             tmp_compound = None
             continue
 
-        if tmp_compound != parse_token_item[IDX_COMPOUND_POS_FEATURE].reading:
-            mecab_restoration.append(parse_token_item[IDX_COMPOUND_POS_FEATURE].idx_original, parse_token_item[IDX_COMPOUND_POS_FEATURE].reading)
-            tmp_compound = parse_token_item[IDX_COMPOUND_POS_FEATURE].reading
+        if tmp_compound != parse_token_item[IDX_POS_FEATURE].reading or (idx_original != parse_token_item[IDX_POS_FEATURE].idx_original):
+            mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_POS_FEATURE].reading)
+            tmp_compound = parse_token_item[IDX_POS_FEATURE].reading
+            idx_original = parse_token_item[IDX_POS_FEATURE].idx_original
+
 
     return mecab_restoration.mecab_reverse()
 
@@ -156,10 +158,10 @@ class MeCabValueExtractor:
                 compound_item_list = compound_include_item[IDX_POS_FEATURE].expression.split("+")
                 for compound_item in compound_item_list:
                     word, pos_tag, _ = compound_item.split("/")
-                    yield word, pos_tag, True, compound_include_item[IDX_POS_FEATURE]
+                    yield word, compound_include_item[IDX_POS_FEATURE]
 
             else:
-                yield compound_include_item[IDX_POS_FEATURE].reading, compound_include_item[IDX_POS_FEATURE].pos, False, compound_include_item[IDX_POS_FEATURE]
+                yield compound_include_item[IDX_POS_FEATURE].reading, compound_include_item[IDX_POS_FEATURE]
 
 
     def parse_compound(self, sentence):
@@ -168,7 +170,8 @@ class MeCabValueExtractor:
 
 if __name__ == "__main__":
     # user_sentence, parse_sentence, restore_sentence
-    user_sentence = "나는 서울대병원에 가야했었어"
+    #
+    user_sentence = "ㅇㅇㅇ선생님. 네, 잠시만 기다려주세요."
     mecab_value_extractor = MeCabValueExtractor()
     compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
     parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])
@@ -177,10 +180,14 @@ if __name__ == "__main__":
     restore_sentence = reverse_compound_parse(compound_parse_list)
     print(restore_sentence)
 
-    mecab_parsed = mecab_value_extractor.parse(user_sentence)
-    parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
-    restore_sentence = reverse_parse(mecab_parsed)
-    print("user sentence : " + user_sentence)
-    print("parse sentence : " + parse_sentence)
-    print("restore sentence : " + restore_sentence)
+    if user_sentence != restore_sentence:
+        print(restore_sentence)
+
+
+    # mecab_parsed = mecab_value_extractor.parse(user_sentence)
+    # parse_sentence = " ".join([x[IDX_TOKEN] for x in mecab_parsed])
+    # restore_sentence = reverse_parse(mecab_parsed)
+    # print("user sentence : " + user_sentence)
+    # print("parse sentence : " + parse_sentence)
+    # print("restore sentence : " + restore_sentence)
 
