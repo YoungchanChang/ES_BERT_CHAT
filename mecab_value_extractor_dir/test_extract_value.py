@@ -39,8 +39,8 @@ def mecab_function_test():
 
     for csv_item in read_csv():
         # Do function
-        compound_parse_list = mecab_value_extractor.parse(csv_item[USER_SENTENCE])
-        restore_sentence = mve.reverse_parse(compound_parse_list)
+        compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
+        restore_sentence = mve.reverse_compound_parse(compound_parse_list)
 
         if csv_item[USER_SENTENCE] != restore_sentence:
             is_same = True
