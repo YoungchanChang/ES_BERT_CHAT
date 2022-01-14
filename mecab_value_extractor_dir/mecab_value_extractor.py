@@ -142,7 +142,7 @@ class MeCabValueExtractor:
                     sentence_space_token_list[idx_token] = string_replacer(sentence_space_token_item, node_surface, index_string, nofail=False)
                     word_feature_list.append((node_surface,
                                              PosFeature(pos=node_extract_feature.pos, semantic=node_extract_feature.semantic,
-                                                        has_jongseong=node_extract_feature.has_jongseong, reading=node_extract_feature.reading,
+                                                        has_jongseong=node_extract_feature.has_jongseong, reading=node_surface,
                                                         type=node_extract_feature.type, start_pos=node_extract_feature.start_pos,
                                                         end_pos=node_extract_feature.end_pos, expression=node_extract_feature.expression,
                                                         idx_original=idx_token, idx_pos=idx_node)))
