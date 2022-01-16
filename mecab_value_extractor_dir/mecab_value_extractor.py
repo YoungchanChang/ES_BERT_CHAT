@@ -32,7 +32,7 @@ IDX_POS_FEATURE = 1
 IDX_TOKEN = 0
 STRING_NOT_FOUND = -1
 pos_split = ["Compound", "Inflect"]
-noun_pos_list = ["NNG", "NNP", "NNB", "NNBC", "NR", "NP", "UNKNOWN"]
+noun_pos_list = ["NNG", "NNP", "UNKNOWN"]
 
 def _create_lattice(sentence):
     lattice = _mecab.Lattice()
@@ -171,7 +171,7 @@ class MeCabValueExtractor:
 if __name__ == "__main__":
     # user_sentence, parse_sentence, restore_sentence
     #
-    user_sentence = "네, 약국 대표자분 성함은 어떻게 되십니까?"
+    user_sentence = "예전 거를 탈퇴를 해서 새로 가입하라는 안내까지 받았는데 예전 약국에서 사용한 공인인증서는 사실 지금 없어요. 새로 다 받아버려서요."
     mecab_value_extractor = MeCabValueExtractor()
     compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
     noun_from_compound_list = [x for x in compound_parse_list if x[IDX_POS_FEATURE].pos in noun_pos_list]
