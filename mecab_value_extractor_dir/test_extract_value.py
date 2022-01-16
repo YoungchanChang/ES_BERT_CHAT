@@ -75,26 +75,27 @@ def get_sentence_entities_qa_form():
 
 
 def write_csv(csv_list):
-    with open('./test_file/call_center.csv', 'w', encoding='utf-8-sig', newline='') as writer_csv:
+    with open('./test_file/call_center_function_diff.csv', 'w', encoding='utf-8-sig', newline='') as writer_csv:
         writer = csv.writer(writer_csv, delimiter=',')
         for idx, csv_item in enumerate(csv_list):
             writer.writerow([idx, *csv_item])
 
 def read_csv():
-    with open('./test_file/call_center_restore_test.csv', 'r', encoding='utf-8-sig') as reader_csv:
+    with open('./test_file/call_center_function_check.csv', 'r', encoding='utf-8-sig') as reader_csv:
         reader = csv.reader(reader_csv, delimiter=',')
         return list(reader)
 
 def mecab_function_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
     tmp_list = []
-    is_same = False
 
     for csv_item in read_csv():
+        is_same = False
+
         # Do function
         compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
-        restore_sentence = mve.reverse_compound_parse(compound_parse_list)
-
+        restore_list = mve.reverse_compound_parse(compound_parse_list)
+        restore_sentence = " ".join(restore_list)
         if csv_item[USER_SENTENCE] != restore_sentence:
             is_same = True
 
@@ -102,10 +103,12 @@ def mecab_function_test():
     write_csv(tmp_list)
 
 if __name__ == "__main__":
+    mecab_function_test()
+
     # 1. get entity
-    sentence_entity = get_sentence_entities()
-    write_csv(sentence_entity)
+    # sentence_entity = get_sentence_entities()
+    # write_csv(sentence_entity)
 
     # 2. qa_form
-    sentence_entity = get_sentence_entities_qa_form()
-    write_csv(sentence_entity)
+    # sentence_entity = get_sentence_entities_qa_form()
+    # write_csv(sentence_entity)
