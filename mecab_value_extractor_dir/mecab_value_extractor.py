@@ -32,7 +32,7 @@ IDX_POS_FEATURE = 1
 IDX_TOKEN = 0
 STRING_NOT_FOUND = -1
 pos_split = ["Compound", "Inflect"]
-noun_pos_list = ["NNG", "NNP", "NNB", "NNBC", "NR", "NP"]
+noun_pos_list = ["NNG", "NNP", "NNB", "NNBC", "NR", "NP", "UNKNOWN"]
 
 def _create_lattice(sentence):
     lattice = _mecab.Lattice()
@@ -74,7 +74,7 @@ class MeCabRestoration:
         reverse_sentence = list()
         for key in sorted(self.data):
             reverse_sentence.append("".join(self.data[key]))
-        return " ".join(reverse_sentence)
+        return reverse_sentence
 
 
 def string_replacer(original_string, newstring, index, nofail=False):
@@ -116,7 +116,6 @@ def reverse_compound_parse(parse_token):
             mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_POS_FEATURE].reading)
             tmp_compound = parse_token_item[IDX_POS_FEATURE].reading
             idx_original = parse_token_item[IDX_POS_FEATURE].idx_original
-
 
     return mecab_restoration.mecab_reverse()
 
@@ -172,14 +171,15 @@ class MeCabValueExtractor:
 if __name__ == "__main__":
     # user_sentence, parse_sentence, restore_sentence
     #
-    user_sentence = "ㅇㅇㅇ선생님. 네, 잠시만 기다려주세요."
+    user_sentence = "네, 약국 대표자분 성함은 어떻게 되십니까?"
     mecab_value_extractor = MeCabValueExtractor()
     compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
-    parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list if x[IDX_POS_FEATURE].pos in noun_pos_list])
+    noun_from_compound_list = [x for x in compound_parse_list if x[IDX_POS_FEATURE].pos in noun_pos_list]
+    parse_sentence = " ".join([x[IDX_TOKEN] for x in noun_from_compound_list])
     print("user sentence : " + user_sentence)
     print("parsed sentence : " + parse_sentence)
-    restore_sentence = reverse_compound_parse(compound_parse_list)
-    print("restored sentence : " + restore_sentence)
+    restore_sentence = reverse_compound_parse(noun_from_compound_list)
+    print("restored sentence : " + " ".join(restore_sentence))
 
     if user_sentence != restore_sentence:
         print(restore_sentence)
