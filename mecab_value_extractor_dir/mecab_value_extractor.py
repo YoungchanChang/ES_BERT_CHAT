@@ -120,6 +120,16 @@ def reverse_compound_parse(parse_token):
     return mecab_restoration.mecab_reverse()
 
 
+def contain_pattern(pattern, find_tokens):
+    for i in range(len(find_tokens)-len(pattern)+1):
+        for j in range(len(pattern)):
+            if find_tokens[i+j][IDX_TOKEN] != pattern[j][IDX_TOKEN]:
+                break
+        else:
+            return i, i+len(pattern)
+    return False
+
+
 class MeCabValueExtractor:
     def __init__(self, dicpath=''):
         argument = ''
@@ -171,14 +181,23 @@ class MeCabValueExtractor:
 if __name__ == "__main__":
     # user_sentence, parse_sentence, restore_sentence
     #
-    user_sentence = "예전 거를 탈퇴를 해서 새로 가입하라는 안내까지 받았는데 예전 약국에서 사용한 공인인증서는 사실 지금 없어요. 새로 다 받아버려서요."
+
+
     mecab_value_extractor = MeCabValueExtractor()
+    user_sentence = "예전 거를 탈퇴를 해서 새로 가입하라는 안내까지 받았는데 예전 약국에서 사용한 공인인증서는 사실 지금 없어요. 새로 다 받아버려서요."
     compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
-    noun_from_compound_list = [x for x in compound_parse_list if x[IDX_POS_FEATURE].pos in noun_pos_list]
-    parse_sentence = " ".join([x[IDX_TOKEN] for x in noun_from_compound_list])
+
+    pattern_sentence = "공인인증서"
+    pattern_val = mecab_value_extractor.parse_compound(pattern_sentence)
+
+    # check if data contains another data
+    if contain_pattern(pattern_val, compound_parse_list):
+        print(pattern_sentence, " pattern parsed by mecab : "," ".join([x[IDX_TOKEN] for x in pattern_val]))
+
     print("user sentence : " + user_sentence)
+    parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])
     print("parsed sentence : " + parse_sentence)
-    restore_sentence = reverse_compound_parse(noun_from_compound_list)
+    restore_sentence = reverse_compound_parse(compound_parse_list)
     print("restored sentence : " + " ".join(restore_sentence))
 
     if user_sentence != restore_sentence:
