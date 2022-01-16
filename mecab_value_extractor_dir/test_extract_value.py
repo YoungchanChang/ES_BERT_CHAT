@@ -90,7 +90,7 @@ def read_csv():
 
 
 def read_txt():
-    with open("./entity_dir/call_center_entity.txt", "r", encoding='utf-8-sig') as file:
+    with open("./entity_dir/call_center_entity_mecab.txt", "r", encoding='utf-8-sig') as file:
         txt_list = file.read().splitlines()
         return sorted(list(txt_list), key=len, reverse=True)
 
@@ -120,7 +120,6 @@ def mecab_function_test():
     write_csv(tmp_list)
 
 
-
 def mecab_function_diff_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
     tmp_list = []
@@ -135,11 +134,11 @@ def mecab_function_diff_test():
 
         # 1. get entity from entity dictionary
         for read_item in read_txt():
-            pattern_val = mecab_value_extractor.parse_compound(read_item)
+            read_value, mecab_value = read_item.split(",")
 
             # 1-1. check if contains pattern
-            if pattern_idx := mve.contain_pattern(pattern_val, compound_parse_list):
-                entity_contain_list.append(read_item)
+            if pattern_idx := mve.contain_pattern(mecab_value.split(), compound_parse_list):
+                entity_contain_list.append(read_value)
 
                 # 1-2. Make blank for short word
                 for pattern_idx_item in range(pattern_idx[0], pattern_idx[1], 1):
@@ -172,14 +171,11 @@ def str_entity_mecab():
 
 
 if __name__ == "__main__":
-    str_entity_mecab()
-
-
-    # import time
-    # st = time.time()
-    # mecab_function_diff_test()
-    # et = time.time()
-    # print(et-st)
+    import time
+    st = time.time()
+    mecab_function_diff_test()
+    et = time.time()
+    print(et-st)
 
     # # 1. get entity
     # sentence_entity = get_sentence_entities()

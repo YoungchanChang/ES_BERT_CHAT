@@ -123,7 +123,7 @@ def reverse_compound_parse(parse_token):
 def contain_pattern(pattern, find_tokens):
     for i in range(len(find_tokens)-len(pattern)+1):
         for j in range(len(pattern)):
-            if find_tokens[i+j][IDX_TOKEN] != pattern[j][IDX_TOKEN]:
+            if find_tokens[i+j][IDX_TOKEN] != pattern[j]:
                 break
         else:
             return i, i+len(pattern)
