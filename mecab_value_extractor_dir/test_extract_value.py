@@ -6,6 +6,7 @@ import json
 import csv
 import mecab_value_extractor as mve
 USER_SENTENCE = 1
+ENTITY = 2
 QA_CUSTOMER = 0
 QA_SERVICE = 1
 
@@ -75,15 +76,17 @@ def get_sentence_entities_qa_form():
 
 
 def write_csv(csv_list):
-    with open('./test_file/call_center_function_diff.csv', 'w', encoding='utf-8-sig', newline='') as writer_csv:
+    with open('./test_file/call_center_entity.csv', 'w', encoding='utf-8-sig', newline='') as writer_csv:
         writer = csv.writer(writer_csv, delimiter=',')
         for idx, csv_item in enumerate(csv_list):
             writer.writerow([idx, *csv_item])
 
+
 def read_csv():
-    with open('./test_file/call_center_function_check.csv', 'r', encoding='utf-8-sig') as reader_csv:
+    with open('./test_file/call_center.csv', 'r', encoding='utf-8-sig') as reader_csv:
         reader = csv.reader(reader_csv, delimiter=',')
         return list(reader)
+
 
 def mecab_function_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
@@ -102,13 +105,35 @@ def mecab_function_test():
         tmp_list.append([csv_item[USER_SENTENCE], restore_sentence, is_same])
     write_csv(tmp_list)
 
-if __name__ == "__main__":
-    mecab_function_test()
 
-    # 1. get entity
+def mecab_function_diff_test():
+    mecab_value_extractor = mve.MeCabValueExtractor()
+    tmp_list = []
+
+    is_same_cnt = 0
+    for csv_item in read_csv():
+        is_same = False
+        # Do function
+        compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
+        noun_from_compound_list = [x for x in compound_parse_list if x[mve.IDX_POS_FEATURE].pos in mve.noun_pos_list]
+        noun_entity = mve.reverse_compound_parse(noun_from_compound_list)
+        str_noun_entity = ", ".join(noun_entity)
+        if csv_item[ENTITY] == str_noun_entity:
+            is_same_cnt += 1
+            is_same = True
+
+        tmp_list.append([csv_item[USER_SENTENCE], csv_item[ENTITY], str_noun_entity, is_same])
+    print(is_same_cnt, "/", len(read_csv()))
+    write_csv(tmp_list)
+
+
+if __name__ == "__main__":
+    mecab_function_diff_test()
+
+    # # 1. get entity
     # sentence_entity = get_sentence_entities()
     # write_csv(sentence_entity)
-
-    # 2. qa_form
+    #
+    # # 2. qa_form
     # sentence_entity = get_sentence_entities_qa_form()
     # write_csv(sentence_entity)
