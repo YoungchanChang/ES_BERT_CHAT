@@ -4,13 +4,14 @@ call_center data source : https://aihub.or.kr/aidata/30716
 import os
 import json
 import csv
+import re
 import mecab_value_extractor as mve
 USER_SENTENCE = 1
 ENTITY = 2
 QA_CUSTOMER = 0
 QA_SERVICE = 1
 FIRST_VAL = 0
-
+STRING_NOT_FOUND = -1
 
 def get_sentence_entities():
     for (path, dir, files) in os.walk("./"):
@@ -129,20 +130,21 @@ def mecab_function_diff_test():
         is_same = False
         # Do function
         compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
-
+        compound_parse_str = " ".join([x[0] for x in compound_parse_list])
         entity_contain_list = []
 
         # 1. get entity from entity dictionary
         for read_item in read_txt():
             read_value, mecab_value = read_item.split(",")
 
-            # 1-1. check if contains pattern
-            if pattern_idx := mve.contain_pattern(mecab_value.split(), compound_parse_list):
-                entity_contain_list.append(read_value)
+            # 1-1. find all match data for duplicate value
+            if mecab_find_list := re.findall(mecab_value, compound_parse_str):
+                for mecab_find_item in mecab_find_list:
 
-                # 1-2. Make blank for short word
-                for pattern_idx_item in range(pattern_idx[0], pattern_idx[1], 1):
-                    compound_parse_list[pattern_idx_item] = "*"
+                    # 1-2. get exact index and replace matching value
+                    if (pattern_idx := compound_parse_str.find(mecab_find_item)) != STRING_NOT_FOUND:
+                        compound_parse_str = mve.string_replacer(compound_parse_str, read_value, pattern_idx, nofail=False)
+                        entity_contain_list.append(read_value)
 
         entity_contain_list.sort()
 
@@ -176,6 +178,9 @@ if __name__ == "__main__":
     mecab_function_diff_test()
     et = time.time()
     print(et-st)
+
+
+
 
     # # 1. get entity
     # sentence_entity = get_sentence_entities()
