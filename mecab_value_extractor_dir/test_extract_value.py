@@ -11,7 +11,7 @@ ENTITY = 2
 QA_CUSTOMER = 0
 QA_SERVICE = 1
 FIRST_VAL = 0
-STRING_NOT_FOUND = -1
+
 
 def get_sentence_entities():
     for (path, dir, files) in os.walk("./"):
@@ -121,14 +121,6 @@ def mecab_function_test():
     write_csv(tmp_list)
 
 
-def get_mecab_value(compound_parse_str):
-    for read_item in read_txt():
-        read_value, mecab_value = read_item.split(",")
-        # 1-2. get exact index and replace matching value
-        if (pattern_idx := compound_parse_str.find(mecab_value)) != STRING_NOT_FOUND:
-            compound_parse_str = mve.string_replacer(compound_parse_str, read_value, pattern_idx, nofail=False)
-            return compound_parse_str, read_value
-    return False
 def mecab_function_diff_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
     tmp_list = []
@@ -138,16 +130,19 @@ def mecab_function_diff_test():
         is_same = False
         # Do function
         compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
-        compound_parse_str = " ".join([x[0] for x in compound_parse_list])
         entity_contain_list = []
 
         # 1. get entity from entity dictionary
-        mecab_match_val = True
-        while mecab_match_val:
-            if mecab_match_val := get_mecab_value(compound_parse_str):
-                compound_parse, read_value = mecab_match_val
-                compound_parse_str = compound_parse
+        for read_item in read_txt():
+            read_value, mecab_value = read_item.split(",")
+
+            # 1-1. check if contains pattern
+            if pattern_idx := mve.contain_pattern(mecab_value.split(), compound_parse_list):
                 entity_contain_list.append(read_value)
+
+                # 1-2. Make blank for short word
+                for pattern_idx_item in range(pattern_idx[0], pattern_idx[1], 1):
+                    compound_parse_list[pattern_idx_item] = "*"
 
         entity_contain_list.sort()
 
@@ -181,9 +176,6 @@ if __name__ == "__main__":
     mecab_function_diff_test()
     et = time.time()
     print(et-st)
-
-
-
 
     # # 1. get entity
     # sentence_entity = get_sentence_entities()
