@@ -9,6 +9,7 @@ USER_SENTENCE = 1
 ENTITY = 2
 QA_CUSTOMER = 0
 QA_SERVICE = 1
+FIRST_VAL = 0
 
 
 def get_sentence_entities():
@@ -87,6 +88,10 @@ def read_csv():
         reader = csv.reader(reader_csv, delimiter=',')
         return list(reader)
 
+def read_txt():
+    with open("./entity_dir/call_center_entity.txt", "r", encoding='utf-8-sig') as file:
+        txt_list = file.read().splitlines()
+        return sorted(list(txt_list), key=len, reverse=True)
 
 def mecab_function_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
@@ -106,29 +111,53 @@ def mecab_function_test():
     write_csv(tmp_list)
 
 
+
 def mecab_function_diff_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
     tmp_list = []
 
     is_same_cnt = 0
-    for csv_item in read_csv():
+    for idx, csv_item in enumerate(read_csv()):
         is_same = False
         # Do function
         compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
-        noun_from_compound_list = [x for x in compound_parse_list if x[mve.IDX_POS_FEATURE].pos in mve.noun_pos_list]
-        noun_entity = mve.reverse_compound_parse(noun_from_compound_list)
-        str_noun_entity = ", ".join(noun_entity)
-        if csv_item[ENTITY] == str_noun_entity:
+
+        entity_contain_list = []
+
+        # 1. get entity from entity dictionary
+        for read_item in read_txt():
+            pattern_val = mecab_value_extractor.parse_compound(read_item)
+
+            # 1-1. check if contains pattern
+            if pattern_idx := mve.contain_pattern(pattern_val, compound_parse_list):
+                entity_contain_list.append(read_item)
+
+                # 1-2. Make blank for short word
+                for pattern_idx_item in range(pattern_idx[0], pattern_idx[1], 1):
+                    compound_parse_list[pattern_idx_item] = "*"
+
+        entity_contain_list.sort()
+
+        # 2. get saved entity
+        csv_entity_list = [x.strip() for x in csv_item[2].split(",")]
+        csv_entity_list.sort()
+
+        if entity_contain_list == csv_entity_list:
+            print(idx, csv_item[USER_SENTENCE])
             is_same_cnt += 1
             is_same = True
 
-        tmp_list.append([csv_item[USER_SENTENCE], csv_item[ENTITY], str_noun_entity, is_same])
+        tmp_list.append([csv_item[USER_SENTENCE], csv_item[ENTITY], ", ".join(entity_contain_list), ", ".join(csv_entity_list), is_same])
     print(is_same_cnt, "/", len(read_csv()))
     write_csv(tmp_list)
 
 
 if __name__ == "__main__":
+    import time
+    st = time.time()
     mecab_function_diff_test()
+    et = time.time()
+    print(et-st)
 
     # # 1. get entity
     # sentence_entity = get_sentence_entities()
