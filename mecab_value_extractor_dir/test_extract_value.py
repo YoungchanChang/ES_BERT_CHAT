@@ -88,10 +88,19 @@ def read_csv():
         reader = csv.reader(reader_csv, delimiter=',')
         return list(reader)
 
+
 def read_txt():
     with open("./entity_dir/call_center_entity.txt", "r", encoding='utf-8-sig') as file:
         txt_list = file.read().splitlines()
         return sorted(list(txt_list), key=len, reverse=True)
+
+
+def write_txt(txt_list):
+    with open("./entity_dir/call_center_entity_mecab.txt", "w", encoding='UTF8') as file:
+        for txt_item in txt_list:
+            data = txt_item + "\n"
+            file.write(data)
+
 
 def mecab_function_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
@@ -152,12 +161,25 @@ def mecab_function_diff_test():
     write_csv(tmp_list)
 
 
+def str_entity_mecab():
+    mecab_value_extractor = mve.MeCabValueExtractor()
+    txt_list = []
+
+    for read_item in read_txt():
+        txt_list.append(read_item + "," + " ".join([x[mve.IDX_TOKEN] for x in mecab_value_extractor.parse_compound(read_item)]))
+
+    write_txt(txt_list)
+
+
 if __name__ == "__main__":
-    import time
-    st = time.time()
-    mecab_function_diff_test()
-    et = time.time()
-    print(et-st)
+    str_entity_mecab()
+
+
+    # import time
+    # st = time.time()
+    # mecab_function_diff_test()
+    # et = time.time()
+    # print(et-st)
 
     # # 1. get entity
     # sentence_entity = get_sentence_entities()
