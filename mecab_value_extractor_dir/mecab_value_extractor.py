@@ -32,6 +32,7 @@ IDX_POS_FEATURE = 1
 IDX_TOKEN = 0
 STRING_NOT_FOUND = -1
 pos_split = ["Compound", "Inflect"]
+noun_pos_list = ["NNG", "NNP", "NNB", "NNBC", "NR", "NP"]
 
 def _create_lattice(sentence):
     lattice = _mecab.Lattice()
@@ -174,11 +175,11 @@ if __name__ == "__main__":
     user_sentence = "ㅇㅇㅇ선생님. 네, 잠시만 기다려주세요."
     mecab_value_extractor = MeCabValueExtractor()
     compound_parse_list = mecab_value_extractor.parse_compound(user_sentence)
-    parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])
+    parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list if x[IDX_POS_FEATURE].pos in noun_pos_list])
     print("user sentence : " + user_sentence)
-    print(parse_sentence)
+    print("parsed sentence : " + parse_sentence)
     restore_sentence = reverse_compound_parse(compound_parse_list)
-    print(restore_sentence)
+    print("restored sentence : " + restore_sentence)
 
     if user_sentence != restore_sentence:
         print(restore_sentence)
