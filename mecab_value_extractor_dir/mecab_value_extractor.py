@@ -120,14 +120,15 @@ def reverse_compound_parse(parse_token):
     return mecab_restoration.mecab_reverse()
 
 
-def contain_pattern(pattern, find_tokens):
+def contain_pattern_list(pattern, find_tokens):
+    tmp_save_list = []
     for i in range(len(find_tokens)-len(pattern)+1):
         for j in range(len(pattern)):
             if find_tokens[i+j][IDX_TOKEN] != pattern[j]:
                 break
         else:
-            return i, i+len(pattern)
-    return False
+            tmp_save_list.append((i, i+len(pattern)))
+    return tmp_save_list
 
 
 class MeCabValueExtractor:
@@ -191,8 +192,8 @@ if __name__ == "__main__":
     pattern_val = mecab_value_extractor.parse_compound(pattern_sentence)
 
     # check if data contains another data
-    if contain_pattern(pattern_val, compound_parse_list):
-        print(pattern_sentence, " pattern parsed by mecab : "," ".join([x[IDX_TOKEN] for x in pattern_val]))
+    if pattern_idx := contain_pattern_list(pattern_val, compound_parse_list):
+        print(pattern_idx)
 
     print("user sentence : " + user_sentence)
     parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])

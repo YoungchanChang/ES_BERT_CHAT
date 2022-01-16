@@ -11,6 +11,7 @@ ENTITY = 2
 QA_CUSTOMER = 0
 QA_SERVICE = 1
 FIRST_VAL = 0
+BLANK_LIST = []
 
 
 def get_sentence_entities():
@@ -137,12 +138,14 @@ def mecab_function_diff_test():
             read_value, mecab_value = read_item.split(",")
 
             # 1-1. check if contains pattern
-            if pattern_idx := mve.contain_pattern(mecab_value.split(), compound_parse_list):
-                entity_contain_list.append(read_value)
+            if (pattern_list := mve.contain_pattern_list(mecab_value.split(), compound_parse_list)) != BLANK_LIST:
 
-                # 1-2. Make blank for short word
-                for pattern_idx_item in range(pattern_idx[0], pattern_idx[1], 1):
-                    compound_parse_list[pattern_idx_item] = "*"
+                for pattern_item in pattern_list:
+                    entity_contain_list.append(read_value)
+
+                    # 1-2. Make blank for short word
+                    for pattern_idx_item in range(pattern_item[0], pattern_item[1], 1):
+                        compound_parse_list[pattern_idx_item] = "*"
 
         entity_contain_list.sort()
 
