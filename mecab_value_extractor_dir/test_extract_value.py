@@ -121,6 +121,14 @@ def mecab_function_test():
     write_csv(tmp_list)
 
 
+def get_mecab_value(compound_parse_str):
+    for read_item in read_txt():
+        read_value, mecab_value = read_item.split(",")
+        # 1-2. get exact index and replace matching value
+        if (pattern_idx := compound_parse_str.find(mecab_value)) != STRING_NOT_FOUND:
+            compound_parse_str = mve.string_replacer(compound_parse_str, read_value, pattern_idx, nofail=False)
+            return compound_parse_str, read_value
+    return False
 def mecab_function_diff_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
     tmp_list = []
@@ -134,17 +142,12 @@ def mecab_function_diff_test():
         entity_contain_list = []
 
         # 1. get entity from entity dictionary
-        for read_item in read_txt():
-            read_value, mecab_value = read_item.split(",")
-
-            # 1-1. find all match data for duplicate value
-            if mecab_find_list := re.findall(mecab_value, compound_parse_str):
-                for mecab_find_item in mecab_find_list:
-
-                    # 1-2. get exact index and replace matching value
-                    if (pattern_idx := compound_parse_str.find(mecab_find_item)) != STRING_NOT_FOUND:
-                        compound_parse_str = mve.string_replacer(compound_parse_str, read_value, pattern_idx, nofail=False)
-                        entity_contain_list.append(read_value)
+        mecab_match_val = True
+        while mecab_match_val:
+            if mecab_match_val := get_mecab_value(compound_parse_str):
+                compound_parse, read_value = mecab_match_val
+                compound_parse_str = compound_parse
+                entity_contain_list.append(read_value)
 
         entity_contain_list.sort()
 
