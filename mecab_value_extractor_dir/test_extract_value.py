@@ -97,7 +97,7 @@ def read_csv():
 
 
 def read_txt():
-    with open("entity_dir/entity_dump/call_center_entity_mecab.txt", "r", encoding='utf-8-sig') as file:
+    with open("test_file/category_test.txt", "r", encoding='utf-8-sig') as file:
         txt_list = file.read().splitlines()
         return sorted(list(txt_list), key=len, reverse=True)
 
@@ -134,6 +134,19 @@ def search_tsv():
         yield category_list
 
 
+def read_mecab_val():
+    dirname = "./entity_dir/entity_mecab"
+    filenames = os.listdir(dirname)
+    for filename in filenames:
+        full_filename = os.path.join(dirname, filename)
+        ext = os.path.splitext(full_filename)[-1]
+
+        if ext == '.txt':
+            with open(f"{full_filename}", "r", encoding='utf-8-sig') as file:
+                txt_list = file.read().splitlines()
+                yield sorted(list(txt_list), key=len, reverse=True)
+
+
 def mecab_function_test():
     mecab_value_extractor = mve.MeCabValueExtractor()
     tmp_list = []
@@ -150,6 +163,26 @@ def mecab_function_test():
 
         tmp_list.append([csv_item[USER_SENTENCE], restore_sentence, is_same])
     write_csv(tmp_list)
+
+
+def mecab_function_category_test():
+    mecab_value_extractor = mve.MeCabValueExtractor()
+    entity_contain_list = []
+    for idx, read_item in enumerate(read_txt()):
+        compound_parse_list = mecab_value_extractor.parse_compound(read_item)
+
+        for mecab_saved_list in read_mecab_val():
+            for mecab_item in mecab_saved_list:
+                small_category, reading, mecab_reading = mecab_item.split(",")
+
+                if (pattern_list := mve.contain_pattern_list(mecab_reading.split(), compound_parse_list)) != BLANK_LIST:
+                    print(idx, " : " + small_category + " : " + reading  + " : " + read_item)
+                    for pattern_item in pattern_list:
+                        entity_contain_list.append([small_category, reading, read_item])
+
+                        # 1-2. Make blank for short word. 공인인증서가 저장된 뒤에 인증서가 저장되지 않도록 하는 코드
+                        for pattern_idx_item in range(pattern_item[0], pattern_item[1], 1):
+                            compound_parse_list[pattern_idx_item] = "*"
 
 
 def mecab_function_diff_test():
@@ -206,7 +239,7 @@ def str_entity_mecab():
 
 
 if __name__ == "__main__":
-    str_entity_mecab()
+    mecab_function_category_test()
 
     # import time
     # st = time.time()
