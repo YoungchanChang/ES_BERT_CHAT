@@ -129,6 +129,7 @@ def mecab_function_diff_test():
     is_same_cnt = 0
     for idx, csv_item in enumerate(read_csv()):
         is_same = False
+
         # Do function
         compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
         entity_contain_list = []
@@ -158,7 +159,7 @@ def mecab_function_diff_test():
             is_same_cnt += 1
             is_same = True
 
-        tmp_list.append([csv_item[USER_SENTENCE], csv_item[ENTITY], ", ".join(entity_contain_list), ", ".join(csv_entity_list), is_same])
+        tmp_list.append([csv_item[USER_SENTENCE], csv_item[ENTITY], ", ".join(entity_contain_list), is_same])
     print(is_same_cnt, "/", len(read_csv()))
     write_csv(tmp_list)
 
