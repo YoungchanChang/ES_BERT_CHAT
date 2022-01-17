@@ -17,3 +17,8 @@ Chatbot system using ElasticSearch and BERT
 # ES_BERT_CHAT usage
 
 https://docs.google.com/spreadsheets/d/1QCbxNuQQQKt0sBDjH4S0nckrJYVZjZE3L67KKxDj250/edit#gid=0
+
+
+# ES_BERT_CAHT Test Result
+
+https://docs.google.com/spreadsheets/d/15USxJuwk2R9T481eWTKuiWGS0U-f8BG6g_nrX8UkyhU/edit#gid=0
