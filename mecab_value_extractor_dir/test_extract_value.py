@@ -143,7 +143,7 @@ def mecab_function_diff_test():
                 for pattern_item in pattern_list:
                     entity_contain_list.append(read_value)
 
-                    # 1-2. Make blank for short word
+                    # 1-2. Make blank for short word. 공인인증서가 저장된 뒤에 인증서가 저장되지 않도록 하는 코드
                     for pattern_idx_item in range(pattern_item[0], pattern_item[1], 1):
                         compound_parse_list[pattern_idx_item] = "*"
 
@@ -153,7 +153,7 @@ def mecab_function_diff_test():
         csv_entity_list = [x.strip() for x in csv_item[2].split(",")]
         csv_entity_list.sort()
 
-        if entity_contain_list == csv_entity_list:
+        if all(elem in entity_contain_list for elem in csv_entity_list):
             print(idx, csv_item[USER_SENTENCE])
             is_same_cnt += 1
             is_same = True
