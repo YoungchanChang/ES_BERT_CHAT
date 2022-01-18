@@ -238,8 +238,49 @@ def str_entity_mecab():
         write_txt(search_list[FIRST_VAL][DIR_NAME], txt_list)
 
 
+def read_entity_example():
+    with open("./entity_dir/entity_example/tmp_test.txt", "r", encoding='utf-8-sig') as file:
+        tmp_test = file.read().splitlines()
+        return list(tmp_test)
+
+
+def split_string(word):
+    if isinstance(word, str):
+        return list(word)
+    if isinstance(word, tuple):
+        return [(char, word[mve.IDX_POS_FEATURE]) for char in word[mve.IDX_TOKEN]]
+
+
+def get_mecab_parse_by_example(reading_item, reading_sentence):
+    mecab_value_extractor = mve.MeCabValueExtractor()
+    compound_parse_list = mecab_value_extractor.parse_compound(reading_sentence)
+
+    reading_list = split_string(reading_item.replace(" ", ""))
+
+    mecab_example_reflect = []
+    for compound_parse_item in compound_parse_list:
+        compound_item = split_string(compound_parse_item)
+        mecab_example_reflect.extend(compound_item)
+
+    add_list = []
+    if (pattern_list := mve.contain_pattern_list(reading_list, mecab_example_reflect)) != BLANK_LIST:
+
+        for pattern_idx_item in range(pattern_list[FIRST_VAL][0], pattern_list[FIRST_VAL][1], 1):
+            add_list.append(mecab_example_reflect[pattern_idx_item])
+
+    reverse_word = mve.reverse_character(add_list)
+    return reverse_word
+
 if __name__ == "__main__":
-    mecab_function_category_test()
+    for tmp_item in read_entity_example():
+        reading_item, reading_sentence = tmp_item.split(",")
+        mecab_value_extractor = mve.MeCabValueExtractor()
+        compound_parse_list = mecab_value_extractor.parse_compound(reading_sentence)
+        word = get_mecab_parse_by_example(reading_item, reading_sentence)
+        reading_item_mecab = " ".join([x[mve.IDX_TOKEN] for x in mecab_value_extractor.parse_compound(reading_item)])
+
+
+    #mecab_function_category_test()
 
     # import time
     # st = time.time()
