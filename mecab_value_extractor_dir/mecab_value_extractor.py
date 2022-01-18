@@ -120,6 +120,20 @@ def reverse_compound_parse(parse_token):
     return mecab_restoration.mecab_reverse()
 
 
+def reverse_character(parse_token):
+    mecab_restoration = MeCabRestoration()
+    idx_pos = None
+    idx_original = None
+
+    for parse_token_item in parse_token:
+        if (parse_token_item[IDX_POS_FEATURE].idx_pos != idx_pos) or (parse_token_item[IDX_POS_FEATURE].idx_original != idx_original):
+            mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_POS_FEATURE].reading)
+            idx_pos = parse_token_item[IDX_POS_FEATURE].idx_pos
+            idx_original = parse_token_item[IDX_POS_FEATURE].idx_original
+
+    return " ".join(mecab_restoration.mecab_reverse())
+
+
 def contain_pattern_list(pattern, find_tokens):
     tmp_save_list = []
     for i in range(len(find_tokens)-len(pattern)+1):
