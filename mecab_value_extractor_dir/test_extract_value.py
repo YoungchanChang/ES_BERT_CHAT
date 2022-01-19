@@ -271,15 +271,14 @@ def get_mecab_parse_by_example(reading_item, reading_sentence):
     reverse_word = mve.reverse_character(add_list)
     return reverse_word
 
-if __name__ == "__main__":
+def mecab_example_word():
     for tmp_item in read_entity_example():
         reading_item, reading_sentence = tmp_item.split(",")
-        mecab_value_extractor = mve.MeCabValueExtractor()
-        compound_parse_list = mecab_value_extractor.parse_compound(reading_sentence)
         word = get_mecab_parse_by_example(reading_item, reading_sentence)
-        reading_item_mecab = " ".join([x[mve.IDX_TOKEN] for x in mecab_value_extractor.parse_compound(reading_item)])
+        return word
 
-
+if __name__ == "__main__":
+    print(mecab_example_word())
     #mecab_function_category_test()
 
     # import time
