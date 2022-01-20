@@ -1,6 +1,6 @@
 import _mecab
 from collections import namedtuple, defaultdict
-import mecab
+from ner_intent_dir.utility_string import string_replacer
 
 Feature = namedtuple('Feature', [
     'pos',
@@ -196,9 +196,9 @@ if __name__ == "__main__":
 
     print("user sentence : " + user_sentence)
     parse_sentence = " ".join([x[IDX_TOKEN] for x in compound_parse_list])
-    print("parsed sentence : " + parse_sentence)
+    print("mecab parsed sentence : " + parse_sentence)
     restore_sentence = reverse_compound_parse(compound_parse_list)
-    print("restored sentence : " + " ".join(restore_sentence))
+    print("restored token sentence : " + " ".join(restore_sentence))
 
     if user_sentence != restore_sentence:
         print(restore_sentence)
