@@ -15,7 +15,7 @@ import mecab
 mecab = mecab.MeCab()
 
 def read_txt():
-    with open("entity_dir/entity_dump/call_center_entity_mecab.txt", "r", encoding='utf-8-sig') as file:
+    with open("data_dir/entity_dump/call_center_entity_mecab.txt", "r", encoding='utf-8-sig') as file:
         txt_list = file.read().splitlines()
         return sorted(list(txt_list), key=len, reverse=True)
 
@@ -55,7 +55,7 @@ def search_tsv():
 
 
 def write_txt(dir_name, txt_list):
-    with open(f"entity_dir/entity_mecab/{dir_name}_mecab.txt", "w", encoding='UTF8') as file:
+    with open(f"data_dir/entity_mecab/{dir_name}_mecab.txt", "w", encoding='UTF8') as file:
         for txt_item in txt_list:
             data = txt_item + "\n"
             file.write(data)
@@ -73,7 +73,7 @@ def str_entity_mecab():
 
 
 def write_txt(dir_name, txt_list):
-    with open(f"entity_dir/entity_mecab/{dir_name}_mecab.txt", "w", encoding='UTF8') as file:
+    with open(f"data_dir/entity_mecab/{dir_name}_mecab.txt", "w", encoding='UTF8') as file:
         for txt_item in txt_list:
             data = txt_item + "\n"
             file.write(data)

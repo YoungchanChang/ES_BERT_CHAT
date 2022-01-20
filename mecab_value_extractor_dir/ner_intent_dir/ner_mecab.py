@@ -27,7 +27,7 @@ class EntityMeCab:
 
 
 if __name__ == "__main__":
-    entity_list_path = "../entity_dir/entity_dump/call_center_entity_mecab.txt"
+    entity_list_path = "../data_dir/entity_dump/call_center_entity_mecab.txt"
     e_s = EntityMeCab(entity_list_path)
     e_s_parse_list = e_s.get_mecab_list("약품 이름을 알려주세요")
     sentence_mecab_list, entity_contain_list = e_s_parse_list

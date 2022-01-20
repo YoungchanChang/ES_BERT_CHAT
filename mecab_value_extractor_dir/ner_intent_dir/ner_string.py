@@ -24,7 +24,7 @@ class EntityString:
 
 
 if __name__ == "__main__":
-    entity_list_path = "../entity_dir/entity_dump/call_center_entity.txt"
+    entity_list_path = "../data_dir/entity_dump/call_center_entity.txt"
     e_s = EntityString(entity_list_path)
     ner_list = e_s.get_entity_list("약품 이름을 알려주세요")
     print(ner_list)
