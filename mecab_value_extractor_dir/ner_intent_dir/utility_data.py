@@ -7,6 +7,13 @@ def read_txt(data_path):
         return sorted(list(txt_list), key=len, reverse=True)
 
 
+def write_txt(data_path, txt_list):
+    with open(data_path, "w", encoding='UTF8') as file:
+        for txt_item in txt_list:
+            data = txt_item + "\n"
+            file.write(data)
+
+
 def read_csv(data_dir):
     with open(data_dir, 'r', encoding='utf-8-sig') as reader_csv:
         reader = csv.reader(reader_csv, delimiter=',')
