@@ -1,12 +1,11 @@
 from utility_string import string_replacer
+from utility_data import read_txt
 STRING_NOT_FOUND = -1
 
 
 class EntityString:
     def __init__(self, data_path=''):
-        with open(data_path, "r", encoding='utf-8-sig') as file:
-            txt_reader = file.read().splitlines()
-            self.entity_list = sorted(list(txt_reader), key=len, reverse=True)
+        self.entity_list = read_txt(data_path)
 
     def get_sting_entity(self, sentence):
         for entity_item in self.entity_list:
