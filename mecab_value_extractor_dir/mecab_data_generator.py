@@ -28,15 +28,15 @@ def get_mecab_value(compound_parse_str):
     return False
 
 
-def search_tsv():
-    dirname = "./entity_dir/entity_original"
-    filenames = os.listdir(dirname)
+def search_tsv(dir_path):
+    filenames = os.listdir(dir_path)
     for filename in filenames:
-        full_filename = os.path.join(dirname, filename)
+        full_filename = os.path.join(dir_path, filename)
 
-        split_filename = os.path.splitext(full_filename)
+        split_filename = os.path.splitext(filename)
         ext = split_filename[EXTENSION]
         file_name = split_filename[FILENAME_ONLY]
+
 
         category_list = []
         # 1. tsv파일 읽기
@@ -52,18 +52,22 @@ def search_tsv():
                         break
                     category_list.append([file_name, large_category, sub_category, df_column_item, df_row])
 
-        yield category_list
+            yield category_list, file_name
 
 
-def str_entity_mecab():
+def str_entity_mecab(dir_path):
+    mecab_path = "./data_dir/intent_mecab/"
     mecab_value_extractor = mve.MeCabValueExtractor()
     txt_list = []
 
-    for search_list in search_tsv():
-        for search_list_item in search_list:
-            mecab_parsed_value = " ".join([x[mve.IDX_TOKEN] for x in mecab_value_extractor.parse_compound(search_list_item[MECAB_PARSE])])
-            txt_list.append(search_list_item[CATEGORY] + "," + search_list_item[MECAB_PARSE] + "," + mecab_parsed_value)
-        utility_data.write_txt(search_list[FIRST_VAL][DIR_NAME], txt_list)
+    for search_list in search_tsv(dir_path):
+        category_list, filename = search_list
+        for category_list_item in category_list:
+            mecab_parsed_value = " ".join([x[mve.IDX_TOKEN] for x in mecab_value_extractor.parse_compound(category_list_item[MECAB_PARSE])])
+            txt_list.append(category_list_item[CATEGORY] + "," + category_list_item[MECAB_PARSE] + "," + mecab_parsed_value)
+
+        mecab_category_path = mecab_path + filename + "_mecab.txt"
+        utility_data.write_txt(mecab_category_path, txt_list)
 
 
 def string_ner():
@@ -108,6 +112,7 @@ def string_ner():
 if __name__ == "__main__":
     import time
     st = time.time()
-    string_ner()
+    dir_path = "./data_dir/intent_original"
+    txt_list = str_entity_mecab(dir_path)
     et = time.time()
     print(et-st)
