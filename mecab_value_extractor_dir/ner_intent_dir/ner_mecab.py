@@ -1,5 +1,5 @@
 from mecab_value_extractor_dir import mecab_value_extractor as mve
-from utility_data import read_txt
+from mecab_value_extractor_dir.ner_intent_dir.utility_data import read_txt
 BLANK_LIST = []
 START_IDX = 0
 END_IDX = 1
@@ -12,23 +12,17 @@ class EntityMeCab:
         self.entity_list = read_txt(data_path)
         self.mecab_value_extractor = mve.MeCabValueExtractor()
 
-    def get_mecab_entity(self, sentence_mecab_list):
+    def get_mecab_list(self, sentence):
+        sentence_mecab_list = self.mecab_value_extractor.parse_compound(sentence)
+        entity_contain_list = []
+
         for entity_item in self.entity_list:
             reading, mecab_reading = entity_item.split(",")
             if (pattern_list := mve.contain_pattern_list(mecab_reading.split(), sentence_mecab_list)) != BLANK_LIST:
                 for pattern_item in pattern_list:
+                    entity_contain_list.append(reading)
                     for pattern_idx_item in range(pattern_item[START_IDX], pattern_item[END_IDX], ONE_WORD):
                         sentence_mecab_list[pattern_idx_item] = ("*", sentence_mecab_list[pattern_idx_item][POS_IDX])
-                return sentence_mecab_list, reading
-        return False
-
-    def get_mecab_list(self, sentence):
-        sentence_mecab_list = self.mecab_value_extractor.parse_compound(sentence)
-        entity_contain_list = []
-        while mecab_match_val := self.get_mecab_entity(sentence_mecab_list):
-            entity_erased_sentence_list, entity_item = mecab_match_val
-            sentence_mecab_list = entity_erased_sentence_list
-            entity_contain_list.append(entity_item)
         return sentence_mecab_list, entity_contain_list
 
 
