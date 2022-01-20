@@ -77,21 +77,6 @@ class MeCabRestoration:
         return reverse_sentence
 
 
-def string_replacer(original_string, newstring, index, nofail=False):
-    # raise an error if index is outside of the string
-    if not nofail and index not in range(len(original_string)):
-        raise ValueError("index outside given string")
-
-    # if not erroring, but the index is still not in the correct range..
-    if index < 0:  # add it to the beginning
-        return newstring + original_string
-    if index > len(original_string):  # add it to the end
-        return original_string + newstring
-
-    len_new_string = len(newstring)
-    blank_string = len(newstring) * "*"
-    # insert the new string between "slices" of the original
-    return original_string[:index] + blank_string + original_string[index + len_new_string:]
 
 
 def reverse_parse(parse_token):
