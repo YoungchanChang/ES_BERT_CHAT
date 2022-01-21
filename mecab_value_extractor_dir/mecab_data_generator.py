@@ -19,15 +19,6 @@ EXTENSION = -1
 mecab = mecab.MeCab()
 
 
-def get_mecab_value(compound_parse_str):
-    for read_item in utility_data.read_txt():
-        read_value, mecab_value = read_item.split(",")
-        if (pattern_idx := compound_parse_str.find(read_value)) != STRING_NOT_FOUND:
-            compound_parse_str = mve.string_replacer(compound_parse_str, read_value, pattern_idx, nofail=False)
-            return compound_parse_str, read_value
-    return False
-
-
 def search_tsv(dir_path):
     filenames = os.listdir(dir_path)
     for filename in filenames:
