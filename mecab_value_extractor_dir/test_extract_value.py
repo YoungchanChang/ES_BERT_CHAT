@@ -94,13 +94,13 @@ def read_csv():
 
 
 def read_txt():
-    with open("test_file/category_test.txt", "r", encoding='utf-8-sig') as file:
+    with open("test_dir/category_test.txt", "r", encoding='utf-8-sig') as file:
         txt_list = file.read().splitlines()
         return sorted(list(txt_list), key=len, reverse=True)
 
 
 def write_txt(dir_name, txt_list):
-    with open(f"entity_dir/entity_mecab/{dir_name}_mecab.txt", "w", encoding='UTF8') as file:
+    with open(f"data_dir/entity_mecab/{dir_name}_mecab.txt", "w", encoding='UTF8') as file:
         for txt_item in txt_list:
             data = txt_item + "\n"
             file.write(data)
@@ -157,50 +157,8 @@ def mecab_function_category_test():
                             compound_parse_list[pattern_idx_item] = "*"
 
 
-def mecab_function_diff_test():
-    mecab_value_extractor = mve.MeCabValueExtractor()
-    tmp_list = []
-
-    is_same_cnt = 0
-    for idx, csv_item in enumerate(read_csv()):
-        is_same = False
-
-        # Do function
-        compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
-        entity_contain_list = []
-
-        # 1. get entity from entity dictionary
-        for read_item in read_txt():
-            read_value, mecab_value = read_item.split(",")
-
-            # 1-1. check if contains pattern
-            if (pattern_list := mve.contain_pattern_list(mecab_value.split(), compound_parse_list)) != BLANK_LIST:
-
-                for pattern_item in pattern_list:
-                    entity_contain_list.append(read_value)
-
-                    # 1-2. Make blank for short word. 공인인증서가 저장된 뒤에 인증서가 저장되지 않도록 하는 코드
-                    for pattern_idx_item in range(pattern_item[0], pattern_item[1], 1):
-                        compound_parse_list[pattern_idx_item] = "*"
-
-        entity_contain_list.sort()
-
-        # 2. get saved entity
-        csv_entity_list = [x.strip() for x in csv_item[2].split(",")]
-        csv_entity_list.sort()
-
-        if all(elem in entity_contain_list for elem in csv_entity_list):
-            print(idx, csv_item[USER_SENTENCE])
-            is_same_cnt += 1
-            is_same = True
-
-        tmp_list.append([csv_item[USER_SENTENCE], csv_item[ENTITY], ", ".join(entity_contain_list), is_same])
-    print(is_same_cnt, "/", len(read_csv()))
-    write_csv(tmp_list)
-
-
 def read_entity_example():
-    with open("./entity_dir/entity_example/tmp_test.txt", "r", encoding='utf-8-sig') as file:
+    with open("data_dir/entity_example/tmp_test.txt", "r", encoding='utf-8-sig') as file:
         tmp_test = file.read().splitlines()
         return list(tmp_test)
 
@@ -239,14 +197,8 @@ def mecab_example_word():
         return word
 
 if __name__ == "__main__":
-    print(mecab_example_word())
-    #mecab_function_category_test()
-
-    # import time
-    # st = time.time()
-    # mecab_function_diff_test()
-    # et = time.time()
-    # print(et-st)
+    # print(mecab_example_word())
+    mecab_function_category_test()
 
     # # 1. get entity
     # sentence_entity = get_sentence_entities()
