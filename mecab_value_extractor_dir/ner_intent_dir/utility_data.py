@@ -1,4 +1,37 @@
+import os
 import csv
+import pandas as pd
+import numpy as np
+
+FILENAME_ONLY = 0
+EXTENSION = -1
+
+
+def search_tsv(dir_path):
+    filenames = os.listdir(dir_path)
+    for filename in filenames:
+        full_filename = os.path.join(dir_path, filename)
+
+        split_filename = os.path.splitext(filename)
+        ext = split_filename[EXTENSION]
+        file_name = split_filename[FILENAME_ONLY]
+
+
+        category_list = []
+        # 1. tsv파일 읽기
+        if ext == '.tsv':
+            # 1-1. 이름에 따라 대분류, 소분류 구분
+            entity, large_category, sub_category = file_name.split("_")
+            df = pd.read_csv(full_filename, sep='\t', encoding='utf-8-sig')
+
+            # 1-2. 모든 컬럼에 대해 수행
+            for df_column_item in df.columns:
+                for df_row in df[df_column_item]:
+                    if df_row is np.nan:
+                        break
+                    category_list.append([file_name, large_category, sub_category, df_column_item, df_row])
+
+            yield category_list, file_name
 
 
 def read_txt(data_path):
