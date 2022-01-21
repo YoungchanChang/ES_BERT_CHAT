@@ -70,45 +70,6 @@ def str_entity_mecab(dir_path):
         utility_data.write_txt(mecab_category_path, txt_list)
 
 
-def string_ner():
-    mecab_value_extractor = mve.MeCabValueExtractor()
-    tmp_list = []
-
-    is_same_cnt = 0
-    for idx, csv_item in enumerate(utility_data.read_csv()):
-        is_same = False
-
-        # Do function
-        compound_parse_list = mecab_value_extractor.parse_compound(csv_item[USER_SENTENCE])
-        compound_parse_str = " ".join([x[0] for x in compound_parse_list])
-        print(compound_parse_str)
-        entity_contain_list = []
-
-        save_data = csv_item[USER_SENTENCE]
-        mecab_match_val = True
-        while mecab_match_val:
-            if mecab_match_val := get_mecab_value(save_data):
-                compound_parse, read_value = mecab_match_val
-                save_data = compound_parse
-                print(idx, compound_parse)
-                entity_contain_list.append(read_value)
-
-        entity_contain_list.sort()
-
-        # 2. get saved entity
-        csv_entity_list = [x.strip() for x in csv_item[2].split(",")]
-        csv_entity_list.sort()
-
-        if all(elem in entity_contain_list for elem in csv_entity_list):
-            print(idx, csv_item[USER_SENTENCE])
-            is_same_cnt += 1
-            is_same = True
-
-        tmp_list.append([csv_item[USER_SENTENCE], csv_item[ENTITY], ", ".join(entity_contain_list), ", ".join(csv_entity_list), is_same])
-    print(is_same_cnt, "/", len(utility_data.read_csv()))
-    utility_data.write_csv(tmp_list)
-
-
 if __name__ == "__main__":
     import time
     st = time.time()
