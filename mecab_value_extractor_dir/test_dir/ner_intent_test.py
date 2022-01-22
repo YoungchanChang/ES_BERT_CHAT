@@ -1,11 +1,15 @@
 import os
 from mecab_value_extractor_dir.ner_intent_dir import ner_string, ner_mecab, utility_data
+from mecab_value_extractor_dir import mecab_value_extractor as mve
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+FILENAME_ONLY = 0
 USER_SENTENCE = 1
 ENTITY = 2
-
+LARGE_CATEGORY = 1
+SMALL_CATEGORY = 2
+BLANK_LIST = []
 
 def test_ner_string():
     entity_list_path = PARENT_DIR + "/entity_dir/entity_dump/call_center_entity.txt"
@@ -67,33 +71,63 @@ def ner_intent_match():
     example_data = "./entity_intent_example.txt"
     entity_dir_path = PARENT_DIR + "/data_dir/entity_mecab"
     intent_dir_path = PARENT_DIR + "/data_dir/intent_mecab"
-    write_dir = "tmp_mecab.csv"
-    filenames = os.listdir(entity_dir_path)
 
+    entity_filenames = os.listdir(entity_dir_path)
+    intent_filenames = os.listdir(intent_dir_path)
+
+    data_parse_list = []
+
+    # 1. 예시 데이터 불러오기
     for data_item in utility_data.read_txt(example_data):
-        print(data_item)
-
-        for entity_search_list in filenames:
+        data_copy = data_item
+        data_meta_info = {
+            "sentence" : data_item,
+            "entity_large_category": "",
+            "entity_small_category": "",
+            "entity" : [],
+            "intent_large_category": "",
+            "intent_small_category": "",
+            "intent" : [],
+            "parsed_sentence" : "",
+        }
+        # 2. 엔티티 매칭데이터 확인하기
+        for entity_search_list in entity_filenames:
             entity_data_path = os.path.join(entity_dir_path, entity_search_list)
             e_m = ner_mecab.EntityMeCab(entity_data_path)
-            sentence_mecab_list, entity_contain_list = e_m.get_mecab_list(data_item)
-            print(sentence_mecab_list, entity_contain_list)
+            sentence_mecab_list, entity_contain_list = e_m.get_mecab_list(data_copy)
 
-        # is_same_cnt = 0
-        # tmp_list = []
-        #
-        # for entity_category_item in entity_category_list:
-        #     entity_list = entity_category_item[TITLE].split("_")
-        #
-        #     for intent_search_list in utility_data.search_tsv(intent_dir_path):
-        #         intent_category_list, filename = intent_search_list
-        #         for intent_category_item in intent_category_list:
-        #             intent_list = intent_category_item[TITLE].split("_")
-        #             if entity_list[DATA_CATEGORY] == intent_list[DATA_CATEGORY]:
-        #                 josa_sbj = utility_string.get_marker(entity_category_item[SPECIFIC_WORD], "josa_sbj")
-        #                 example_data_gen.append(str(entity_category_item[SPECIFIC_WORD]) + str(josa_sbj) + " " + str(intent_category_item[SPECIFIC_WORD]))
-        #                 print(intent_category_item)
-        #
+            if entity_contain_list != BLANK_LIST:
+                restored_value_list = mve.reverse_compound_parse(sentence_mecab_list)
+                data_copy = " ".join(restored_value_list)
+                split_filename = os.path.splitext(entity_search_list)
+                file_name = split_filename[FILENAME_ONLY]
+                file_split_list = file_name.split("_")
+                data_meta_info["entity"] = entity_contain_list
+                data_meta_info["entity_large_category"] = file_split_list[LARGE_CATEGORY]
+                data_meta_info["entity_small_category"] = file_split_list[SMALL_CATEGORY]
+                data_meta_info["parsed_sentence"] = data_copy
+                break
+
+        # 3. 인텐트 매칭 데이터 확인하기
+        for intent_search_list in intent_filenames:
+            intent_data_path = os.path.join(intent_dir_path, intent_search_list)
+            i_m = ner_mecab.EntityMeCab(intent_data_path)
+            sentence_mecab_list, intent_contain_list = i_m.get_mecab_list(data_copy)
+
+            if intent_contain_list != BLANK_LIST:
+                restored_value_list = mve.reverse_compound_parse(sentence_mecab_list)
+                data_copy = " ".join(restored_value_list)
+                split_filename = os.path.splitext(intent_search_list)
+                file_name = split_filename[FILENAME_ONLY]
+                file_split_list = file_name.split("_")
+                data_meta_info["intent"] = intent_contain_list
+                data_meta_info["intent_large_category"] = file_split_list[LARGE_CATEGORY]
+                data_meta_info["intent_small_category"] = file_split_list[SMALL_CATEGORY]
+                data_meta_info["parsed_sentence"] = data_copy
+                break
+
+        data_parse_list.append(data_meta_info.values())
+    utility_data.write_csv("tmp.csv", data_parse_list)
 
 if __name__ == "__main__":
     import time
