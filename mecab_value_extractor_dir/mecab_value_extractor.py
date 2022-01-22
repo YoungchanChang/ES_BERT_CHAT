@@ -98,7 +98,7 @@ def reverse_compound_parse(parse_token):
             continue
 
         if tmp_compound != parse_token_item[IDX_POS_FEATURE].reading or (idx_original != parse_token_item[IDX_POS_FEATURE].idx_original):
-            mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_POS_FEATURE].reading)
+            mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_TOKEN])
             tmp_compound = parse_token_item[IDX_POS_FEATURE].reading
             idx_original = parse_token_item[IDX_POS_FEATURE].idx_original
 
