@@ -1,5 +1,5 @@
-from mecab_ner.mecab_value_extractor_dir.ner_intent_dir.utility_string import string_replacer
-from mecab_ner.mecab_value_extractor_dir.ner_intent_dir.utility_data import read_txt
+from mecab_value_extractor_dir.ner_intent_dir.utility_string import string_replacer
+from mecab_value_extractor_dir.ner_intent_dir.utility_data import read_txt
 STRING_NOT_FOUND = -1
 
 

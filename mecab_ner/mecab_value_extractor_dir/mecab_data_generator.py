@@ -1,6 +1,6 @@
 import mecab
 import mecab_value_extractor as mve
-from mecab_ner.mecab_value_extractor_dir.ner_intent_dir import utility_data, utility_string
+from mecab_value_extractor_dir.ner_intent_dir import utility_data, utility_string
 
 USER_SENTENCE = 1
 CATEGORY = 3

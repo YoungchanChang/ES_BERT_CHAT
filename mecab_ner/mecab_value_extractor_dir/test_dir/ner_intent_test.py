@@ -1,5 +1,5 @@
 import os
-from mecab_ner.mecab_value_extractor_dir.ner_intent_dir import utility_data, ner_string, ner_mecab
+from mecab_value_extractor_dir.ner_intent_dir import utility_data, ner_string, ner_mecab
 
 PARENT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
