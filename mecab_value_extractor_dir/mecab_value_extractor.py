@@ -93,7 +93,7 @@ def reverse_compound_parse(parse_token):
 
     for parse_token_item in parse_token:
         if parse_token_item[IDX_POS_FEATURE].type is None:
-            mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_POS_FEATURE].reading)
+            mecab_restoration.append(parse_token_item[IDX_POS_FEATURE].idx_original, parse_token_item[IDX_TOKEN])
             tmp_compound = None
             continue
 
