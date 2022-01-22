@@ -11,6 +11,8 @@ LARGE_CATEGORY = 1
 SMALL_CATEGORY = 2
 ENTITY_INTENT_CLASS = 0
 ONLY_ONE_VALUE = 0
+CATEGORY = 0
+VALUE = 1
 BLANK_LIST = []
 
 def test_ner_string():
@@ -96,7 +98,7 @@ def ner_intent_match():
                 split_filename = os.path.splitext(entity_search_list)
                 file_name = split_filename[FILENAME_ONLY]
                 file_split_list = file_name.split("_")
-                entity_list.append([file_split_list[ENTITY_INTENT_CLASS], file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], entity_contain_list[ONLY_ONE_VALUE]])
+                entity_list.append([file_split_list[ENTITY_INTENT_CLASS], file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], entity_contain_list[ONLY_ONE_VALUE][VALUE]])
 
         # 3. 인텐트 매칭 데이터 확인하기
         for intent_search_list in intent_filenames:
@@ -110,7 +112,7 @@ def ner_intent_match():
                 split_filename = os.path.splitext(intent_search_list)
                 file_name = split_filename[FILENAME_ONLY]
                 file_split_list = file_name.split("_")
-                intent_list.append([file_split_list[ENTITY_INTENT_CLASS], file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], intent_contain_list[ONLY_ONE_VALUE]])
+                intent_list.append([file_split_list[ENTITY_INTENT_CLASS], file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], intent_contain_list[ONLY_ONE_VALUE][CATEGORY]])
 
         # 4. 같은 카테고리에 있는 엔티티 인텐트 매칭하기
         for entity_item in entity_list:
