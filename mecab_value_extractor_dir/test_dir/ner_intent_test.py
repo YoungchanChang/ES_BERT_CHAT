@@ -9,6 +9,8 @@ USER_SENTENCE = 1
 ENTITY = 2
 LARGE_CATEGORY = 1
 SMALL_CATEGORY = 2
+ENTITY_INTENT_CLASS = 0
+ONLY_ONE_VALUE = 0
 BLANK_LIST = []
 
 def test_ner_string():
@@ -76,21 +78,12 @@ def ner_intent_match():
     intent_filenames = os.listdir(intent_dir_path)
 
     data_parse_list = []
-    entity_list = []
-    intent_list = []
+
     # 1. 예시 데이터 불러오기
     for data_item in utility_data.read_txt(example_data):
+        entity_list = []
+        intent_list = []
 
-        data_meta_info = {
-            "sentence" : data_item,
-            "entity_large_category": "",
-            "entity_small_category": "",
-            "entity" : [],
-            "intent_large_category": "",
-            "intent_small_category": "",
-            "intent" : [],
-            "parsed_sentence" : "",
-        }
         # 2. 엔티티 매칭데이터 확인하기
         for entity_search_list in entity_filenames:
             data_copy = data_item
@@ -103,7 +96,7 @@ def ner_intent_match():
                 split_filename = os.path.splitext(entity_search_list)
                 file_name = split_filename[FILENAME_ONLY]
                 file_split_list = file_name.split("_")
-                entity_list.append([file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], entity_contain_list])
+                entity_list.append([file_split_list[ENTITY_INTENT_CLASS], file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], entity_contain_list[ONLY_ONE_VALUE]])
 
         # 3. 인텐트 매칭 데이터 확인하기
         for intent_search_list in intent_filenames:
@@ -117,15 +110,17 @@ def ner_intent_match():
                 split_filename = os.path.splitext(intent_search_list)
                 file_name = split_filename[FILENAME_ONLY]
                 file_split_list = file_name.split("_")
-                intent_list.append([file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], intent_contain_list])
+                intent_list.append([file_split_list[ENTITY_INTENT_CLASS], file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], intent_contain_list[ONLY_ONE_VALUE]])
 
+        # 4. 같은 카테고리에 있는 엔티티 인텐트 매칭하기
         for entity_item in entity_list:
             for intent_item in intent_list:
-                if entity_item[0] == intent_item[0]:
-                    print(entity_item, intent_item)
+                if entity_item[LARGE_CATEGORY] == intent_item[LARGE_CATEGORY]:
+                    data_parse_list.append([data_item, *entity_item, *intent_item])
+                    print(data_item, *entity_item, *intent_item)
 
-        data_parse_list.append(data_meta_info.values())
     utility_data.write_csv("tmp.csv", data_parse_list)
+
 
 if __name__ == "__main__":
     import time
