@@ -40,10 +40,13 @@ def read_txt(data_path):
         return sorted(list(txt_list), key=len, reverse=True)
 
 
-def write_txt(data_path, txt_list):
+def write_txt(data_path, txt_list, is_sort=False):
+    if is_sort:
+        txt_list = sorted(list(txt_list), key=len, reverse=True)
+
     with open(data_path, "w", encoding='UTF8') as file:
         for txt_item in txt_list:
-            data = txt_item + "\n"
+            data = str(txt_item) + "\n"
             file.write(data)
 
 
