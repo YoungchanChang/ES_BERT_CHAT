@@ -1,6 +1,6 @@
 import _mecab
 from collections import namedtuple, defaultdict
-from mecab_value_extractor_dir.ner_intent_dir.utility_string import string_replacer
+from mecab_ner.mecab_value_extractor_dir.ner_intent_dir.utility_string import string_replacer
 
 Feature = namedtuple('Feature', [
     'pos',

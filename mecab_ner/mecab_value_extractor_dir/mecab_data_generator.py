@@ -1,6 +1,6 @@
 import mecab
 import mecab_value_extractor as mve
-from mecab_value_extractor_dir.ner_intent_dir import utility_data, utility_string
+from mecab_ner.mecab_value_extractor_dir.ner_intent_dir import utility_data, utility_string
 
 USER_SENTENCE = 1
 CATEGORY = 3
@@ -20,7 +20,7 @@ mecab = mecab.MeCab()
 
 
 def str_entity_mecab(dir_path):
-    mecab_path = "./data_dir/intent_mecab/"
+    mecab_path = "data_dir/intent_mecab/"
     mecab_value_extractor = mve.MeCabValueExtractor()
 
     for search_list in utility_data.search_tsv(dir_path):
@@ -36,15 +36,15 @@ def str_entity_mecab(dir_path):
 def main():
     import time
     st = time.time()
-    dir_path = "./data_dir/intent_original"
+    dir_path = "data_dir/intent_original"
     txt_list = str_entity_mecab(dir_path)
     et = time.time()
     print(et-st)
 
 
 def test_sentence_generator():
-    entity_dir_path = "./data_dir/entity_original"
-    intent_dir_path = "./data_dir/intent_original"
+    entity_dir_path = "data_dir/entity_original"
+    intent_dir_path = "data_dir/intent_original"
 
     example_data_gen = []
     for entity_search_list in utility_data.search_tsv(entity_dir_path):

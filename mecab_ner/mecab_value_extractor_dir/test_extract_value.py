@@ -17,7 +17,7 @@ BLANK_LIST = []
 
 
 def get_sentence_entities():
-    for (path, dir, files) in os.walk("./"):
+    for (path, dir, files) in os.walk("/"):
         for filename in files:
             ext = os.path.splitext(filename)[-1]
             if ext == '.json':
@@ -32,7 +32,7 @@ def get_sentence_entities():
 
 def get_sentence_entities_qa_form():
     qa_list = []
-    for (path, dir, files) in os.walk("./"):
+    for (path, dir, files) in os.walk("/"):
         for filename in files:
             ext = os.path.splitext(filename)[-1]
             if ext == '.json':

@@ -1,5 +1,5 @@
-from mecab_value_extractor_dir import mecab_value_extractor as mve
-from mecab_value_extractor_dir.ner_intent_dir.utility_data import read_txt
+from mecab_ner.mecab_value_extractor_dir import mecab_value_extractor as mve
+from mecab_ner.mecab_value_extractor_dir.ner_intent_dir.utility_data import read_txt
 BLANK_LIST = []
 START_IDX = 0
 END_IDX = 1
