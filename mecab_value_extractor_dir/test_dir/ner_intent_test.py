@@ -62,9 +62,42 @@ def test_ner_mecab():
     print(is_same_cnt, "/", len(utility_data.read_csv(csv_dir)))
     utility_data.write_csv(write_dir, tmp_list)
 
+
+def ner_intent_match():
+    example_data = "./entity_intent_example.txt"
+    entity_dir_path = PARENT_DIR + "/data_dir/entity_mecab"
+    intent_dir_path = PARENT_DIR + "/data_dir/intent_mecab"
+    write_dir = "tmp_mecab.csv"
+    filenames = os.listdir(entity_dir_path)
+
+    for data_item in utility_data.read_txt(example_data):
+        print(data_item)
+
+        for entity_search_list in filenames:
+            entity_data_path = os.path.join(entity_dir_path, entity_search_list)
+            e_m = ner_mecab.EntityMeCab(entity_data_path)
+            sentence_mecab_list, entity_contain_list = e_m.get_mecab_list(data_item)
+            print(sentence_mecab_list, entity_contain_list)
+
+        # is_same_cnt = 0
+        # tmp_list = []
+        #
+        # for entity_category_item in entity_category_list:
+        #     entity_list = entity_category_item[TITLE].split("_")
+        #
+        #     for intent_search_list in utility_data.search_tsv(intent_dir_path):
+        #         intent_category_list, filename = intent_search_list
+        #         for intent_category_item in intent_category_list:
+        #             intent_list = intent_category_item[TITLE].split("_")
+        #             if entity_list[DATA_CATEGORY] == intent_list[DATA_CATEGORY]:
+        #                 josa_sbj = utility_string.get_marker(entity_category_item[SPECIFIC_WORD], "josa_sbj")
+        #                 example_data_gen.append(str(entity_category_item[SPECIFIC_WORD]) + str(josa_sbj) + " " + str(intent_category_item[SPECIFIC_WORD]))
+        #                 print(intent_category_item)
+        #
+
 if __name__ == "__main__":
     import time
     st = time.time()
-    test_ner_mecab()
+    ner_intent_match()
     et = time.time()
     print(et-st)
