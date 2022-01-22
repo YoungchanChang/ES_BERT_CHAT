@@ -17,7 +17,7 @@ class EntityMeCab:
         entity_contain_list = []
 
         for entity_item in self.entity_list:
-            reading, mecab_reading = entity_item.split(",")
+            category, reading, mecab_reading = entity_item.split(",")
             if (pattern_list := mve.contain_pattern_list(mecab_reading.split(), sentence_mecab_list)) != BLANK_LIST:
                 for pattern_item in pattern_list:
                     entity_contain_list.append(reading)
