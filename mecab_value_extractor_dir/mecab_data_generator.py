@@ -22,9 +22,9 @@ mecab = mecab.MeCab()
 def str_entity_mecab(dir_path):
     mecab_path = "./data_dir/intent_mecab/"
     mecab_value_extractor = mve.MeCabValueExtractor()
-    txt_list = []
 
     for search_list in utility_data.search_tsv(dir_path):
+        txt_list = []
         category_list, filename = search_list
         for category_list_item in category_list:
             mecab_parsed_value = " ".join([x[mve.IDX_TOKEN] for x in mecab_value_extractor.parse_compound(category_list_item[MECAB_PARSE])])
@@ -68,5 +68,5 @@ def test_sentence_generator():
             file.write(data)
 
 if __name__ == "__main__":
-    # main()
-    test_sentence_generator()
+    main()
+    # test_sentence_generator()
