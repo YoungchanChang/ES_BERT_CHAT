@@ -76,10 +76,11 @@ def ner_intent_match():
     intent_filenames = os.listdir(intent_dir_path)
 
     data_parse_list = []
-
+    entity_list = []
+    intent_list = []
     # 1. 예시 데이터 불러오기
     for data_item in utility_data.read_txt(example_data):
-        data_copy = data_item
+
         data_meta_info = {
             "sentence" : data_item,
             "entity_large_category": "",
@@ -92,39 +93,36 @@ def ner_intent_match():
         }
         # 2. 엔티티 매칭데이터 확인하기
         for entity_search_list in entity_filenames:
+            data_copy = data_item
             entity_data_path = os.path.join(entity_dir_path, entity_search_list)
             e_m = ner_mecab.EntityMeCab(entity_data_path)
             sentence_mecab_list, entity_contain_list = e_m.get_mecab_list(data_copy)
 
+            # 2-1.카테고리에 해당되는 엔티티가 있을 때 저장
             if entity_contain_list != BLANK_LIST:
-                restored_value_list = mve.reverse_compound_parse(sentence_mecab_list)
-                data_copy = " ".join(restored_value_list)
                 split_filename = os.path.splitext(entity_search_list)
                 file_name = split_filename[FILENAME_ONLY]
                 file_split_list = file_name.split("_")
-                data_meta_info["entity"] = entity_contain_list
-                data_meta_info["entity_large_category"] = file_split_list[LARGE_CATEGORY]
-                data_meta_info["entity_small_category"] = file_split_list[SMALL_CATEGORY]
-                data_meta_info["parsed_sentence"] = data_copy
-                break
+                entity_list.append([file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], entity_contain_list])
 
         # 3. 인텐트 매칭 데이터 확인하기
         for intent_search_list in intent_filenames:
+            data_copy = data_item
             intent_data_path = os.path.join(intent_dir_path, intent_search_list)
             i_m = ner_mecab.EntityMeCab(intent_data_path)
             sentence_mecab_list, intent_contain_list = i_m.get_mecab_list(data_copy)
 
+            # 3-1.카테고리에 해당되는 엔티티가 있을 때 저장
             if intent_contain_list != BLANK_LIST:
-                restored_value_list = mve.reverse_compound_parse(sentence_mecab_list)
-                data_copy = " ".join(restored_value_list)
                 split_filename = os.path.splitext(intent_search_list)
                 file_name = split_filename[FILENAME_ONLY]
                 file_split_list = file_name.split("_")
-                data_meta_info["intent"] = intent_contain_list
-                data_meta_info["intent_large_category"] = file_split_list[LARGE_CATEGORY]
-                data_meta_info["intent_small_category"] = file_split_list[SMALL_CATEGORY]
-                data_meta_info["parsed_sentence"] = data_copy
-                break
+                intent_list.append([file_split_list[LARGE_CATEGORY], file_split_list[SMALL_CATEGORY], intent_contain_list])
+
+        for entity_item in entity_list:
+            for intent_item in intent_list:
+                if entity_item[0] == intent_item[0]:
+                    print(entity_item, intent_item)
 
         data_parse_list.append(data_meta_info.values())
     utility_data.write_csv("tmp.csv", data_parse_list)
