@@ -45,6 +45,8 @@ RUN ./tools/add-userdic.sh
 RUN make clean
 RUN make install
 
+
+
 # 4. 패키시 추가 및 경로 변경
 ## 4-1. install other package
 WORKDIR /user/local
