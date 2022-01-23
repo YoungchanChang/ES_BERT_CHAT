@@ -9,14 +9,17 @@ class EntityString:
 
     def get_sting_entity(self, sentence):
         for entity_item in self.entity_list:
-            if (pattern_idx := sentence.find(entity_item)) != STRING_NOT_FOUND:
+            pattern_idx = sentence.find(entity_item)
+            if pattern_idx != STRING_NOT_FOUND:
                 sentence = string_replacer(sentence, entity_item, pattern_idx, nofail=False)
                 return sentence, entity_item
         return False
 
     def get_entity_list(self, sentence):
         entity_contain_list = []
-        while mecab_match_val := self.get_sting_entity(sentence):
+        mecab_match_val = True
+        while mecab_match_val:
+            mecab_match_val = self.get_sting_entity(sentence)
             entity_erased_sentence, entity_item = mecab_match_val
             sentence = entity_erased_sentence
             entity_contain_list.append(entity_item)

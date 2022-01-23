@@ -1,23 +1,23 @@
 from mecab_value_extractor_dir.test_dir.ner_intent_test import get_entity_intent
 
 QUERY = 0
-ENTITY_LARGE_CATEGORY = 2
-ENTITY_SMALL_CATEGORY = 3
-ENTITY = 4
-INTENT_LARGE_CATEGORY = 6
-INTENT_SMALL_CATEGORY = 7
-INTENT = 8
+LARGE_CATEGORY = 1
+SMALL_CATEGORY = 2
+E_I_VAL = 3
+ENTITY = 0
+INTENT = 1
 
 
 def get_entity_intent_dict(query):
     return_dict = {}
-    if entity_intent := get_entity_intent(query):
+    entity_intent = get_entity_intent(query)
+    if entity_intent:
         return_dict['query'] = entity_intent[QUERY]
-        return_dict['entity_large_category'] = entity_intent[ENTITY_LARGE_CATEGORY]
-        return_dict['entity_small_category'] = entity_intent[ENTITY_SMALL_CATEGORY]
-        return_dict['entity'] = entity_intent[ENTITY]
-        return_dict['intent_large_category'] = entity_intent[INTENT_LARGE_CATEGORY]
-        return_dict['intent_small_category'] = entity_intent[INTENT_SMALL_CATEGORY]
-        return_dict['intent'] = entity_intent[INTENT]
+        return_dict['entity_large_category'] = entity_intent[ENTITY][LARGE_CATEGORY]
+        return_dict['entity_small_category'] = entity_intent[ENTITY][SMALL_CATEGORY]
+        return_dict['entity'] = entity_intent[ENTITY][E_I_VAL]
+        return_dict['intent_large_category'] = entity_intent[INTENT][LARGE_CATEGORY]
+        return_dict['intent_small_category'] = entity_intent[INTENT][SMALL_CATEGORY]
+        return_dict['intent'] = entity_intent[INTENT][E_I_VAL]
         return return_dict
     return False

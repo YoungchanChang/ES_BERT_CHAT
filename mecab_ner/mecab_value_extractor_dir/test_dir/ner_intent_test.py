@@ -116,7 +116,7 @@ def get_entity_intent(sentence):
     for entity_item in entity_list:
         for intent_item in intent_list:
             if entity_item[LARGE_CATEGORY] == intent_item[LARGE_CATEGORY]:
-                return sentence, *entity_item, *intent_item
+                return sentence, entity_item, intent_item
 
     return False
 

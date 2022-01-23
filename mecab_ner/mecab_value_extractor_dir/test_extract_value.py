@@ -146,8 +146,8 @@ def mecab_function_category_test():
         for mecab_saved_list in read_mecab_val():
             for mecab_item in mecab_saved_list:
                 small_category, reading, mecab_reading = mecab_item.split(",")
-
-                if (pattern_list := mve.contain_pattern_list(mecab_reading.split(), compound_parse_list)) != BLANK_LIST:
+                pattern_list = mve.contain_pattern_list(mecab_reading.split(), compound_parse_list)
+                if pattern_list != BLANK_LIST:
                     print(idx, " : " + small_category + " : " + reading  + " : " + read_item)
                     for pattern_item in pattern_list:
                         entity_contain_list.append([small_category, reading, read_item])
@@ -182,7 +182,8 @@ def get_mecab_parse_by_example(reading_item, reading_sentence):
         mecab_example_reflect.extend(compound_item)
 
     add_list = []
-    if (pattern_list := mve.contain_pattern_list(reading_list, mecab_example_reflect)) != BLANK_LIST:
+    pattern_list = mve.contain_pattern_list(reading_list, mecab_example_reflect)
+    if pattern_list != BLANK_LIST:
 
         for pattern_idx_item in range(pattern_list[FIRST_VAL][0], pattern_list[FIRST_VAL][1], 1):
             add_list.append(mecab_example_reflect[pattern_idx_item])

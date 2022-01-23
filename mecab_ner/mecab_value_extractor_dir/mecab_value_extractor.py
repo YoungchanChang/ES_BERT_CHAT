@@ -150,7 +150,8 @@ class MeCabValueExtractor:
         for idx_node, node in enumerate(lattice):
             node_surface, node_extract_feature = node.surface, _extract_pos_expression(node)
             for idx_token, sentence_space_token_item in enumerate(sentence_space_token_list):
-                if (index_string := sentence_space_token_item.find(node_surface)) != STRING_NOT_FOUND:
+                index_string = sentence_space_token_item.find(node_surface)
+                if index_string != STRING_NOT_FOUND:
                     sentence_space_token_list[idx_token] = string_replacer(sentence_space_token_item, node_surface, index_string, nofail=False)
                     word_feature_list.append((node_surface,
                                              PosFeature(pos=node_extract_feature.pos, semantic=node_extract_feature.semantic,
@@ -191,7 +192,8 @@ if __name__ == "__main__":
     pattern_val = mecab_value_extractor.parse_compound(pattern_sentence)
 
     # check if data contains another data
-    if pattern_idx := contain_pattern_list(pattern_val, compound_parse_list):
+    pattern_idx = contain_pattern_list(pattern_val, compound_parse_list)
+    if pattern_idx:
         print(pattern_idx)
 
     print("user sentence : " + user_sentence)
