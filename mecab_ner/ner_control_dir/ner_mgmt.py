@@ -4,8 +4,8 @@ QUERY = 0
 LARGE_CATEGORY = 1
 SMALL_CATEGORY = 2
 E_I_VAL = 3
-ENTITY = 0
-INTENT = 1
+ENTITY = 1
+INTENT = 2
 
 
 def get_entity_intent_dict(query):
