@@ -1,0 +1,13 @@
+# eat
+fastfood,eat,저랑 같이 {entity}{josa_obj} 먹어요. 제가 {entity} 먹는 영상 보여드릴께요.
+fruit,eat,제가 {entity}{josa_obj} 준비했어요. 짜잔~!
+korea,eat,저랑 같이 {entity}{josa_obj} 먹어요. 제가 근처에 {entity} 맛있는 곳 추천해드릴까요?
+tea,eat,저랑 같이 {entity}{josa_obj} 만들어 먹어요. 제가 {entity} 만들어 먹는 영상 보여드릴께요.
+vegetable,eat,제가 {entity}{josa_obj} 준비했어요. 짜잔~!
+
+# like
+fastfood,like,저도 {entity}{josa_sbj} 좋아요. 그런데 몸에 안 좋으니깐 조금만 먹어요.
+fruit,like,저도 {entity}{josa_sbj} 좋아해요. 어제 {entity}{josa_obj} 주문했어요.
+korea,like,저도 {entity}{josa_sbj} 좋아요. 한식은 언제나 맛있는 것 같아요. 혹시 좋아하시는 한식이 있으신가요?
+tea,like,저도 {entity}{josa_sbj} 좋아요. 밥먹고 차 한잔이 제 삶의 즐거움이거든요.
+vegetable,like,저도 {entity}{josa_sbj} 좋아요. 생으로 먹으면 맛이 좋지 않아서 요리로 만들어먹고 있어요.
