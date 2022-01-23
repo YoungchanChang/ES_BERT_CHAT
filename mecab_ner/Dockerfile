@@ -45,11 +45,6 @@ RUN ./tools/add-userdic.sh
 RUN make clean
 RUN make install
 
-# Mecab Python install
-WORKDIR /user/local
-RUN cp /usr/local/lib/mecab-0.996-ko-0.9.2/mecab-config /usr/bin
-RUN pip install python-mecab-ko
-
 # 4. 패키시 추가 및 경로 변경
 ## 4-1. install other package
 WORKDIR /user/local
