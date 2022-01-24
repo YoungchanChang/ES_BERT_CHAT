@@ -39,4 +39,4 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 ENV FLASK_APP chat_server_start.py
 ENV FLASK_RUN_HOST 0.0.0.0
 
-CMD gunicorn chat_server_start:app -b 0.0.0.0:9094 -w 2 --threads 2 --timeout 600
+CMD gunicorn chat_server_start:app --worker-class eventlet -w 1 -b 0.0.0.0:9094  --reload
