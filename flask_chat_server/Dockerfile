@@ -34,7 +34,9 @@ COPY . .
 RUN apt-get install -y locales
 RUN locale-gen ko_KR.UTF-8
 ENV LANG en_US.UTF-8
+ENV PYTHONIOENCODING=UTF-8
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+ENV PYTHONUNBUFFERED=1
 
 ENV FLASK_APP chat_server_start.py
 ENV FLASK_RUN_HOST 0.0.0.0
