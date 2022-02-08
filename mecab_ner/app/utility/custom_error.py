@@ -1,0 +1,4 @@
+
+
+class MeCabError(Exception):
+    pass
