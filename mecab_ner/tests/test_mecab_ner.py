@@ -1,5 +1,6 @@
 import mecab
 
+from mecab_ner.app.application.service.mecab_parser import MeCabParser
 from mecab_ner.app.domain.entity import MecabWordFeature
 
 mecab = mecab.MeCab()
@@ -20,3 +21,10 @@ def test_python_mecab_parse():
         mecab_parse_item.idx_pos = 0
 
     assert len(mecab_parse_list) == 7
+
+
+def test_mecab_parser():
+
+    mecab_parse_results = MeCabParser("나는 서울대병원에 갔어").get_parse_results()
+
+    assert len(mecab_parse_results) == 5
