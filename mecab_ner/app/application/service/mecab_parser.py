@@ -1,6 +1,6 @@
 import _mecab
 from collections import namedtuple
-from typing import List
+from typing import Generator
 
 from mecab_ner.app.domain.entity import MecabWordFeature
 from mecab_ner.app.utility.custom_error import MeCabError
@@ -72,8 +72,7 @@ class MeCabParser:
 
         return False
 
-    def get_parse_results(self) -> List:
-        mecab_parse_results = []
+    def gen_parse_sentence(self) -> Generator:
 
         lattice = _create_lattice(self.sentence)
 
@@ -87,6 +86,4 @@ class MeCabParser:
             idx_token = self._get_idx_token(mecab_word_feature)
             if idx_token is not False:
                 mecab_word_feature.idx_token = idx_token
-                mecab_parse_results.append(mecab_word_feature)
-
-        return mecab_parse_results
+                yield mecab_word_feature
