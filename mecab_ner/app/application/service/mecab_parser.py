@@ -82,7 +82,7 @@ class MeCabParser:
             mecab_word_feature.idx_pos = idx_node
 
             idx_token = self._get_idx_token(mecab_word_feature)
-            if idx_token:
+            if idx_token is not False:
                 mecab_word_feature.idx_token = idx_token
                 mecab_parse_results.append(mecab_word_feature)
 
