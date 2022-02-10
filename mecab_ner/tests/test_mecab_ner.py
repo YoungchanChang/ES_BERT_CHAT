@@ -1,6 +1,7 @@
 import mecab
 
 from mecab_ner.app.application.service.mecab_parser import MeCabParser
+from mecab_ner.app.application.service.mecab_storage import MeCabStorage
 from mecab_ner.app.domain.entity import MecabWordFeature
 
 mecab = mecab.MeCab()
@@ -28,3 +29,8 @@ def test_mecab_parse_results():
     mecab_parse_results = MeCabParser("나는 서울대병원에 갔어").get_parse_results()
 
     assert len(mecab_parse_results) == 7
+
+    restore_sentence = MeCabStorage().get_reverse_parse(mecab_parse_results)
+
+    assert len(restore_sentence) == 3
+
