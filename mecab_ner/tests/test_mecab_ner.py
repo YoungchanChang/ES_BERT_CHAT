@@ -23,7 +23,7 @@ def test_python_mecab_parse():
     assert len(mecab_parse_list) == 7
 
 
-def test_mecab_parser():
+def test_mecab_parse_results():
 
     mecab_parse_results = MeCabParser("나는 서울대병원에 갔어").get_parse_results()
 
