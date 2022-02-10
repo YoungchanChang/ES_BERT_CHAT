@@ -1,5 +1,6 @@
 import _mecab
 from collections import namedtuple
+from typing import List
 
 from mecab_ner.app.domain.entity import MecabWordFeature
 from mecab_ner.app.utility.custom_error import MeCabError
@@ -46,6 +47,8 @@ def _get_mecab_feature(node) -> MecabWordFeature:
 
 class MeCabParser:
 
+    """ 문장을 형태소 분석하는 클래스. 형태소 분석시 형태소 분석 토큰, 스페이스 분석 토큰의 인덱스 위치도 함께 저장 """
+
     def __init__(self, sentence: str, dicpath=''):
         argument = ''
 
@@ -69,7 +72,7 @@ class MeCabParser:
 
         return False
 
-    def get_parse_results(self):
+    def get_parse_results(self) -> List:
         mecab_parse_results = []
 
         lattice = _create_lattice(self.sentence)
