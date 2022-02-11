@@ -3,7 +3,7 @@ from collections import namedtuple, defaultdict
 
 NODE_POS = 0
 NODE_EXPRESSION = 1
-IDX_POS_FEATURE = 1
+MECAB_WORD_FEATURE = 1
 IDX_TOKEN = 0
 
 class MeCabStorage:
@@ -28,4 +28,23 @@ class MeCabStorage:
     def get_reverse_parse(self, parse_token):
         for parse_token_item in parse_token:
             self._append(parse_token_item.space_token_idx, parse_token_item.word)
+        return self._mecab_reverse()
+
+    def reverse_compound_parse(self, parse_token):
+        tmp_word = None
+        tmp_idx = None
+
+        for parse_token_item in parse_token:
+            if parse_token_item[MECAB_WORD_FEATURE].type is None:
+                self._append(parse_token_item[MECAB_WORD_FEATURE].space_token_idx, parse_token_item[MECAB_WORD_FEATURE].word)
+                tmp_word = None
+                continue
+
+            if tmp_word == parse_token_item[MECAB_WORD_FEATURE].word and (
+                    tmp_idx == parse_token_item[MECAB_WORD_FEATURE].space_token_idx):
+                continue
+            self._append(parse_token_item[MECAB_WORD_FEATURE].space_token_idx, parse_token_item[MECAB_WORD_FEATURE].word)
+            tmp_word = parse_token_item[MECAB_WORD_FEATURE].word
+            tmp_idx = parse_token_item[MECAB_WORD_FEATURE].space_token_idx
+
         return self._mecab_reverse()
