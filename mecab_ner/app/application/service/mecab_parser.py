@@ -106,5 +106,5 @@ class MeCabParser:
                     yield word, compound_include_item
 
             else:
-                yield compound_include_item.reading, compound_include_item
+                yield compound_include_item.word, compound_include_item
 
