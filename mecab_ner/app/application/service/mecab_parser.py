@@ -59,7 +59,9 @@ class MeCabParser:
         self.sentence = sentence
         self.sentence_token = self.sentence.split()
 
-    def _get_idx_token(self, mecab_word_feature: MecabWordFeature) -> int:
+    def _get_space_token_idx(self, mecab_word_feature: MecabWordFeature) -> int:
+
+        """ 스페이스로 토큰 분석한 인덱스 값 반환 """
 
         for idx_token, sentence_token_item in enumerate(self.sentence_token):
 
@@ -72,18 +74,20 @@ class MeCabParser:
 
         return False
 
-    def gen_parse_sentence(self) -> Generator:
+    def gen_mecab_token_feature(self) -> Generator:
+
+        """ 메캅으로 형태소 분석한 토큰 제너레이터로 반환 """
 
         lattice = _create_lattice(self.sentence)
 
         if not self.tagger.parse(lattice):
             raise MeCabError(self.tagger.what())
 
-        for idx_node, node in enumerate(lattice):
-            mecab_word_feature = _get_mecab_feature(node)
-            mecab_word_feature.idx_pos = idx_node
+        for mecab_token_idx, mecab_token in enumerate(lattice):
+            mecab_token_feature = _get_mecab_feature(mecab_token)
+            mecab_token_feature.mecab_token_idx = mecab_token_idx
 
-            idx_token = self._get_idx_token(mecab_word_feature)
-            if idx_token is not False:
-                mecab_word_feature.idx_token = idx_token
-                yield mecab_word_feature
+            space_token_idx = self._get_space_token_idx(mecab_token_feature)
+            if space_token_idx is not False:
+                mecab_token_feature.space_token_idx = space_token_idx
+                yield mecab_token_feature

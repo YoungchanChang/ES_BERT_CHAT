@@ -27,5 +27,5 @@ class MeCabStorage:
 
     def get_reverse_parse(self, parse_token):
         for parse_token_item in parse_token:
-            self._append(parse_token_item.idx_token, parse_token_item.word)
+            self._append(parse_token_item.space_token_idx, parse_token_item.word)
         return self._mecab_reverse()

@@ -18,6 +18,6 @@ class MecabWordFeature(MecabDomain):
     start_pos: str
     end_pos: str
     expression: str
-    idx_token: Optional[int] = None
-    idx_pos: Optional[int] = None
+    space_token_idx: Optional[int] = None
+    mecab_token_idx: Optional[int] = None
 
