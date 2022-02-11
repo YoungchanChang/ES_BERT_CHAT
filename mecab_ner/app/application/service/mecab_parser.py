@@ -94,7 +94,7 @@ class MeCabParser:
                 mecab_token_feature.space_token_idx = space_token_idx
                 yield mecab_token_feature
 
-    def gen_mecab_token_type_feature(self) -> Generator:
+    def gen_mecab_compound_token_feature(self) -> Generator:
 
         """ 메캅으로 형태소 분석한 토큰 제너레이터로 반환 """
 
