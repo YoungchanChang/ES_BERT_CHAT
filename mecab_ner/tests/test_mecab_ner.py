@@ -41,3 +41,6 @@ def test_gen_mecab_token_type_feature():
 
     assert len(mecab_parse_results) == 9
 
+    restore_sentence = MeCabStorage().reverse_compound_parse(mecab_parse_results)
+
+    assert len(restore_sentence) == 3
