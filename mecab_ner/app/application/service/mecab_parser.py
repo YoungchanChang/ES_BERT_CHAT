@@ -49,6 +49,8 @@ class MeCabParser:
 
     """ 문장을 형태소 분석하는 클래스. 형태소 분석시 형태소 분석 토큰, 스페이스 분석 토큰의 인덱스 위치도 함께 저장 """
 
+    type_list = ["Compound", "Inflect"]
+
     def __init__(self, sentence: str, dicpath=''):
         argument = ''
 
@@ -91,3 +93,18 @@ class MeCabParser:
             if space_token_idx is not False:
                 mecab_token_feature.space_token_idx = space_token_idx
                 yield mecab_token_feature
+
+    def gen_mecab_token_type_feature(self) -> Generator:
+
+        """ 메캅으로 형태소 분석한 토큰 제너레이터로 반환 """
+
+        for compound_include_item in self.gen_mecab_token_feature():
+            if compound_include_item.type in self.type_list:
+                compound_item_list = compound_include_item.expression.split("+")
+                for compound_item in compound_item_list:
+                    word, pos_tag, _ = compound_item.split("/")
+                    yield word, compound_include_item
+
+            else:
+                yield compound_include_item.reading, compound_include_item
+
