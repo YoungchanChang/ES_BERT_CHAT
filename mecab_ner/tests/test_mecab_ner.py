@@ -30,17 +30,17 @@ def test_gen_mecab_token_feature():
 
     assert len(mecab_parse_results) == 7
 
-    restore_sentence = MeCabStorage().get_reverse_parse(mecab_parse_results)
+    restore_sentence = MeCabStorage().restore_mecab_tokens(mecab_parse_results)
 
     assert len(restore_sentence) == 3
 
 
 def test_gen_mecab_token_type_feature():
 
-    mecab_parse_results = list(MeCabParser("나는 서울대병원에 갔어").gen_mecab_token_type_feature())
+    mecab_parse_results = list(MeCabParser("나는 서울대병원에 갔어").gen_mecab_compound_token_feature())
 
     assert len(mecab_parse_results) == 9
 
-    restore_sentence = MeCabStorage().reverse_compound_parse(mecab_parse_results)
+    restore_sentence = MeCabStorage().reverse_compound_tokens(mecab_parse_results)
 
     assert len(restore_sentence) == 3
