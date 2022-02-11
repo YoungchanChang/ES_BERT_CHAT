@@ -25,12 +25,12 @@ class MeCabStorage:
             reverse_sentence.append("".join(self.data[key]))
         return reverse_sentence
 
-    def get_reverse_parse(self, parse_token):
+    def restore_mecab_tokens(self, parse_token):
         for parse_token_item in parse_token:
             self._append(parse_token_item.space_token_idx, parse_token_item.word)
         return self._mecab_reverse()
 
-    def reverse_compound_parse(self, parse_token):
+    def reverse_compound_tokens(self, parse_token):
         tmp_word = None
         tmp_idx = None
 
