@@ -110,20 +110,30 @@ def test_storage_same():
 
 
 def test_mecab_ner():
-    sentence = "나는 감이 먹고 싶어"
-    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/storage"
-    mecab_entity_category_list = MeCabNer(entity_storage_path).get_category_entity(sentence=sentence)
+    """간단한 문장에서 엔티티 추출"""
+    sentence = "나는 딸기가 먹고 싶어"
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
+    mecab_entity_category_list = mecab_ner.get_category_entity()
 
     for mecab_category_item in mecab_entity_category_list:
+        entity_list = list(mecab_ner.get_entity(mecab_category_item.start_idx, mecab_category_item.end_idx))
+        entity_str = " ".join(entity_list)
         assert mecab_category_item.large_category == "food"
         assert mecab_category_item.medium_category == "fruit"
         assert mecab_category_item.small_category == "#과일"
-        assert mecab_category_item.entity == "감"
+        assert entity_str == "딸기"
 
-    intent_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/intents/storage"
-    mecab_intent_category_list = MeCabNer(intent_storage_path).get_category_entity(sentence=sentence)
-    for mecab_intent_category_item in mecab_intent_category_list:
+    intent_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/intents/mecab_storage"
+    mecab_ner_intents = MeCabNer(storage_mecab_path=intent_storage_path, sentence=sentence)
+    mecab_intents_category_list = mecab_ner_intents.get_category_entity()
+
+    for mecab_intent_category_item in mecab_intents_category_list:
+        intent_list = list(mecab_ner.get_entity(mecab_intent_category_item.start_idx, mecab_intent_category_item.end_idx))
+        intent_str = " ".join(intent_list)
         assert mecab_intent_category_item.large_category == "food"
         assert mecab_intent_category_item.medium_category == "eat"
         assert mecab_intent_category_item.small_category == "#먹고 싶다"
-        assert mecab_intent_category_item.entity == "먹 고 싶"
+        assert intent_str == "먹 고 싶"
+
+
