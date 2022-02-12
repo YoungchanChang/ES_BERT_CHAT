@@ -2,6 +2,8 @@ from typing import Generator
 
 import mecab
 from pathlib import Path
+
+from mecab_ner.app.application.service.mecab_generator import MecabGenerator
 from mecab_ner.app.application.service.mecab_parser import MeCabParser
 from mecab_ner.app.application.service.mecab_storage import MeCabStorage
 from mecab_ner.app.domain.entity import MecabWordFeature
@@ -52,14 +54,33 @@ def test_gen_mecab_token_type_feature():
 def test_read_category():
     storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/storage"
 
+    # clear data
+    m_g = MecabGenerator(storage_path=storage_path)
+    for path_item in Path(m_g.mecab_path).iterdir():
+        Path(path_item).unlink()
+    Path(m_g.mecab_path).rmdir()
+
+    # init data
+    m_g = MecabGenerator(storage_path=storage_path)
+
+    for data_item in m_g.gen_data_input():
+        large_category, medium_category, data_dict = data_item
+
+        assert isinstance(large_category, str)
+        assert isinstance(medium_category, str)
+        assert isinstance(data_dict, dict)
+
+    m_g.write_category()
+
+
+def test_storage_same():
+
+    """ mecab 저장 데이터와 storage 데이터의 길이가 같은지 확인 """
+
+    storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/storage"
+
     for path_item in Path(storage_path).iterdir():
-
-        txt_data = DataReader.read_txt(path_item)
-        for data_item in DataReader.read_category(txt_data):
-            title, contents = data_item
-
-            assert isinstance(title, str)
-            assert isinstance(contents, list)
-
-            for content_item in contents:
-                assert isinstance((MeCabParser(content_item).gen_mecab_compound_token_feature()), Generator)
+        stroage_data_len = len(DataReader.read_txt(path_item))
+        mecab_path_read = Path(storage_path).parent.joinpath(MecabGenerator.MECAB_STORAGE, path_item.name)
+        mecab_data_len = len(DataReader.read_txt(mecab_path_read))
+        assert stroage_data_len == mecab_data_len
