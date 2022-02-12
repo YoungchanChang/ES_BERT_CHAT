@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Generator
 from pathlib import Path
 from mecab_ner.app.application.service.mecab_parser import MeCabParser
 from mecab_ner.app.utility.custom_error import DataException, PathException
@@ -31,18 +31,15 @@ class MecabGenerator:
         self.storage_path = storage_path
         self.mecab_path = mecab_path
 
-    def read_category(self, data_list: List):
-
-        """ 카테고리에서 데이터 읽는 메소드 """
-
-        header, *other = data_list
+    def read_category(self, txt_data: List) -> Generator:
+        """ 데이터에서 헤더, 내용 나누어서 값 반환하는 메소드 """
+        header, *contents = txt_data
+        category_list = []
 
         if not header.startswith(self.CLASS_BOUNDARY):
             raise DataException("header should starts with #")
 
-        category_list = []
-
-        for data_item in other:
+        for data_item in contents:
             if self.CLASS_BOUNDARY in data_item:
                 yield header, sorted(category_list, key=len, reverse=True)
                 header = data_item
@@ -53,7 +50,7 @@ class MecabGenerator:
 
         yield header, sorted(category_list, key=len, reverse=True)
 
-    def validate_path(self, path):
+    def validate_path(self, path) -> None:
         """ 경로 검증 """
         if not Path(path).is_dir():
             raise PathException("Please check if directory")
@@ -65,11 +62,12 @@ class MecabGenerator:
             if file.suffix != self.FORMAT_SUFFIX:
                 raise PathException("Please check if suffix")
 
-    def get_word_from_feature(self, mecab_word):
+    def get_word_from_feature(self, mecab_word) -> str:
         """ 메캅 특성에서 단어만 검출"""
         return " ".join([x[self.FIRST_WORD] for x in list(MeCabParser(mecab_word).gen_mecab_compound_token_feature())])
 
-    def gen_data_input(self):
+    def gen_data_input(self) -> Generator:
+        """경로에 있는 데이터 읽은 뒤 카테고리 데이터셋으로 반환"""
         for path_item in Path(self.storage_path).iterdir():
             large_category, medium_category = path_item.stem.split("_")
             txt_data = DataReader.read_txt(path_item)
@@ -82,7 +80,8 @@ class MecabGenerator:
 
             yield large_category, medium_category, data_dict
 
-    def write_category(self):
+    def write_category(self) -> None:
+        """카테고리별로 데이터 저장하는 메소드"""
         for item in self.gen_data_input():
             large_category, medium_category, data_dict = item
             file_name = large_category + self.FORMAT_SPLITER + medium_category + self.FORMAT_SUFFIX
