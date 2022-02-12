@@ -137,3 +137,17 @@ def test_mecab_ner():
         assert intent_str == "먹 고 싶"
 
 
+def test_infer_mecab_ner():
+    sentence = "나는 신촌 딸기가 먹고 싶어"
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
+    mecab_entity_category_list = mecab_ner.get_category_entity()
+
+    for mecab_category_item in mecab_entity_category_list:
+        mecab_category_item = mecab_ner.infer_entity(mecab_category_item)
+        entity_list = list(mecab_ner.get_entity(mecab_category_item.start_idx, mecab_category_item.end_idx))
+        entity_str = " ".join(entity_list)
+        assert mecab_category_item.large_category == "food"
+        assert mecab_category_item.medium_category == "fruit"
+        assert mecab_category_item.small_category == "#과일"
+        assert entity_str == "신촌 딸기"
