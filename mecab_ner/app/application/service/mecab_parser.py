@@ -49,6 +49,7 @@ class MeCabParser:
 
     """ 문장을 형태소 분석하는 클래스. 형태소 분석시 형태소 분석 토큰, 스페이스 분석 토큰의 인덱스 위치도 함께 저장 """
 
+    FIRST_WORD = 0
     type_list = ["Compound", "Inflect"]
 
     def __init__(self, sentence: str, dicpath=''):
@@ -108,3 +109,6 @@ class MeCabParser:
             else:
                 yield compound_include_item.word, compound_include_item
 
+    def get_word_from_feature(self) -> str:
+        """ 메캅 특성에서 단어만 검출"""
+        return " ".join([x[self.FIRST_WORD] for x in list(self.gen_mecab_compound_token_feature())])

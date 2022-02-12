@@ -7,7 +7,6 @@ from mecab_ner.app.utility.data_reader import DataReader
 
 class MecabGenerator:
 
-    FIRST_WORD = 0
     ORIGIN_WORD = 0
     MECAB_WORD = 1
     FORMAT_LIMIT = 2
@@ -62,10 +61,6 @@ class MecabGenerator:
             if file.suffix != self.FORMAT_SUFFIX:
                 raise PathException("Please check if suffix")
 
-    def get_word_from_feature(self, mecab_word) -> str:
-        """ 메캅 특성에서 단어만 검출"""
-        return " ".join([x[self.FIRST_WORD] for x in list(MeCabParser(mecab_word).gen_mecab_compound_token_feature())])
-
     def gen_data_input(self) -> Generator:
         """경로에 있는 데이터 읽은 뒤 카테고리 데이터셋으로 반환"""
         for path_item in Path(self.storage_path).iterdir():
@@ -75,7 +70,7 @@ class MecabGenerator:
 
             for data_item in self.read_category(txt_data):
                 small_category, contents = data_item
-                mecab_parsed = [(x, self.get_word_from_feature(x)) for x in contents]
+                mecab_parsed = [(x, MeCabParser(x).get_word_from_feature()) for x in contents]
                 data_dict[small_category] = mecab_parsed
 
             yield large_category, medium_category, data_dict
