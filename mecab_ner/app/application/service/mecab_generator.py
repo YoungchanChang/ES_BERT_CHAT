@@ -30,16 +30,17 @@ class MecabGenerator:
         self.storage_path = storage_path
         self.mecab_path = mecab_path
 
-    def read_category(self, txt_data: List) -> Generator:
+    @staticmethod
+    def read_category(txt_data: List) -> Generator:
         """ 데이터에서 헤더, 내용 나누어서 값 반환하는 메소드 """
         header, *contents = txt_data
         category_list = []
 
-        if not header.startswith(self.CLASS_BOUNDARY):
+        if not header.startswith(MecabGenerator.CLASS_BOUNDARY):
             raise DataException("header should starts with #")
 
         for data_item in contents:
-            if self.CLASS_BOUNDARY in data_item:
+            if MecabGenerator.CLASS_BOUNDARY in data_item:
                 yield header, sorted(category_list, key=len, reverse=True)
                 header = data_item
                 category_list = []
@@ -61,23 +62,26 @@ class MecabGenerator:
             if file.suffix != self.FORMAT_SUFFIX:
                 raise PathException("Please check if suffix")
 
-    def gen_data_input(self) -> Generator:
+    @staticmethod
+    def gen_all_mecab_category_data(storage_path, need_parser=False) -> Generator:
         """경로에 있는 데이터 읽은 뒤 카테고리 데이터셋으로 반환"""
-        for path_item in Path(self.storage_path).iterdir():
+
+        for path_item in Path(storage_path).iterdir():
             large_category, medium_category = path_item.stem.split("_")
             txt_data = DataReader.read_txt(path_item)
             data_dict = {}
 
-            for data_item in self.read_category(txt_data):
+            for data_item in MecabGenerator.read_category(txt_data):
                 small_category, contents = data_item
-                mecab_parsed = [(x, MeCabParser(x).get_word_from_feature()) for x in contents]
-                data_dict[small_category] = mecab_parsed
+                if need_parser:
+                    contents = [(x, MeCabParser(x).get_word_from_feature()) for x in contents]
+                data_dict[small_category] = contents
 
             yield large_category, medium_category, data_dict
 
     def write_category(self) -> None:
         """카테고리별로 데이터 저장하는 메소드"""
-        for item in self.gen_data_input():
+        for item in self.gen_all_mecab_category_data(storage_path=self.storage_path, need_parser=True):
             large_category, medium_category, data_dict = item
             file_name = large_category + self.FORMAT_SPLITER + medium_category + self.FORMAT_SUFFIX
             mecab_write_path = self.mecab_path.joinpath(file_name)
