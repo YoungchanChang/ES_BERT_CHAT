@@ -109,6 +109,10 @@ class MeCabParser:
             else:
                 yield compound_include_item.word, compound_include_item
 
-    def get_word_from_feature(self) -> str:
+    def get_word_from_feature(self, is_list=False):
         """ 메캅 특성에서 단어만 검출"""
+
+        if is_list:
+            return [x[self.FIRST_WORD] for x in list(self.gen_mecab_compound_token_feature())]
+
         return " ".join([x[self.FIRST_WORD] for x in list(self.gen_mecab_compound_token_feature())])
