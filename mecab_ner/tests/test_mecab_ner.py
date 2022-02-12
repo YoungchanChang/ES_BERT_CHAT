@@ -4,6 +4,7 @@ import mecab
 from pathlib import Path
 
 from mecab_ner.app.application.service.mecab_generator import MecabGenerator
+from mecab_ner.app.application.service.mecab_ner import MeCabNer
 from mecab_ner.app.application.service.mecab_parser import MeCabParser
 from mecab_ner.app.application.service.mecab_storage import MeCabStorage
 from mecab_ner.app.domain.entity import MecabWordFeature
@@ -63,7 +64,7 @@ def test_read_category():
     # init data
     m_g = MecabGenerator(storage_path=storage_path)
 
-    for data_item in m_g.gen_data_input():
+    for data_item in m_g.gen_all_mecab_category_data(m_g.storage_path, need_parser=True):
         large_category, medium_category, data_dict = data_item
 
         assert isinstance(large_category, str)
@@ -84,3 +85,13 @@ def test_storage_same():
         mecab_path_read = Path(storage_path).parent.joinpath(MecabGenerator.MECAB_STORAGE, path_item.name)
         mecab_data_len = len(DataReader.read_txt(mecab_path_read))
         assert stroage_data_len == mecab_data_len
+
+
+def test_mecab_ner():
+    sentence = "나는 감이 먹고 싶어"
+    mecab_category_list = MeCabNer().get_category_entity(sentence=sentence)
+    for mecab_category_item in mecab_category_list:
+        assert mecab_category_item.large_category == "food"
+        assert mecab_category_item.medium_category == "fruit"
+        assert mecab_category_item.small_category == "#과일"
+        assert mecab_category_item.entity == "감"
