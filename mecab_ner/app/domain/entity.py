@@ -27,4 +27,5 @@ class MecabCategory(MecabDomain):
     large_category: str
     medium_category: str
     small_category: str
-    entity: str
+    start_idx: int
+    end_idx: int
