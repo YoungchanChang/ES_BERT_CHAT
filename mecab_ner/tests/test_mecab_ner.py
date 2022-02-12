@@ -1,8 +1,11 @@
-import mecab
+from typing import Generator
 
+import mecab
+from pathlib import Path
 from mecab_ner.app.application.service.mecab_parser import MeCabParser
 from mecab_ner.app.application.service.mecab_storage import MeCabStorage
 from mecab_ner.app.domain.entity import MecabWordFeature
+from mecab_ner.app.utility.data_reader import DataReader
 
 mecab = mecab.MeCab()
 
@@ -44,3 +47,19 @@ def test_gen_mecab_token_type_feature():
     restore_sentence = MeCabStorage().reverse_compound_tokens(mecab_parse_results)
 
     assert len(restore_sentence) == 3
+
+
+def test_read_category():
+    storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/storage"
+
+    for path_item in Path(storage_path).iterdir():
+
+        txt_data = DataReader.read_txt(path_item)
+        for data_item in DataReader.read_category(txt_data):
+            title, contents = data_item
+
+            assert isinstance(title, str)
+            assert isinstance(contents, list)
+
+            for content_item in contents:
+                assert isinstance((MeCabParser(content_item).gen_mecab_compound_token_feature()), Generator)
