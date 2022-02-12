@@ -61,10 +61,11 @@ class MeCabNer:
         for step_idx in range(start_idx, end_idx, self.ONE_WORD):
             yield self.mecab_parsed_list[step_idx][0]
 
-    def infer_entity(self, mecab_category_item: MecabCategory):
+    def infer_entity(self, mecab_category_item: MecabCategory) -> MecabCategory:
         for idx_range in range(mecab_category_item.start_idx - 1, 0, -1):
             if self.mecab_parsed_list[idx_range][1].pos in ["NNG", "NNP"]:
                 mecab_category_item.start_idx = self.mecab_parsed_list[idx_range][1].mecab_token_idx
                 continue
             break
+        return mecab_category_item
 
