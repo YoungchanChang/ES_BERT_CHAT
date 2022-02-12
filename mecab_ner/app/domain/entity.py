@@ -21,3 +21,10 @@ class MecabWordFeature(MecabDomain):
     space_token_idx: Optional[int] = None
     mecab_token_idx: Optional[int] = None
 
+
+@dataclass
+class MecabCategory(MecabDomain):
+    large_category: str
+    medium_category: str
+    small_category: str
+    entity: str
