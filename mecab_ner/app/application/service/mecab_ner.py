@@ -15,9 +15,7 @@ class MeCabNer:
     MECAB_FEATURE_IDX = 1
     WORD_IDX = 0
 
-    def __init__(self):
-
-        storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/storage"
+    def __init__(self, storage_path):
 
         self.mecab_generator = MecabGenerator(storage_path=storage_path)
         self.gen_all_mecab_category_data = self.mecab_generator.gen_all_mecab_category_data(storage_path=self.mecab_generator.mecab_path, need_parser=False)
