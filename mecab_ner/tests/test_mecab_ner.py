@@ -74,6 +74,28 @@ def test_read_category():
     m_g.write_category()
 
 
+def test_read_intent_category():
+    storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/intents/storage"
+
+    # clear data
+    m_g = MecabGenerator(storage_path=storage_path)
+    for path_item in Path(m_g.mecab_path).iterdir():
+        Path(path_item).unlink()
+    Path(m_g.mecab_path).rmdir()
+
+    # init data
+    m_g = MecabGenerator(storage_path=storage_path)
+
+    for data_item in m_g.gen_all_mecab_category_data(m_g.storage_path, need_parser=True):
+        large_category, medium_category, data_dict = data_item
+
+        assert isinstance(large_category, str)
+        assert isinstance(medium_category, str)
+        assert isinstance(data_dict, dict)
+
+    m_g.write_category()
+
+
 def test_storage_same():
 
     """ mecab 저장 데이터와 storage 데이터의 길이가 같은지 확인 """
@@ -89,9 +111,19 @@ def test_storage_same():
 
 def test_mecab_ner():
     sentence = "나는 감이 먹고 싶어"
-    mecab_category_list = MeCabNer().get_category_entity(sentence=sentence)
-    for mecab_category_item in mecab_category_list:
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/storage"
+    mecab_entity_category_list = MeCabNer(entity_storage_path).get_category_entity(sentence=sentence)
+
+    for mecab_category_item in mecab_entity_category_list:
         assert mecab_category_item.large_category == "food"
         assert mecab_category_item.medium_category == "fruit"
         assert mecab_category_item.small_category == "#과일"
         assert mecab_category_item.entity == "감"
+
+    intent_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/intents/storage"
+    mecab_intent_category_list = MeCabNer(intent_storage_path).get_category_entity(sentence=sentence)
+    for mecab_intent_category_item in mecab_intent_category_list:
+        assert mecab_intent_category_item.large_category == "food"
+        assert mecab_intent_category_item.medium_category == "eat"
+        assert mecab_intent_category_item.small_category == "#먹고 싶다"
+        assert mecab_intent_category_item.entity == "먹 고 싶"
