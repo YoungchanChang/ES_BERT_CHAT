@@ -165,4 +165,6 @@ class MeCabNer:
                     yield MecabCategory(large_category=entity_category_item.large_category,
                                         medium_category=entity_category_item.medium_category,
                                         small_category=entity_category_item.small_category,
+                                        start_idx=entity_category_item.start_idx,
+                                        end_idx=entity_category_item.end_idx,
                                         entity=restore_sentence)
