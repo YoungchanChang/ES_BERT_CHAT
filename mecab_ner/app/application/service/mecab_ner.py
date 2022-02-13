@@ -1,10 +1,10 @@
 from typing import List, Generator
 
-from mecab_ner.app.application.service.mecab_generator import MecabGenerator
-from mecab_ner.app.application.service.mecab_parser import MeCabParser
-from mecab_ner.app.application.service.mecab_storage import MeCabStorage
-from mecab_ner.app.domain.entity import MecabCategory
-from mecab_ner.app.utility.mecab_helper import contain_pattern_list
+from app.application.service.mecab_generator import MecabGenerator
+from app.application.service.mecab_parser import MeCabParser
+from app.application.service.mecab_storage import MeCabStorage
+from app.domain.entity import MecabCategory
+from app.utility.mecab_helper import contain_pattern_list
 import copy
 
 

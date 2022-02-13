@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from mecab_ner.app.controller.service.mecab_controller import get_data
+from app.controller.service.mecab_controller import get_data
 
 class Query(BaseModel):
     sentence: str

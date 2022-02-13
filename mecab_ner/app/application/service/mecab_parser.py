@@ -2,9 +2,9 @@ import _mecab
 from collections import namedtuple
 from typing import Generator
 
-from mecab_ner.app.domain.entity import MecabWordFeature
-from mecab_ner.app.utility.custom_error import MeCabError
-from mecab_ner.app.utility.string_helper import delete_pattern_from_string
+from app.domain.entity import MecabWordFeature
+from app.utility.custom_error import MeCabError
+from app.utility.string_helper import delete_pattern_from_string
 
 STRING_NOT_FOUND = -1
 

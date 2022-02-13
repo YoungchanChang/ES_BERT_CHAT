@@ -1,8 +1,8 @@
 from typing import List, Generator
 from pathlib import Path
-from mecab_ner.app.application.service.mecab_parser import MeCabParser
-from mecab_ner.app.utility.custom_error import DataException, PathException
-from mecab_ner.app.utility.data_reader import DataReader
+from app.application.service.mecab_parser import MeCabParser
+from app.utility.custom_error import DataException, PathException
+from app.utility.data_reader import DataReader
 
 
 class MecabGenerator:

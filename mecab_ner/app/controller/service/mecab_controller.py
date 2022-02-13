@@ -2,9 +2,9 @@ from dataclasses import asdict
 from typing import List, Generator
 import numpy as np
 
-from mecab_ner.app.application.service.mecab_ner import MeCabNer
-from mecab_ner.app.application.service.mecab_storage import MeCabStorage
-from mecab_ner.app.domain.entity import MecabCategory, MeCabEntityIntent
+from app.application.service.mecab_ner import MeCabNer
+from app.application.service.mecab_storage import MeCabStorage
+from app.domain.entity import MecabCategory, MeCabEntityIntent
 
 
 class MeCabController:
