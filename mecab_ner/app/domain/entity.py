@@ -31,7 +31,18 @@ class MecabCategory(MecabDomain):
     end_idx: Optional[int] = None
     entity: Optional[str] = None
 
+
 @dataclass
 class MeCabEntityIntent(MecabDomain):
     entity: MecabCategory
+    intent: MecabCategory
+
+
+@dataclass
+class MeCabEntity(MecabDomain):
+    entity: MecabCategory
+
+
+@dataclass
+class MeCabIntent(MecabDomain):
     intent: MecabCategory
