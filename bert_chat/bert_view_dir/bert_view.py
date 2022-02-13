@@ -12,14 +12,16 @@ def entity_intent_result():
         "sender" : "youngchan"
     }
     input_json = json.loads(request.get_data().decode('utf-8'))
-    entity_large_category = input_json.get("entity_large_category")
-    entity_small_category = input_json.get("entity_small_category")
-    entity = input_json.get("entity")
-    intent_small_category = input_json.get("intent_small_category")
+    answer = input_json.get("answer")
+    answer_list = []
+    for answer_item in answer:
+        entity = answer_item.get("entity")
+        intent = answer_item.get("intent")
+        template_answer = get_template_data(entity.get('large_category'), entity.get('medium_category'), entity.get('entity'), intent.get('medium_category'))
+        answer_list.append(template_answer)
 
     try:
-        template_data = get_template_data(entity_large_category, entity_small_category, entity, intent_small_category)
-        return_json["answer"] = template_data
+        return_json["answer"] = answer_list
         return make_response(jsonify(return_json), 200)
 
     except Exception as e:
