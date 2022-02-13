@@ -5,28 +5,18 @@ from mecab_ner.app.application.service.mecab_storage import MeCabStorage
 from mecab_ner.app.domain.entity import MecabCategory
 
 
-def gen_integrated_entity(blank_list: List) -> Generator:
-    start_idx = None
-    end_idx = None
-    switch_on = True
-    for idx, item in enumerate(blank_list):
-        if item == MeCabController.FULL_WORD:
-            end_idx = idx
 
-            if switch_on:
-                start_idx = idx
 
-            switch_on = False
-            continue
-
-        if (switch_on is False) and end_idx:
-            yield start_idx, end_idx
-            start_idx = None
-            end_idx = None
-            switch_on = True
-
+def integrate_many_entity_index(mecab_entity_category_list: List, mecab_list_length: int) -> List:
+    """인덱스 값에 엔티티가 있는 경우, 없는 경우 구분"""
+    blank = [MeCabController.EMPTY_WORD] * mecab_list_length
+    for mecab_entity_category_item in mecab_entity_category_list:
+        for i in range(mecab_entity_category_item.start_idx, mecab_entity_category_item.end_idx, 1):
+            blank[i] = MeCabController.FULL_WORD
+    return blank
 
 class MeCabController:
+
     EMPTY_WORD = 0
     FULL_WORD = 1
 
@@ -61,3 +51,25 @@ class MeCabController:
                                         medium_category=entity_category_item.medium_category,
                                         small_category=entity_category_item.small_category,
                                         entity=restore_sentence)
+
+    def gen_integrated_entity(self, blank_list: List) -> Generator:
+        start_idx = None
+        end_idx = None
+        switch_on = True
+        for idx, item in enumerate(blank_list):
+            if item == MeCabController.FULL_WORD:
+                end_idx = idx
+
+                if switch_on:
+                    start_idx = idx
+
+                switch_on = False
+
+                if idx != len(blank_list)-1:
+                    continue
+
+            if (switch_on is False) and end_idx:
+                yield start_idx, end_idx
+                start_idx = None
+                end_idx = None
+                switch_on = True
