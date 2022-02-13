@@ -20,16 +20,18 @@ class MeCabController:
 
     def gen_entity_intent(self, sentence):
 
-        entity_list = self.mecab_entity_ner.gen_integrated_entities(sentence, status=MeCabNer.INFER_FORWARD)
-        entity_list = list(entity_list)
+        entity_gen = self.mecab_entity_ner.gen_integrated_entities(sentence, status=MeCabNer.INFER_FORWARD)
+        entity_list = list(entity_gen)
+        intent_gen = self.mecab_intent_ner.gen_integrated_entities(sentence, status=MeCabNer.ENTITY)
+        intent_list = list(intent_gen)
 
-        intent_list = self.mecab_intent_ner.gen_integrated_entities(sentence, status=MeCabNer.ENTITY)
-        intent_list = list(intent_list)
+        if len(entity_list) == 0:
+            for intent_item in intent_list:
+                yield intent_item
+        elif len(intent_list) == 0:
+            for entity_item in entity_list:
+                yield entity_item
 
-        if len(intent_list) == 0:
-            yield entity_list
-        elif len(entity_list) == 0:
-            yield intent_list
         else:
             for intent_item in intent_list:
                 tmp_dis = np.inf
