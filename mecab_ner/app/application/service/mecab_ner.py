@@ -63,9 +63,19 @@ class MeCabNer:
 
     def infer_entity(self, mecab_category_item: MecabCategory) -> MecabCategory:
         for idx_range in range(mecab_category_item.start_idx - 1, 0, -1):
-            if self.mecab_parsed_list[idx_range][1].pos in ["NNG", "NNP"]:
+            if self.mecab_parsed_list[idx_range][self.MECAB_FEATURE_IDX].pos in ["NNG", "NNP"]:
                 mecab_category_item.start_idx = self.mecab_parsed_list[idx_range][1].mecab_token_idx
                 continue
             break
         return mecab_category_item
 
+    def infer_backward(self, mecab_category_item: MecabCategory) -> MecabCategory:
+        for idx_range in range(mecab_category_item.end_idx, len(self.mecab_parsed_list)-1, 1):
+            if self.mecab_parsed_list[idx_range][self.MECAB_FEATURE_IDX].pos in ["NNG", "NNP"]:
+                mecab_category_item.end_idx = self.mecab_parsed_list[idx_range][1].mecab_token_idx+1
+                continue
+            elif self.mecab_parsed_list[idx_range][self.MECAB_FEATURE_IDX].pos in ["MM"]:
+                mecab_category_item.end_idx = self.mecab_parsed_list[idx_range][1].mecab_token_idx+1
+                continue
+            break
+        return mecab_category_item
