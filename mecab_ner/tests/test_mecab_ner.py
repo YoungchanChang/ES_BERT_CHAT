@@ -201,4 +201,15 @@ def test_word_sense_disambiguation():
     mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path)
     intent_list = mecab_ner.gen_integrated_entities(sentence, status=MeCabNer.ENTITY)
     intent_list = list(intent_list)
-    assert len(intent_list) == 3
+    assert len(intent_list) == 4
+
+
+def test_mecab_controller():
+    sentence = "나는 차를 마신 뒤에 차를 드라이브 하고 싶다"
+    last_answer = MeCabController().gen_entity(sentence)
+    last_answer = list(last_answer)
+    assert len(last_answer) == 2
+    sentence = "그냥 드라이브 하고 싶다"
+    last_answers = MeCabController().gen_entity(sentence)
+    last_answers = list(last_answers)
+    assert len(last_answers) == 1
