@@ -166,9 +166,10 @@ class MeCabNer:
             restore_sentence = " ".join(restore_tokens)
             for entity_category_item in mecab_entity_category_list:
                 if entity_category_item.end_idx == end_idx:
+                    small_category_replace = entity_category_item.small_category.replace("#", "").strip()
                     yield MecabCategory(large_category=entity_category_item.large_category,
                                         medium_category=entity_category_item.medium_category,
-                                        small_category=entity_category_item.small_category,
+                                        small_category=small_category_replace,
                                         start_idx=entity_category_item.start_idx,
                                         end_idx=entity_category_item.end_idx,
                                         entity=restore_sentence)
