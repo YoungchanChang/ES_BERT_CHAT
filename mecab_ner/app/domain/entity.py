@@ -30,3 +30,8 @@ class MecabCategory(MecabDomain):
     start_idx: Optional[int] = None
     end_idx: Optional[int] = None
     entity: Optional[str] = None
+
+@dataclass
+class MeCabEntityIntent(MecabDomain):
+    entity: MecabCategory
+    intent: MecabCategory
