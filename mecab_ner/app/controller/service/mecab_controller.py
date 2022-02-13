@@ -1,7 +1,6 @@
+import os
 from dataclasses import asdict
-from typing import List, Generator
 import numpy as np
-
 from app.application.service.mecab_ner import MeCabNer
 from app.application.service.mecab_storage import MeCabStorage
 from app.domain.entity import MecabCategory, MeCabEntityIntent
@@ -13,9 +12,9 @@ class MeCabController:
     FULL_WORD = 1
 
     def __init__(self):
-        entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
+        entity_storage_path = os.getenv("entity_storage_path")
         self.mecab_entity_ner = MeCabNer(storage_mecab_path=entity_storage_path)
-        entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/intents/mecab_storage"
+        entity_storage_path = os.getenv("intent_storage_path")
         self.mecab_intent_ner = MeCabNer(storage_mecab_path=entity_storage_path)
 
     def gen_entity_intent(self, sentence):

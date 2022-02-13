@@ -1,7 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
-
+from dotenv import load_dotenv
+load_dotenv()
 from app.controller.service.mecab_controller import get_data
 
 class Query(BaseModel):
