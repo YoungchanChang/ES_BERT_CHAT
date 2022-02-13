@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from typing import List, Generator
 import numpy as np
 
@@ -5,14 +6,6 @@ from mecab_ner.app.application.service.mecab_ner import MeCabNer
 from mecab_ner.app.application.service.mecab_storage import MeCabStorage
 from mecab_ner.app.domain.entity import MecabCategory, MeCabEntityIntent
 
-
-def integrate_many_entity_index(mecab_entity_category_list: List, mecab_list_length: int) -> List:
-    """인덱스 값에 엔티티가 있는 경우, 없는 경우 구분"""
-    blank = [MeCabController.EMPTY_WORD] * mecab_list_length
-    for mecab_entity_category_item in mecab_entity_category_list:
-        for i in range(mecab_entity_category_item.start_idx, mecab_entity_category_item.end_idx, 1):
-            blank[i] = MeCabController.FULL_WORD
-    return blank
 
 class MeCabController:
 
@@ -49,3 +42,11 @@ class MeCabController:
                         if e_i_dis <= tmp_dis:
                             mc_en_int = MeCabEntityIntent(entity_item, intent_item)
                 yield mc_en_int
+
+
+def get_data(sentence):
+    return_val = []
+    for mecab_item in MeCabController().gen_entity_intent(sentence=sentence):
+        return_val.append(asdict(mecab_item))
+
+    return return_val
