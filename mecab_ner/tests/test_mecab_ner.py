@@ -206,10 +206,10 @@ def test_word_sense_disambiguation():
 
 def test_mecab_controller():
     sentence = "나는 차를 마신 뒤에 차를 드라이브 하고 싶다"
-    last_answer = MeCabController().gen_entity(sentence)
+    last_answer = MeCabController().gen_entity_intent(sentence)
     last_answer = list(last_answer)
     assert len(last_answer) == 2
     sentence = "그냥 드라이브 하고 싶다"
-    last_answers = MeCabController().gen_entity(sentence)
+    last_answers = MeCabController().gen_entity_intent(sentence)
     last_answers = list(last_answers)
     assert len(last_answers) == 1
