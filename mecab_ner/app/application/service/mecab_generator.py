@@ -30,6 +30,18 @@ class MecabGenerator:
         self.storage_path = storage_path
         self.mecab_path = mecab_path
 
+    def validate_path(self, path) -> None:
+        """ 경로 검증 """
+        if not Path(path).is_dir():
+            raise PathException("Please check if directory")
+
+        for file in Path(path).iterdir():
+            if len(file.stem.split(self.FORMAT_SPLITER)) != self.FORMAT_LIMIT:
+                raise PathException("Please check if format is right")
+
+            if file.suffix != self.FORMAT_SUFFIX:
+                raise PathException("Please check if suffix")
+
     @staticmethod
     def read_category(txt_data: List) -> Generator:
         """ 데이터에서 헤더, 내용 나누어서 값 반환하는 메소드 """
@@ -49,18 +61,6 @@ class MecabGenerator:
             category_list.append(data_item)
 
         yield header, sorted(category_list, key=len, reverse=True)
-
-    def validate_path(self, path) -> None:
-        """ 경로 검증 """
-        if not Path(path).is_dir():
-            raise PathException("Please check if directory")
-
-        for file in Path(path).iterdir():
-            if len(file.stem.split(self.FORMAT_SPLITER)) != self.FORMAT_LIMIT:
-                raise PathException("Please check if format is right")
-
-            if file.suffix != self.FORMAT_SUFFIX:
-                raise PathException("Please check if suffix")
 
     @staticmethod
     def gen_all_mecab_category_data(storage_path, need_parser=False) -> Generator:

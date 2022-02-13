@@ -47,7 +47,10 @@ def _get_mecab_feature(node) -> MecabWordFeature:
 
 class MeCabParser:
 
-    """ 문장을 형태소 분석하는 클래스. 형태소 분석시 형태소 분석 토큰, 스페이스 분석 토큰의 인덱스 위치도 함께 저장 """
+    """
+    문장을 형태소 분석하는 클래스.
+    형태소 분석시 형태소 분석 토큰, 스페이스 분석 토큰의 인덱스 위치도 함께 저장
+    """
 
     FIRST_WORD = 0
     type_list = ["Compound", "Inflect"]
