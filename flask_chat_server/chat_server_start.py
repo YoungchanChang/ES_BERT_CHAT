@@ -17,12 +17,12 @@ def index():
 
 @socketio.on("chat")
 def event_handler(json):
-    json["nickname"] = json["nickname"].encode("utf-8").decode("utf-8")
-    json_message = json["message"].encode("utf-8").decode("utf-8")
+    json["nickname"] = json["nickname"].encode("latin1").decode("utf-8")
+    json_message = json["message"].encode("latin1").decode("utf-8")
     logging.debug(json_message)
     mecab_bert_answer = get_mecab_ner_answer(json_message)
     logging.debug(mecab_bert_answer)
-    socketio.emit("response", {"nickname": "friendbot", "message": mecab_bert_answer})
+    socketio.emit("response", {"nickname": "friendbot", "message": str(mecab_bert_answer)})
 
 
 @socketio.on("connected")

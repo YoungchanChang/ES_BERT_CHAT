@@ -14,12 +14,12 @@ mecab_ner_container_url = config["server"]["mecab_ner"]
 
 def get_mecab_ner_answer(query):
     json_data = {
-        "query" : query
+        "sentence" : query
     }
     utility_answer = requests.post(
         mecab_ner_container_url, headers=headers, data=json.dumps(json_data)
     )
-
+    print(utility_answer)
     answer = json.loads(utility_answer.text).get("answer")
-
+    print(answer)
     return answer
