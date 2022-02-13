@@ -7,6 +7,7 @@ from mecab_ner.app.application.service.mecab_generator import MecabGenerator
 from mecab_ner.app.application.service.mecab_ner import MeCabNer
 from mecab_ner.app.application.service.mecab_parser import MeCabParser
 from mecab_ner.app.application.service.mecab_storage import MeCabStorage
+from mecab_ner.app.controller.service.mecab_controller import MeCabController
 from mecab_ner.app.domain.entity import MecabWordFeature
 from mecab_ner.app.utility.data_reader import DataReader
 
@@ -169,113 +170,26 @@ def test_infer_backward():
         assert entity_str == "라떼 한 잔"
 
 
-
 def test_filter_entity():
     sentence = "나는 스윗한 딸기 치킨 먹고 싶어 사두감도 먹고 싶어"
-    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
-    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
-    mecab_entity_category_list = [mecab_ner.infer_entity(x) for x in mecab_ner.get_category_entity()]
+    b = list(MeCabController(sentence).gen_entity())
+    assert b[0].large_category == "food"
+    assert b[0].medium_category == "fastfood"
+    assert b[0].small_category == "#패스트 푸드"
+    assert b[0].restore_sentence == "스윗한 딸기 치킨"
 
-    blank = [0]* len(mecab_ner.mecab_parsed_list)
-    for mecab_entity_category_item in mecab_entity_category_list:
-        for i in range(mecab_entity_category_item.start_idx, mecab_entity_category_item.end_idx, 1):
-            blank[i] = 1
+    assert b[1].large_category == "food"
+    assert b[1].medium_category == "fruit"
+    assert b[1].small_category == "#과일"
+    assert b[1].entity == "사두감"
 
-    contain_list = []
-    start_idx = None
-    end_idx = None
-    switch_on = True
-    for idx, item in enumerate(blank):
-        if item == 1:
-            end_idx = idx
+    b = list(MeCabController("나는 딸기랑 감이 먹고 싶어").gen_entity())
+    assert b[0].large_category == "food"
+    assert b[0].medium_category == "fruit"
+    assert b[0].small_category == "#과일"
+    assert b[0].entity == "딸기"
 
-            if switch_on:
-                start_idx = idx
-
-            switch_on = False
-            continue
-
-        if (switch_on == False) and end_idx:
-            contain_list.append((start_idx,end_idx))
-            start_idx = None
-            end_idx = None
-            switch_on = True
-
-    eed_idx = contain_list[0][1]+1
-    a = mecab_ner.mecab_parsed_list[contain_list[0][0]:eed_idx]
-    restore_list = MeCabStorage().reverse_compound_tokens(a)
-    restore_sentence = " ".join(restore_list)
-    for entity_item in mecab_entity_category_list:
-        if entity_item.end_idx == eed_idx:
-            assert entity_item.large_category == "food"
-            assert entity_item.medium_category == "fastfood"
-            assert entity_item.small_category == "#패스트 푸드"
-            assert restore_sentence == "스윗한 딸기 치킨"
-
-
-    eed_idx = contain_list[1][1]+1
-    a = mecab_ner.mecab_parsed_list[contain_list[1][0]:eed_idx]
-    restore_list = MeCabStorage().reverse_compound_tokens(a)
-    restore_sentence = " ".join(restore_list)
-    for entity_item in mecab_entity_category_list:
-        if entity_item.end_idx == eed_idx:
-            assert entity_item.large_category == "food"
-            assert entity_item.medium_category == "fruit"
-            assert entity_item.small_category == "#과일"
-            assert restore_sentence == "사두감"
-
-
-def test_many_entity():
-    sentence = "나는 딸기랑 감이 먹고 싶어"
-    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
-    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
-    mecab_entity_category_list = [mecab_ner.infer_entity(x) for x in mecab_ner.get_category_entity()]
-
-    blank = [0]* len(mecab_ner.mecab_parsed_list)
-    for mecab_entity_category_item in mecab_entity_category_list:
-        for i in range(mecab_entity_category_item.start_idx, mecab_entity_category_item.end_idx, 1):
-            blank[i] = 1
-
-    contain_list = []
-    start_idx = None
-    end_idx = None
-    switch_on = True
-    for idx, item in enumerate(blank):
-        if item == 1:
-            end_idx = idx
-
-            if switch_on:
-                start_idx = idx
-
-            switch_on = False
-            continue
-
-        if (switch_on == False) and end_idx:
-            contain_list.append((start_idx,end_idx))
-            start_idx = None
-            end_idx = None
-            switch_on = True
-
-    eed_idx = contain_list[0][1]+1
-    a = mecab_ner.mecab_parsed_list[contain_list[0][0]:eed_idx]
-    restore_list = MeCabStorage().reverse_compound_tokens(a)
-    restore_sentence = " ".join(restore_list)
-    for entity_item in mecab_entity_category_list:
-        if entity_item.end_idx == eed_idx:
-            assert entity_item.large_category == "food"
-            assert entity_item.medium_category == "fruit"
-            assert entity_item.small_category == "#과일"
-            assert restore_sentence == "딸기"
-
-
-
-    eed_idx = contain_list[1][1]+1
-    a = mecab_ner.mecab_parsed_list[contain_list[1][0]:eed_idx]
-    restore_list = MeCabStorage().reverse_compound_tokens(a)
-    restore_sentence = " ".join(restore_list)
-    for entity_item in mecab_entity_category_list:
-        if entity_item.end_idx == eed_idx:
-            assert entity_item.large_category == "food"
-            assert entity_item.medium_category == "fruit"
-            assert entity_item.small_category == "#과일"
-            assert restore_sentence == "감"
+    assert b[1].large_category == "food"
+    assert b[1].medium_category == "fruit"
+    assert b[1].small_category == "#과일"
+    assert b[1].entity == "감"
