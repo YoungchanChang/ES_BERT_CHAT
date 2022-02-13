@@ -176,7 +176,7 @@ def test_filter_entity():
     assert b[0].large_category == "food"
     assert b[0].medium_category == "fastfood"
     assert b[0].small_category == "#패스트 푸드"
-    assert b[0].restore_sentence == "스윗한 딸기 치킨"
+    assert b[0].entity == "스윗한 딸기 치킨"
 
     assert b[1].large_category == "food"
     assert b[1].medium_category == "fruit"
