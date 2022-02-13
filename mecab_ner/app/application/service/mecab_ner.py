@@ -25,7 +25,11 @@ def infer_backward(mecab_parsed_list: List, mecab_category_item: MecabCategory) 
 def infer_entity(mecab_parsed_list: List, mecab_category_item: MecabCategory) -> MecabCategory:
     """ pos에 따라 start_index 변경"""
 
-    for idx_range in range(mecab_category_item.start_idx - 1, 0, -1):
+    end_point = 0
+    if mecab_category_item.start_idx == 1:
+        end_point = -1
+
+    for idx_range in range(mecab_category_item.start_idx - 1, end_point, -1):
         if mecab_parsed_list[idx_range][MeCabNer.MECAB_FEATURE_IDX].pos in ["NNG", "NNP"]:
             mecab_category_item.start_idx = mecab_parsed_list[idx_range][1].mecab_token_idx
             continue
