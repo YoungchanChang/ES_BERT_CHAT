@@ -151,3 +151,75 @@ def test_infer_mecab_ner():
         assert mecab_category_item.medium_category == "fruit"
         assert mecab_category_item.small_category == "#과일"
         assert entity_str == "신촌 딸기"
+
+
+def test_infer_backward():
+    sentence = "나는 라떼 한 잔이 먹고 싶어"
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
+    mecab_entity_category_list = mecab_ner.get_category_entity()
+
+    for mecab_category_item in mecab_entity_category_list:
+        mecab_category_item = mecab_ner.infer_backward(mecab_category_item)
+        entity_list = list(mecab_ner.get_entity(mecab_category_item.start_idx, mecab_category_item.end_idx))
+        entity_str = " ".join(entity_list)
+        assert mecab_category_item.large_category == "food"
+        assert mecab_category_item.medium_category == "fruit"
+        assert mecab_category_item.small_category == "#과일"
+        assert entity_str == "라떼 한 잔"
+
+
+
+def test_filter_entity():
+    sentence = "나는 스윗한 딸기 치킨 먹고 싶어 사두감도 먹고 싶어"
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
+    mecab_entity_category_list = [mecab_ner.infer_entity(x) for x in mecab_ner.get_category_entity()]
+
+    blank = [0]* len(mecab_ner.mecab_parsed_list)
+    for mecab_entity_category_item in mecab_entity_category_list:
+        for i in range(mecab_entity_category_item.start_idx, mecab_entity_category_item.end_idx, 1):
+            blank[i] = 1
+
+    contain_list = []
+    start_idx = None
+    end_idx = None
+    switch_on = True
+    for idx, item in enumerate(blank):
+        if item == 1:
+            end_idx = idx
+
+            if switch_on:
+                start_idx = idx
+
+            switch_on = False
+            continue
+
+        if (switch_on == False) and end_idx:
+            contain_list.append((start_idx,end_idx))
+            start_idx = None
+            end_idx = None
+            switch_on = True
+
+    eed_idx = contain_list[0][1]+1
+    a = mecab_ner.mecab_parsed_list[contain_list[0][0]:eed_idx]
+    restore_list = MeCabStorage().reverse_compound_tokens(a)
+    restore_sentence = " ".join(restore_list)
+    for entity_item in mecab_entity_category_list:
+        if entity_item.end_idx == eed_idx:
+            assert entity_item.large_category == "food"
+            assert entity_item.medium_category == "fastfood"
+            assert entity_item.small_category == "#패스트 푸드"
+            assert restore_sentence == "스윗한 딸기 치킨"
+
+
+    eed_idx = contain_list[1][1]+1
+    a = mecab_ner.mecab_parsed_list[contain_list[1][0]:eed_idx]
+    restore_list = MeCabStorage().reverse_compound_tokens(a)
+    restore_sentence = " ".join(restore_list)
+    for entity_item in mecab_entity_category_list:
+        if entity_item.end_idx == eed_idx:
+            assert entity_item.large_category == "food"
+            assert entity_item.medium_category == "fruit"
+            assert entity_item.small_category == "#과일"
+            assert restore_sentence == "사두감"
