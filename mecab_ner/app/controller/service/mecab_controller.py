@@ -48,16 +48,16 @@ class MeCabController:
 
         many_entity_index_list = self.integrate_many_entity_index(mecab_entity_category_list)
 
-        for entity_item in gen_integrated_entity(many_entity_index_list):
+        for integrated_entity_item in gen_integrated_entity(many_entity_index_list):
 
-            end_idx = entity_item[1] + 1
-            start_idx = entity_item[0]
-            a = self.mecab_ner.mecab_parsed_list[start_idx:end_idx]
-            restore_tokens = MeCabStorage().reverse_compound_tokens(a)
+            end_idx = integrated_entity_item[1] + 1
+            start_idx = integrated_entity_item[0]
+            mecab_parsed_list = self.mecab_ner.mecab_parsed_list[start_idx:end_idx]
+            restore_tokens = MeCabStorage().reverse_compound_tokens(mecab_parsed_list)
             restore_sentence = " ".join(restore_tokens)
-            for entity_item in mecab_entity_category_list:
-                if entity_item.end_idx == end_idx:
-                    yield MecabCategory(large_category=entity_item.large_category,
-                                  medium_category=entity_item.medium_category,
-                                  small_category=entity_item.small_category,
-                                  entity=restore_sentence)
+            for entity_category_item in mecab_entity_category_list:
+                if entity_category_item.end_idx == end_idx:
+                    yield MecabCategory(large_category=entity_category_item.large_category,
+                                        medium_category=entity_category_item.medium_category,
+                                        small_category=entity_category_item.small_category,
+                                        entity=restore_sentence)
