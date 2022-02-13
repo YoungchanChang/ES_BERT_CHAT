@@ -114,82 +114,91 @@ def test_mecab_ner():
     """간단한 문장에서 엔티티 추출"""
     sentence = "나는 딸기가 먹고 싶어"
     entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
-    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
-    mecab_entity_category_list = mecab_ner.get_category_entity()
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path)
 
-    for mecab_category_item in mecab_entity_category_list:
-        entity_list = list(mecab_ner.get_entity(mecab_category_item.start_idx, mecab_category_item.end_idx))
-        entity_str = " ".join(entity_list)
+    for mecab_category_item in mecab_ner.get_entities(sentence=sentence):
+
         assert mecab_category_item.large_category == "food"
         assert mecab_category_item.medium_category == "fruit"
         assert mecab_category_item.small_category == "#과일"
-        assert entity_str == "딸기"
+        assert mecab_category_item.entity == "딸기"
 
     intent_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/intents/mecab_storage"
-    mecab_ner_intents = MeCabNer(storage_mecab_path=intent_storage_path, sentence=sentence)
-    mecab_intents_category_list = mecab_ner_intents.get_category_entity()
+    mecab_ner_intents = MeCabNer(storage_mecab_path=intent_storage_path)
 
-    for mecab_intent_category_item in mecab_intents_category_list:
-        intent_list = list(mecab_ner.get_entity(mecab_intent_category_item.start_idx, mecab_intent_category_item.end_idx))
-        intent_str = " ".join(intent_list)
+    for mecab_intent_category_item in mecab_ner_intents.get_entities(sentence=sentence):
         assert mecab_intent_category_item.large_category == "food"
         assert mecab_intent_category_item.medium_category == "eat"
         assert mecab_intent_category_item.small_category == "#먹고 싶다"
-        assert intent_str == "먹 고 싶"
+        assert mecab_intent_category_item.entity == "먹 고 싶"
 
 
 def test_infer_mecab_ner():
     sentence = "나는 신촌 딸기가 먹고 싶어"
     entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
-    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
-    mecab_entity_category_list = mecab_ner.get_category_entity()
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path)
 
-    for mecab_category_item in mecab_entity_category_list:
-        mecab_category_item = mecab_ner.infer_entity(mecab_category_item)
-        entity_list = list(mecab_ner.get_entity(mecab_category_item.start_idx, mecab_category_item.end_idx))
-        entity_str = " ".join(entity_list)
+    for mecab_category_item in mecab_ner.get_entities(sentence=sentence, status=MeCabNer.INFER_FORWARD):
         assert mecab_category_item.large_category == "food"
         assert mecab_category_item.medium_category == "fruit"
         assert mecab_category_item.small_category == "#과일"
-        assert entity_str == "신촌 딸기"
+        assert mecab_category_item.entity == "신촌 딸기"
 
 
 def test_infer_backward():
     sentence = "나는 라떼 한 잔이 먹고 싶어"
     entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
-    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path, sentence=sentence)
-    mecab_entity_category_list = mecab_ner.get_category_entity()
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path)
 
-    for mecab_category_item in mecab_entity_category_list:
-        mecab_category_item = mecab_ner.infer_backward(mecab_category_item)
-        entity_list = list(mecab_ner.get_entity(mecab_category_item.start_idx, mecab_category_item.end_idx))
-        entity_str = " ".join(entity_list)
+    for mecab_category_item in mecab_ner.get_entities(sentence=sentence, status=MeCabNer.INFER_BACKWARD):
         assert mecab_category_item.large_category == "food"
         assert mecab_category_item.medium_category == "tea"
         assert mecab_category_item.small_category == "#차"
-        assert entity_str == "라떼 한 잔"
+        assert mecab_category_item.entity == "라떼 한 잔"
 
 
 def test_filter_entity():
     sentence = "나는 스윗한 딸기 치킨 먹고 싶어 사두감도 먹고 싶어"
-    b = list(MeCabController(sentence).gen_entity())
-    assert b[0].large_category == "food"
-    assert b[0].medium_category == "fastfood"
-    assert b[0].small_category == "#패스트 푸드"
-    assert b[0].entity == "스윗한 딸기 치킨"
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path)
+    entity_list = mecab_ner.gen_integrated_entities(sentence, status=MeCabNer.INFER_FORWARD)
+    entity_list = list(entity_list)
+    assert entity_list[0].large_category == "food"
+    assert entity_list[0].medium_category == "fastfood"
+    assert entity_list[0].small_category == "#패스트 푸드"
+    assert entity_list[0].entity == "스윗한 딸기 치킨"
 
-    assert b[1].large_category == "food"
-    assert b[1].medium_category == "fruit"
-    assert b[1].small_category == "#과일"
-    assert b[1].entity == "사두감"
+    assert entity_list[1].large_category == "food"
+    assert entity_list[1].medium_category == "fruit"
+    assert entity_list[1].small_category == "#과일"
+    assert entity_list[1].entity == "사두감"
 
-    b = list(MeCabController("나는 딸기랑 감이 먹고 싶어").gen_entity())
-    assert b[0].large_category == "food"
-    assert b[0].medium_category == "fruit"
-    assert b[0].small_category == "#과일"
-    assert b[0].entity == "딸기"
+    sentence = "나는 딸기랑 감이 먹고 싶어"
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path)
+    entity_list = mecab_ner.gen_integrated_entities(sentence, status=MeCabNer.INFER_FORWARD)
+    entity_list = list(entity_list)
+    assert entity_list[0].large_category == "food"
+    assert entity_list[0].medium_category == "fruit"
+    assert entity_list[0].small_category == "#과일"
+    assert entity_list[0].entity == "딸기"
 
-    assert b[1].large_category == "food"
-    assert b[1].medium_category == "fruit"
-    assert b[1].small_category == "#과일"
-    assert b[1].entity == "감"
+    assert entity_list[1].large_category == "food"
+    assert entity_list[1].medium_category == "fruit"
+    assert entity_list[1].small_category == "#과일"
+    assert entity_list[1].entity == "감"
+
+
+def test_word_sense_disambiguation():
+    sentence = "나는 차가 좋다"
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/entities/mecab_storage"
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path)
+    entity_list = mecab_ner.gen_integrated_entities(sentence, status=MeCabNer.INFER_FORWARD)
+    entity_list = list(entity_list)
+    assert len(entity_list) == 2
+
+    entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/intents/mecab_storage"
+    mecab_ner = MeCabNer(storage_mecab_path=entity_storage_path)
+    intent_list = mecab_ner.gen_integrated_entities(sentence, status=MeCabNer.ENTITY)
+    intent_list = list(intent_list)
+    assert len(intent_list) == 3
