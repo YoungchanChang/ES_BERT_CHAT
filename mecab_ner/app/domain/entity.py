@@ -27,5 +27,6 @@ class MecabCategory(MecabDomain):
     large_category: str
     medium_category: str
     small_category: str
-    start_idx: int
-    end_idx: int
+    start_idx: Optional[int] = None
+    end_idx: Optional[int] = None
+    entity: Optional[str] = None
