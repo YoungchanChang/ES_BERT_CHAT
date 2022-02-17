@@ -5,4 +5,6 @@ from . import models
 
 @admin.register(models.User)
 class CustomUserAdmin(admin.ModelAdmin):
-    pass
+
+    list_display = ("username", "email", "gender", 'birthdate', 'birthtime')
+    list_filter = ("gender", "birthdate", 'birthtime')
