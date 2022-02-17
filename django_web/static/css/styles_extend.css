@@ -1,0 +1,34 @@
+.h-128 {
+    height:32rem;
+}
+
+.h-96 {
+    height:24rem;
+}
+
+.h-80 {
+    height:20rem;
+}
+.h-80v {
+    height:80vh;
+}
+
+.bg_item_explain{
+    background-color: #F3EDE8;
+}
+
+.font-basic {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.font-highlight {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight:500;
+}
+.font-important {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight:900;
+}
+.font-yellow {
+    font-family: 'Yellowtail', cursive;
+}
