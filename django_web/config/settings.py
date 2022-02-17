@@ -39,7 +39,7 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-PROJECT_APPS = ["core.apps.CoreConfig", "friends.apps.FriendsConfig" ]
+PROJECT_APPS = ["core.apps.CoreConfig", "friends.apps.FriendsConfig", "users.apps.UsersConfig" ]
 
 THIRD_PARTY_APPS = []
 
@@ -126,3 +126,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+AUTH_USER_MODEL = "users.User"
