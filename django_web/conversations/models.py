@@ -16,6 +16,9 @@ class Conversation(core_models.TimeStampedModel):
             usernames.append(user.username)
         return ", ".join(usernames)
 
+    def show_pk(self):
+        return self.pk
+
     def count_messages(self):
         return self.messages.count()
 
