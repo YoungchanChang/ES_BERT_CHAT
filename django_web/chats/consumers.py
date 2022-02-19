@@ -2,6 +2,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
+from chats.api_docker import get_mecab_ner
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -16,6 +18,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
+
         # Send message to room group
         await self.send(text_data=json.dumps({
             'message': message
@@ -23,5 +26,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Send message to room group
         await self.send(text_data=json.dumps({
-            'message': "Respond from chatbot"
+            'message': str(get_mecab_ner(text_data))
         }))
