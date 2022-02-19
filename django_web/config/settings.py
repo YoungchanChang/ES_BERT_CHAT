@@ -42,7 +42,7 @@ DJANGO_APPS = [
 
 PROJECT_APPS = ["core.apps.CoreConfig", "friends.apps.FriendsConfig",
                 "users.apps.UsersConfig", "conversations.apps.ConversationsConfig",
-                "chats.apps.ChatsConfig"]
+                "chats.apps.ChatsConfig", "mecab_ner.apps.MecabNerConfig"]
 
 THIRD_PARTY_APPS = []
 
