@@ -20,3 +20,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'message': message
         }))
+
+        # Send message to room group
+        await self.send(text_data=json.dumps({
+            'message': "Respond from chatbot"
+        }))
