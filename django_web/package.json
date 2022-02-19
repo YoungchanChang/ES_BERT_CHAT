@@ -1,0 +1,22 @@
+{
+  "name": "FriendsTalk",
+  "version": "1.0.0",
+  "description": "Friends Talk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YoungchanChang/ES_BERT_CHAT"
+  },
+  "scripts": {
+    "css": "gulp"
+  },
+  "homepage": "https://github.com/nomadcoders/airbnb-clone#readme",
+  "devDependencies": {
+    "autoprefixer": "^9.7.0",
+    "gulp": "^4.0.2",
+    "gulp-csso": "^3.0.1",
+    "gulp-postcss": "^8.0.0",
+    "gulp-sass": "^4.0.2",
+    "node-sass": "^4.13.0",
+    "tailwindcss": "^1.1.3"
+  }
+}
