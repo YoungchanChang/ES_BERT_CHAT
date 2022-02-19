@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from core import managers as core_managers
 # Create your models here.
 
 
@@ -24,3 +24,7 @@ class User(AbstractUser):
 
     birthdate = models.DateField(null=True)
     birthtime = models.TimeField(default=None, null=True, blank=True)
+    objects = core_managers.CustomUserManager()
+
+    def show_pk(self):
+        return self.pk
