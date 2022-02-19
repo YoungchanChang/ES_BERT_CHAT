@@ -1,15 +1,15 @@
 import uvicorn
 from fastapi import FastAPI
-from pydantic import BaseModel
+
 from dotenv import load_dotenv
 
+from app.domain.entity import Query, CategoryItem
 from app.utility.docker_net import get_entity_intent_answer
 
 load_dotenv()
-from app.controller.service.mecab_controller import get_data
+from app.controller.service.mecab_controller import get_data, CreateData
 
-class Query(BaseModel):
-    sentence: str
+
 
 app = FastAPI()
 
@@ -29,7 +29,15 @@ async def bert_chat(sentence: Query):
     return_json = {"answer": return_val}
     return jsonable_encoder(return_json)
 
+
+@app.post("/mecab_entity/create_index")
+async def create_index(category_item: CategoryItem):
+    CreateData.create_index(category_item)
+    return_json = {"answer": True}
+    return jsonable_encoder(return_json)
+
+
 if __name__ == "__main__":
     uvicorn.run(
-        "app.infrastructure.fastapi.main:app", host="0.0.0.0", port=8000, reload=True
+        "app.infrastructure.fastapi.main:app", host="0.0.0.0", port=7000, reload=True
     )
