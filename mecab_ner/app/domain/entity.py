@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-
+from pydantic import BaseModel
 
 @dataclass
 class MecabDomain:
@@ -46,3 +46,14 @@ class MeCabEntity(MecabDomain):
 @dataclass
 class MeCabIntent(MecabDomain):
     intent: MecabCategory
+
+
+class Query(BaseModel):
+    sentence: str
+
+
+class CategoryItem(BaseModel):
+    large_category: str
+    medium_category: str
+    small_category: str
+    type: str
