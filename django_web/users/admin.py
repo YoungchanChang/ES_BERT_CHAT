@@ -20,3 +20,5 @@ class CustomUserAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+    list_display = ("__str__", "show_pk")
