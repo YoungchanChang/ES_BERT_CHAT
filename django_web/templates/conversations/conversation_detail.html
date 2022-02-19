@@ -30,13 +30,13 @@
                 no messages
             {% else %}
                 {% for message in conversation.messages.all  %}
-                    <div class="mb-10 {% if message.user.pk == user.pk %}
+                    <div class="mb-10 {% if message.user.first_name == "FriendBot" %}
                         self-end
                         text-right
                     {% endif %}">
                         <span class="text-sm font-medium text-gray-600">{{message.user.first_name}}</span>
                         <div class="mt-px p-5 w-56 rounded
-                            {% if message.user.pk != user.pk %}
+                            {% if message.user.first_name != "FriendBot" %}
                                 bg-teal-500
                                 text-white
                             {% else %}
