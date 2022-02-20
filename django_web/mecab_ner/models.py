@@ -42,3 +42,20 @@ class MecabEntity(core_models.TimeStampedModel):
 
     def show_pk(self):
         return self.pk
+
+
+class MecabIntent(core_models.TimeStampedModel):
+
+    """ Item Model Definition """
+
+    word = models.CharField(max_length=80)
+    mecab_word = models.CharField(max_length=150)
+    category = models.ForeignKey(
+        "IntentCategoryItem", related_name="intent", on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name_plural = "mecab_intents"
+
+    def show_pk(self):
+        return self.pk
