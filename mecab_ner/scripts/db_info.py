@@ -41,12 +41,12 @@ class AbstractCategory(TimeStampedModel):
 
 class EntityCategoryItem(AbstractCategory):
     class Meta:
-        table_name = "entity_category"
+        table_name = "mecab_ner_entitycategoryitem"
 
 
 class IntentCategoryItem(AbstractCategory):
     class Meta:
-        table_name = "intent_category"
+        table_name = "mecab_ner_intentcategoryitem"
 
 
 class BaseModel(TimeStampedModel):
@@ -65,4 +65,4 @@ class MecabEntity(BaseModel):
     )
 
     class Meta:
-        table_name = "entity_vocab"
+        table_name = "mecab_ner_mecabentity"
