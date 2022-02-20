@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
-from chat_middleware.layer_model.domain import DjangoRequest, ChatMiddlewareResponse
+from chat_middleware.layer_model.domain import ChatMiddlewareResponse, Request
 
 router = APIRouter(
     prefix="/chat_middleware",
@@ -12,7 +12,7 @@ router = APIRouter(
 
 
 @router.post("/middleware_response")
-async def request_from_django_web(d_req: DjangoRequest):
+async def request_from_django_web(django_req: Request):
     try:
         c_m_res = ChatMiddlewareResponse(bot_response="Hello")
     except ValidationError as e:
