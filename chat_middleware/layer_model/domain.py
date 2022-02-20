@@ -4,22 +4,20 @@ from typing import List, Optional
 
 
 class Request(BaseModel):
+
+    """ 사용자 요청 정보 """
+
     user_sentence: str
     user_request_time: datetime
+    user_ip: str
     request_get_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
-class DjangoRequest(Request):
-    ip_info: str
-
-
 class ChatMiddlewareResponse(BaseModel):
+    """ 챗미들웨어 서버에서 보내는 응답 """
+
     bot_response: str
     bot_response_time: datetime = datetime.now().isoformat(timespec='microseconds')
-
-
-class MecabNerRequest(Request):
-    ...
 
 
 class MecabNerAttribute(BaseModel):
@@ -35,6 +33,9 @@ class MecabNerAttribute(BaseModel):
 
 
 class MecabNerResponse(BaseModel):
+
+    """ MecabNer에서 받는 응답 """
+
     user_sentence: str
     is_atomic: bool
     sentence_attributes: List[MecabNerAttribute]
@@ -42,10 +43,16 @@ class MecabNerResponse(BaseModel):
 
 
 class ChatApiRequest(MecabNerAttribute):
+
+    """ ChatApi 서버에 보내는 요청 """
+
     request_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
 class ChatApiResponse(BaseModel):
+
+    """ ChatApi 서버에 보내는 응답 """
+
     api_template: str
     api_server: str
     system_response_time: datetime
