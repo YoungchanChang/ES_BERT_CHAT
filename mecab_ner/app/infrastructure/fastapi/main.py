@@ -7,9 +7,7 @@ from app.domain.entity import Query, CategoryItem
 from app.utility.docker_net import get_entity_intent_answer
 
 load_dotenv()
-from app.controller.service.mecab_controller import get_data, CreateData
-
-
+from app.controller.service.mecab_controller import get_data, MecabDataController
 
 app = FastAPI()
 
@@ -32,8 +30,8 @@ async def bert_chat(sentence: Query):
 
 @app.post("/mecab_entity/create_index")
 async def create_index(category_item: CategoryItem):
-    CreateData.create_index(category_item)
-    return_json = {"answer": True}
+    is_index_created = MecabDataController.create_index(category_item)
+    return_json = {"answer": is_index_created}
     return jsonable_encoder(return_json)
 
 

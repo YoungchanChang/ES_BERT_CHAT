@@ -58,17 +58,18 @@ def get_data(sentence):
 class MecabDataController:
     BASE_DIR_PATH = Path(__file__).resolve().parent.parent.parent.parent.joinpath("datas")
 
-    def create_index(self, category_item: CategoryItem):
+    @staticmethod
+    def create_index(category_item: CategoryItem):
 
         category_name = category_item.large_category + "_" + category_item.medium_category + ".txt"
         small_category_name = "#"+category_item.small_category
 
         BASE_DIR_PATH = ""
         if category_item.type == "entity":
-            BASE_DIR_PATH = self.BASE_DIR_PATH.joinpath("entities", "storage").joinpath(category_name)
+            BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("entities", "storage").joinpath(category_name)
 
         elif category_item.type == "intent":
-            BASE_DIR_PATH = self.BASE_DIR_PATH.joinpath("intents")
+            BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("intents")
 
         if not BASE_DIR_PATH.exists():
             DataReader.write_txt(str(BASE_DIR_PATH), [small_category_name])
