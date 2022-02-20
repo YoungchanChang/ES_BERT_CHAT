@@ -10,7 +10,7 @@
 
 RequestAPI:
 
-- djang_web 컨테이너 -> chat_middleware 컨테이너에 응답 요청
+- django_web 컨테이너 -> chat_middleware 컨테이너에 응답 요청
 
 | 파라미터              | 타입        | 필수여부 | 설명        |
 |-------------------|-----------|------|-----------|
@@ -18,7 +18,7 @@ RequestAPI:
 | ip_info           | ip        | Y    | 사용자 ip정보  |
 | user_request_time | timefield | Y    | 사용자 요청 시간 |
 
-- djang_web 컨테이너 <- chat_middleware 컨테이너에 응답
+- django_web 컨테이너 <- chat_middleware 컨테이너에 응답
 
 ResponseAPI:
 
