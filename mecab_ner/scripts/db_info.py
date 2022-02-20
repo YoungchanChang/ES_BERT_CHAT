@@ -16,7 +16,11 @@ class TimeStampedModel(Model):
     """ TimeStampedModel Model Definition """
     id = PrimaryKeyField()
     created = DateTimeField(default=datetime.now)
-    updated = TimestampField()
+    updated = DateTimeField()
+
+    def save(self, *args, **kwargs):
+        self.updated = datetime.now()
+        return super(TimeStampedModel, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
