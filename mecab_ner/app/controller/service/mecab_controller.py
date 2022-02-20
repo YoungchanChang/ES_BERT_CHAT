@@ -6,9 +6,11 @@ import numpy as np
 
 from app.application.service.mecab_generator import MecabGenerator
 from app.application.service.mecab_ner import MeCabNer
+from app.application.service.mecab_parser import MeCabParser
 from app.application.service.mecab_storage import MeCabStorage
-from app.domain.entity import MecabCategory, MeCabEntityIntent, MeCabEntity, MeCabIntent, CategoryItem
+from app.domain.entity import MecabCategory, MeCabEntityIntent, MeCabEntity, MeCabIntent, CategoryItem, MecabWord
 from app.utility.data_reader import DataReader
+from scripts.db_info import EntityCategoryItem, MecabEntity, MecabIntent, IntentCategoryItem
 
 
 class MeCabController:
@@ -55,6 +57,7 @@ def get_data(sentence):
 
     return return_val
 
+
 class MecabDataController:
     BASE_DIR_PATH = Path(__file__).resolve().parent.parent.parent.parent.joinpath("datas")
 
@@ -69,19 +72,64 @@ class MecabDataController:
             BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("entities", "storage").joinpath(category_name)
 
         elif category_item.type == "intent":
-            BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("intents")
+            BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("intents", "storage").joinpath(category_name)
 
         if not BASE_DIR_PATH.exists():
             DataReader.write_txt(str(BASE_DIR_PATH), [small_category_name])
 
         if BASE_DIR_PATH.exists():
             return True
+
         return False
-    # storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner/datas/intents/mecab_storage"
-    # m_g = MecabGenerator(storage_path=storage_path)
-    # for path_item in Path(m_g.mecab_path).iterdir():
-    #     Path(path_item).unlink()
-    # Path(m_g.mecab_path).rmdir()
-    #
-    # # init data
-    # m_g = MecabGenerator(storage_path=storage_path)
+
+    @staticmethod
+    def insert_data(mecab_word: MecabWord):
+
+        saving_word = mecab_word.word
+        parsed_word = MeCabParser(saving_word).get_word_from_feature()
+
+        if mecab_word.type == "entity":
+            mecab_entity_data = MecabEntity.get_or_none(MecabEntity.category == mecab_word.category,
+                                                        MecabEntity.word == saving_word)
+            if mecab_entity_data is not None:
+                return False
+
+            value = EntityCategoryItem.get_or_none(mecab_word.category)
+            small_category = "\n" + "#" + value.small_category
+            category_name = value.large_category + "_" + value.medium_category + ".txt"
+
+            BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("entities", "storage").joinpath(category_name)
+
+            DataReader.write_txt(str(BASE_DIR_PATH), [small_category, saving_word])
+
+            BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("entities", "mecab_storage").joinpath(category_name)
+
+            DataReader.write_txt(str(BASE_DIR_PATH), [small_category, saving_word + "," + parsed_word])
+
+            mecab_entity = MecabEntity.create(word=mecab_word.word, mecab_word=parsed_word, category=value)
+            if mecab_entity.id:
+                return True
+
+        if mecab_word.type == "intent":
+            mecab_intent_data = MecabIntent.get_or_none(MecabIntent.category == mecab_word.category,
+                                                        MecabIntent.word == saving_word)
+            if mecab_intent_data is not None:
+                return False
+
+            value = IntentCategoryItem.get_or_none(mecab_word.category)
+            small_category = "\n" + "#" + value.small_category
+            category_name = value.large_category + "_" + value.medium_category + ".txt"
+
+            BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("intents", "storage").joinpath(category_name)
+
+            DataReader.write_txt(str(BASE_DIR_PATH), [small_category, saving_word])
+
+            BASE_DIR_PATH = MecabDataController.BASE_DIR_PATH.joinpath("intents", "mecab_storage").joinpath(category_name)
+
+            DataReader.write_txt(str(BASE_DIR_PATH), [small_category, saving_word + "," + parsed_word])
+
+            mecab_intent = MecabIntent.create(word=mecab_word.word, mecab_word=parsed_word, category=value)
+            if mecab_intent.id:
+                return True
+
+        return False
