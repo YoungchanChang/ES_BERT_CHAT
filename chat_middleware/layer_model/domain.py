@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from datetime import datetime
+from pydantic import BaseModel, validator
+from datetime import datetime, date
 from typing import List, Optional
 
 
@@ -9,16 +9,13 @@ class Request(BaseModel):
     request_get_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
-class Response(BaseModel):
-    bot_response_time: Optional[datetime] = datetime.now().isoformat(timespec='microseconds')
-
-
 class DjangoRequest(Request):
     ip_info: str
 
 
-class DjangoResponse(Response):
+class ChatMiddlewareResponse(BaseModel):
     bot_response: str
+    bot_response_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
 class MecabNerRequest(Request):
@@ -41,14 +38,14 @@ class MecabNerResponse(BaseModel):
     user_sentence: str
     is_atomic: bool
     sentence_attributes: List[MecabNerAttribute]
-    system_response_time: datetime = datetime.now().isoformat(timespec='minutes')
+    system_response_time: datetime
 
 
 class ChatApiRequest(MecabNerAttribute):
-    request_time: datetime = datetime.now().isoformat(timespec='minutes')
+    request_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
 class ChatApiResponse(BaseModel):
     api_template: str
     api_server: str
-    system_response_time: datetime = datetime.now().isoformat(timespec='minutes')
+    system_response_time: datetime
