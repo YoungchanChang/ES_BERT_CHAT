@@ -3,7 +3,7 @@ from fastapi import FastAPI
 
 from dotenv import load_dotenv
 
-from app.domain.entity import Query, CategoryItem
+from app.domain.entity import Query, CategoryItem, MecabWord
 from app.utility.docker_net import get_entity_intent_answer
 
 load_dotenv()
@@ -33,6 +33,14 @@ async def create_index(category_item: CategoryItem):
     is_index_created = MecabDataController.create_index(category_item)
     return_json = {"answer": is_index_created}
     return jsonable_encoder(return_json)
+
+
+@app.post("/mecab_entity/insert_data")
+async def insert_data(mecab_word: MecabWord):
+    is_index_created = MecabDataController.insert_data(mecab_word)
+    return_json = {"answer": is_index_created}
+    return jsonable_encoder(return_json)
+
 
 
 if __name__ == "__main__":
