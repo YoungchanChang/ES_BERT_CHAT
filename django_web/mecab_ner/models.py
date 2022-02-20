@@ -1,6 +1,7 @@
 from django.db import models
 from core import models as core_models
 # Create your models here.
+from mecab_ner.docker_api import create_mecab_index, insert_mecab_data
 
 
 class AbstractItem(core_models.TimeStampedModel):
@@ -17,17 +18,42 @@ class AbstractItem(core_models.TimeStampedModel):
     def show_pk(self):
         return self.pk
 
+
 class EntityCategoryItem(AbstractItem):
 
     class Meta:
         verbose_name_plural = "entity_categories"
 
+    def save(self, *args, **kwargs):
+        json_data = {"large_category": self.large_category, "medium_category": self.medium_category,
+                     "small_category": self.small_category, "type": "entity"}
+
+        answer = create_mecab_index(json_data)
+
+        if not answer:
+            return
+
+    def delete(self, using=None, keep_parents=False):
+        """ Temporary disable """
+        pass
 
 class IntentCategoryItem(AbstractItem):
 
     class Meta:
         verbose_name_plural = "intent_categories"
 
+    def save(self, *args, **kwargs):
+        json_data = {'large_category': self.large_category, "medium_category": self.medium_category,
+                     "small_category": self.small_category, "type": "intent"}
+
+        answer = create_mecab_index(json_data)
+
+        if not answer:
+            return
+
+    def delete(self, using=None, keep_parents=False):
+        """ Temporary disable """
+        pass
 
 class MecabEntity(core_models.TimeStampedModel):
 
@@ -45,6 +71,18 @@ class MecabEntity(core_models.TimeStampedModel):
     def show_pk(self):
         return self.pk
 
+    def save(self, *args, **kwargs):
+        json_data = {'word': self.word, "category": self.category_id,
+                     "type": "entity"}
+
+        answer = insert_mecab_data(json_data)
+
+        if not answer:
+            return
+
+    def delete(self, using=None, keep_parents=False):
+        """ Temporary disable """
+        pass
 
 class MecabIntent(core_models.TimeStampedModel):
 
@@ -61,3 +99,16 @@ class MecabIntent(core_models.TimeStampedModel):
 
     def show_pk(self):
         return self.pk
+
+    def save(self, *args, **kwargs):
+        json_data = {'word': self.word, "category": self.category_id,
+                     "type": "intent"}
+
+        answer = insert_mecab_data(json_data)
+
+        if not answer:
+            return
+
+    def delete(self, using=None, keep_parents=False):
+        """ Temporary disable """
+        pass
