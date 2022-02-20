@@ -3,13 +3,13 @@ from typing import Generator
 import mecab
 from pathlib import Path
 
-from mecab_ner.app.application.service.mecab_generator import MecabGenerator
-from mecab_ner.app.application.service.mecab_ner import MeCabNer
-from mecab_ner.app.application.service.mecab_parser import MeCabParser
-from mecab_ner.app.application.service.mecab_storage import MeCabStorage
-from mecab_ner.app.controller.service.mecab_controller import MeCabController
-from mecab_ner.app.domain.entity import MecabWordFeature
-from mecab_ner.app.utility.data_reader import DataReader
+from app.application.service.mecab_generator import MecabGenerator
+from app.application.service.mecab_ner import MeCabNer
+from app.application.service.mecab_parser import MeCabParser
+from app.application.service.mecab_storage import MeCabStorage
+from app.controller.service.mecab_controller import MeCabController
+from app.domain.entity import MecabWordFeature
+from app.utility.data_reader import DataReader
 
 mecab = mecab.MeCab()
 
@@ -165,12 +165,12 @@ def test_filter_entity():
     entity_list = list(entity_list)
     assert entity_list[0].large_category == "food"
     assert entity_list[0].medium_category == "fastfood"
-    assert entity_list[0].small_category == "#패스트 푸드"
+    assert entity_list[0].small_category == "패스트 푸드"
     assert entity_list[0].entity == "스윗한 딸기 치킨"
 
     assert entity_list[1].large_category == "food"
     assert entity_list[1].medium_category == "fruit"
-    assert entity_list[1].small_category == "#과일"
+    assert entity_list[1].small_category == "과일"
     assert entity_list[1].entity == "사두감"
 
     sentence = "나는 딸기랑 감이 먹고 싶어"
@@ -180,12 +180,12 @@ def test_filter_entity():
     entity_list = list(entity_list)
     assert entity_list[0].large_category == "food"
     assert entity_list[0].medium_category == "fruit"
-    assert entity_list[0].small_category == "#과일"
+    assert entity_list[0].small_category == "과일"
     assert entity_list[0].entity == "딸기"
 
     assert entity_list[1].large_category == "food"
     assert entity_list[1].medium_category == "fruit"
-    assert entity_list[1].small_category == "#과일"
+    assert entity_list[1].small_category == "과일"
     assert entity_list[1].entity == "감"
 
 
