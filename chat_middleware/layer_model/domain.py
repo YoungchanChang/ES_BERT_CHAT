@@ -5,7 +5,7 @@ from typing import List, Optional
 
 class Request(BaseModel):
     user_sentence: str
-    user_request_time: datetime = datetime.now().isoformat(timespec='microseconds')
+    user_request_time: datetime
     request_get_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
