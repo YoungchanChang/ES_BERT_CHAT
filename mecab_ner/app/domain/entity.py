@@ -57,3 +57,8 @@ class CategoryItem(BaseModel):
     medium_category: str
     small_category: str
     type: str
+
+class MecabWord(BaseModel):
+    word: str
+    category: int
+    type: str
