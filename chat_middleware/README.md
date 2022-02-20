@@ -15,7 +15,7 @@ RequestAPI:
 | 파라미터              | 타입        | 필수여부 | 설명        |
 |-------------------|-----------|------|-----------|
 | user_sentence     | string    | Y    | 사용자 발화 문장 |
-| ip_info           | ip        | Y    | 사용자 ip정보  |
+| user_ip           | ip        | Y    | 사용자 ip정보  |
 | user_request_time | timefield | Y    | 사용자 요청 시간 |
 
 - django_web 컨테이너 <- chat_middleware 컨테이너에 응답
@@ -37,6 +37,7 @@ RequestAPI:
 | 파라미터              | 타입        | 필수여부 | 설명        |
 |-------------------|-----------|------|-----------|
 | user_sentence     | string    | Y    | 사용자 발화 문장 |
+| user_ip           | ip        | Y    | 사용자 ip정보  |
 | user_request_time | timefield | Y    | 사용자 요청 시간 |
 
 ResponseAPI:
@@ -78,7 +79,7 @@ RequestAPI:
 | intent_medium_category | string    | N    | 인텐트 중 카테고리     |
 | intent_small_category  | string    | N    | 인텐트 소 카테고리     |
 | bert_confirm           | boolean   | Y    | 버트 확인여부        |
-| ip_info                | ip        | Y    | 사용자 ip정보       |
+| user_ip                | ip        | Y    | 사용자 ip정보       |
 | user_request_time      | timefield | Y    | 시스템 요청 시간      |
 
 
