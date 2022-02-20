@@ -66,3 +66,17 @@ class MecabEntity(BaseModel):
 
     class Meta:
         table_name = "mecab_ner_mecabentity"
+
+
+class MecabIntent(BaseModel):
+
+    """ Item Model Definition """
+
+    word = CharField(max_length=80)
+    mecab_word = CharField(max_length=150)
+    category = ForeignKeyField(
+        IntentCategoryItem, backref='mecab_intents', on_delete='CASCADE'
+    )
+
+    class Meta:
+        table_name = "mecab_ner_mecabintent"
