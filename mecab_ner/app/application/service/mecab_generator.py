@@ -58,6 +58,9 @@ class MecabGenerator:
                 category_list = []
                 continue
 
+            if data_item == '':
+                continue
+
             category_list.append(data_item)
 
         yield header, sorted(category_list, key=len, reverse=True)
