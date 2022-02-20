@@ -61,7 +61,7 @@ class MecabEntity(BaseModel):
     word = CharField(max_length=80)
     mecab_word = CharField(max_length=150)
     category = ForeignKeyField(
-        EntityCategoryItem, related_name="entity", on_delete='CASCADE'
+        EntityCategoryItem, backref='mecab_entities', on_delete='CASCADE'
     )
 
     class Meta:
