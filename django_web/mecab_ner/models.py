@@ -14,6 +14,8 @@ class AbstractItem(core_models.TimeStampedModel):
     class Meta:
         abstract = True
 
+    def show_pk(self):
+        return self.pk
 
 class EntityCategoryItem(AbstractItem):
 

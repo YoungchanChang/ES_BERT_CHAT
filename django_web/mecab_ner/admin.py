@@ -7,7 +7,7 @@ class EntityCategoryItemAdmin(admin.ModelAdmin):
 
     """ Item Admin Definition """
 
-    list_display = ("small_category", "medium_category", "large_category", "used_by")
+    list_display = ("small_category", "medium_category", "large_category", "used_by", "show_pk")
 
     list_filter = (
         "small_category",
@@ -24,7 +24,7 @@ class IntentCategoryItemAdmin(admin.ModelAdmin):
 
     """ Item Admin Definition """
 
-    list_display = ("small_category", "medium_category", "large_category", "used_by")
+    list_display = ("small_category", "medium_category", "large_category", "used_by", "show_pk")
 
     list_filter = (
         "small_category",
