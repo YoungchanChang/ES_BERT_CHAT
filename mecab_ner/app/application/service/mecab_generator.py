@@ -75,8 +75,11 @@ class MecabGenerator:
                 small_category, contents = data_item
                 if need_parser:
                     contents = [(x, MeCabParser(x).get_word_from_feature()) for x in contents]
-                data_dict[small_category] = contents
-
+                dict_value = data_dict.get(small_category, None)
+                if dict_value is None:
+                    data_dict[small_category] = contents
+                else:
+                    data_dict[small_category].extend(contents)
             yield large_category, medium_category, data_dict
 
     def write_category(self) -> None:
