@@ -4,12 +4,13 @@ from typing import List, Optional
 
 
 class Request(BaseModel):
-    sentence: str
-    request_time: Optional[datetime] = datetime.now().isoformat(timespec='minutes')
+    user_sentence: str
+    user_request_time: datetime = datetime.now().isoformat(timespec='microseconds')
+    request_get_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
 class Response(BaseModel):
-    response_time: Optional[datetime] = datetime.now().isoformat(timespec='minutes')
+    bot_response_time: Optional[datetime] = datetime.now().isoformat(timespec='microseconds')
 
 
 class DjangoRequest(Request):
@@ -40,14 +41,14 @@ class MecabNerResponse(BaseModel):
     user_sentence: str
     is_atomic: bool
     sentence_attributes: List[MecabNerAttribute]
-    response_time: Optional[datetime] = datetime.now().isoformat(timespec='minutes')
+    system_response_time: datetime = datetime.now().isoformat(timespec='minutes')
 
 
 class ChatApiRequest(MecabNerAttribute):
-    request_time: Optional[datetime] = datetime.now().isoformat(timespec='minutes')
+    request_time: datetime = datetime.now().isoformat(timespec='minutes')
 
 
 class ChatApiResponse(BaseModel):
     api_template: str
     api_server: str
-    response_time: Optional[datetime] = datetime.now().isoformat(timespec='minutes')
+    system_response_time: datetime = datetime.now().isoformat(timespec='minutes')
