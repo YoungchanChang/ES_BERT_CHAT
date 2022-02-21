@@ -8,9 +8,16 @@ class Request(BaseModel):
     """ 사용자 요청 정보 """
 
     user_sentence: str
-    user_request_time: datetime
     user_ip: str
+    user_request_time: datetime
     request_get_time: datetime = datetime.now().isoformat(timespec='microseconds')
+
+
+class Response(BaseModel):
+
+    """ 시스템 응답 정보 """
+
+    system_response_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
 class MecabNerAttribute(BaseModel):
@@ -25,18 +32,25 @@ class MecabNerAttribute(BaseModel):
     bert_confirm: bool
 
 
+class TemplateRequestData(BaseModel):
+    main_category: str
+    entity_medium_category: str
+    entity: str
+    intent_small_category: str
+
+
 class ChatApiRequest(BaseModel):
 
     """ ChatApi 서버에 보내는 요청 """
 
-    m_n_a: MecabNerAttribute
     req: Request
+    is_atomic: bool
+    sentence_attributes: List[MecabNerAttribute]
 
 
-class ChatApiResponse(BaseModel):
+class ChatApiResponse(Response):
 
     """ ChatApi 서버에 보내는 응답 """
 
-    api_template: str
+    api_response: str
     api_server: str
-    system_response_time: datetime
