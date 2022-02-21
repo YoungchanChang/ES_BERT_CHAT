@@ -22,10 +22,10 @@ RequestAPI:
 
 ResponseAPI:
 
-| 파라미터              | 타입        | 필수여부 | 설명       |
-|-------------------|-----------|------|----------|
-| bot_response      | string    | Y    | 챗봇 응답 문장 |
-| bot_response_time | timefield | Y    | 챗봇 응답 시간 |
+| 파라미터                 | 타입        | 필수여부 | 설명        |
+|----------------------|-----------|------|-----------|
+| bot_response         | string    | Y    | 챗봇 응답 문장  |
+| system_response_time | timefield | Y    | 시스템 응답 시간 |
 
 
 # 2. To mecab_ner
