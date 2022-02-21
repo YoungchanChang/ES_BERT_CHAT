@@ -52,7 +52,6 @@ class ChatApiRequest(BaseModel):
     """ ChatApi 서버에 보내는 요청 """
 
     req: Request
-    is_atomic: bool
     sentence_attributes: List[MecabNerAttribute]
 
 
