@@ -1,9 +1,11 @@
+import json
+
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
 from chat_middleware.layer_model.domain import ChatMiddlewareResponse, Request, ChatApiRequest, ChatApiResponse
-from chat_middleware.utility.api_endpoint import get_chat_api_response
+from chat_middleware.utility.api_endpoint import get_chat_api_response, get_mecab_ner_response
 
 router = APIRouter(
     prefix="/chat_middleware",
@@ -15,11 +17,24 @@ router = APIRouter(
 @router.post("/response_middleware")
 async def request_from_django_web(django_req: Request):
     try:
-        c_m_res = ChatMiddlewareResponse(bot_response="Hello")
+        mecab_ner_response = get_mecab_ner_response(django_req.json())
+
+        chat_api_response = get_chat_api_response(json.dumps(mecab_ner_response, default=str))
+        c_m_res = ChatMiddlewareResponse(bot_response=chat_api_response)
     except ValidationError as e:
         return e.json()
 
     return jsonable_encoder(c_m_res)
+
+
+@router.post("/test_mecab_ner")
+async def request_mecab_ner(django_req: Request):
+    try:
+        mecab_ner_response = get_mecab_ner_response(django_req.json())
+        return jsonable_encoder(mecab_ner_response)
+
+    except ValidationError as e:
+        return e.json()
 
 
 @router.post("/test_chat_api")
