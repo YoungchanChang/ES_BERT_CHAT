@@ -39,7 +39,7 @@ class MecabNerResponse(BaseModel):
     user_sentence: str
     is_atomic: bool
     sentence_attributes: List[MecabNerAttribute]
-    system_response_time: datetime
+    system_response_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
 class ChatApiRequest(BaseModel):
@@ -56,4 +56,4 @@ class ChatApiResponse(BaseModel):
 
     api_response: str
     api_server: str
-    system_response_time: datetime
+    system_response_time: datetime = datetime.now().isoformat(timespec='microseconds')
