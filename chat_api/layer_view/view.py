@@ -31,7 +31,7 @@ async def request_from_chat_middleware(chat_api_req: ChatApiRequest):
 
         if middle_m_n_a.main_category == "music":
             youtube_response = get_youtube_api_response(chat_api_req.json())
-            c_a_res = ChatApiResponse(api_response="유튜브 음악입니다", api_server="youtube_template")
+            c_a_res = ChatApiResponse(api_response=youtube_response, api_server="youtube_template")
             return jsonable_encoder(c_a_res)
 
         if middle_m_n_a.main_category == "question":

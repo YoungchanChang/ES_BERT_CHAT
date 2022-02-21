@@ -13,7 +13,7 @@ def get_youtube_api_response(json_data):
 
     try:
         utility_answer = requests.post(
-            os.getenv("youtube_response"), headers={'content-type': 'application/json'}, data=json.dumps(json_data), timeout=3
+            os.getenv("youtube_response"), headers={'content-type': 'application/json'}, data=json_data
         )
         api_response = json.loads(utility_answer.text).get("api_response")
         return api_response
