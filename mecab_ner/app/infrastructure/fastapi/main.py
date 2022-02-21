@@ -45,5 +45,5 @@ async def insert_data(mecab_word: MecabWord):
 
 if __name__ == "__main__":
     uvicorn.run(
-        "app.infrastructure.fastapi.main:app", host="0.0.0.0", port=7000, reload=True
+        "app.infrastructure.fastapi.main:app", host="0.0.0.0", port=5100, reload=True
     )
