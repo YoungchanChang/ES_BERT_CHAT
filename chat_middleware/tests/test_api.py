@@ -3,6 +3,9 @@ import json
 from datetime import date
 from dotenv import load_dotenv
 import requests_mock
+
+from chat_middleware.layer_model.domain import ChatApiResponse
+
 load_dotenv()
 
 def test_request_from_django_web_well(fastapi_client, mock_django_request):
@@ -23,9 +26,9 @@ def test_request_from_django_web_wrong_time_format(fastapi_client, mock_django_r
         assert result.status_code == 422
 
 
-def test_mecab_ner(requests_mock, mock_mecab_ner_response):
+def test_mecab_ner(requests_mock, mock_chat_api_response):
     # ref : https://stackoverflow.com/questions/63957899/requests-mock-how-can-i-match-posted-payload-in-a-mocked-endpoint
-    mecab_ner_response = json.loads(mock_mecab_ner_response.json())
+    chat_api_response = json.loads(mock_chat_api_response.json())
 
-    requests_mock.get(os.getenv("mecab_ner_info"), json=mecab_ner_response)
+    requests_mock.get(os.getenv("mecab_ner_info"), json=chat_api_response)
 
