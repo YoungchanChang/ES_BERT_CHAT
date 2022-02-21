@@ -13,13 +13,6 @@ class Request(BaseModel):
     request_get_time: datetime = datetime.now().isoformat(timespec='microseconds')
 
 
-class ChatMiddlewareResponse(BaseModel):
-    """ 챗미들웨어 서버에서 보내는 응답 """
-
-    bot_response: str
-    bot_response_time: datetime = datetime.now().isoformat(timespec='microseconds')
-
-
 class MecabNerAttribute(BaseModel):
     category_sentence: str
     main_category: str
@@ -30,16 +23,6 @@ class MecabNerAttribute(BaseModel):
     intent_medium_category: str
     intent_small_category: str
     bert_confirm: bool
-
-
-class MecabNerResponse(BaseModel):
-
-    """ MecabNer에서 받는 응답 """
-
-    user_sentence: str
-    is_atomic: bool
-    sentence_attributes: List[MecabNerAttribute]
-    system_response_time: datetime
 
 
 class ChatApiRequest(BaseModel):
