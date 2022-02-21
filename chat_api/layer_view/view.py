@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.post("/response_api")
-async def request_from_django_web(chat_api_req: ChatApiRequest):
+async def request_chat_middleware(chat_api_req: ChatApiRequest):
     try:
         c_a_res = ChatApiResponse(api_template="나도 치킨이 좋아요", api_server="basic_template", system_response_time="2022-02-21T07:03:52.716025")
     except ValidationError as e:
