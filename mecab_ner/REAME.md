@@ -25,10 +25,12 @@ ResponseAPI:
 
 | 파라미터                   | 타입             | 필수여부 | 설명                 |
 |------------------------|----------------|------|--------------------|
-| user_sentence          | string         | Y    | 사용자 발화 문장          |
-| is_atomic              | boolean        | Y    | 엔티티-인텐트 하나 여부      |
-| system_response_time   | timefield      | Y    | 시스템 응답 시간          |
+| req                    | Objects        | Y    | 사용자 발화 문장          |
 | sentence_attributes    | ArrayOfObjects | Y    | 엔티티-인텐트 포함 객체      |
+| req 속성                 | -              | -    | -                  |
+| user_sentence          | string         | Y    | 사용자 발화 문장          |
+| user_ip                | ip             | Y    | 사용자 ip정보           |
+| user_request_time      | timefield      | Y    | 시스템 요청 시간          |
 | sentence_attributes 속성 | -              | -    | -                  |
 | category_sentence      | string         | Y    | 엔티티 많을 때 사용자 발화 문장 |
 | main_category          | string         | N    | 엔티티-인텐트 대 카테고리     |
@@ -49,10 +51,12 @@ RequestAPI:
 
 | 파라미터                   | 타입             | 필수여부 | 설명                 |
 |------------------------|----------------|------|--------------------|
-| user_sentence          | string         | Y    | 사용자 발화 문장          |
-| is_atomic              | boolean        | Y    | 엔티티-인텐트 하나 여부      |
-| system_response_time   | timefield      | Y    | 시스템 응답 시간          |
+| req                    | Objects        | Y    | 사용자 발화 문장          |
 | sentence_attributes    | ArrayOfObjects | Y    | 엔티티-인텐트 포함 객체      |
+| req 속성                 | -              | -    | -                  |
+| user_sentence          | string         | Y    | 사용자 발화 문장          |
+| user_ip                | ip             | Y    | 사용자 ip정보           |
+| user_request_time      | timefield      | Y    | 시스템 요청 시간          |
 | sentence_attributes 속성 | -              | -    | -                  |
 | category_sentence      | string         | Y    | 엔티티 많을 때 사용자 발화 문장 |
 | main_category          | string         | N    | 엔티티-인텐트 대 카테고리     |
