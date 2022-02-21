@@ -8,7 +8,9 @@ from app.application.service.mecab_generator import MecabGenerator
 from app.application.service.mecab_ner import MeCabNer
 from app.application.service.mecab_parser import MeCabParser
 from app.application.service.mecab_storage import MeCabStorage
+from app.domain.endpoint import MecabNerAttribute
 from app.domain.entity import MecabCategory, MeCabEntityIntent, MeCabEntity, MeCabIntent, CategoryItem, MecabWord
+from app.infrastructure.network.api_endpoint import get_bert_confirm_response
 from app.utility.data_reader import DataReader
 from scripts.db_info import EntityCategoryItem, MecabEntity, MecabIntent, IntentCategoryItem
 
@@ -48,13 +50,21 @@ class MeCabController:
                             mc_en_int = MeCabEntityIntent(entity_item, intent_item)
                 yield mc_en_int
 
-
 def get_data(sentence):
+
     return_val = []
     for mecab_item in MeCabController().gen_entity_intent(sentence=sentence):
         if mecab_item:
-            return_val.append(asdict(mecab_item))
-
+            if mecab_item.entity.large_category != mecab_item.intent.large_category:
+                continue
+            m_n_attr = MecabNerAttribute(category_sentence=sentence, main_category=mecab_item.entity.large_category,
+                              entity=mecab_item.entity.entity, entity_medium_category=mecab_item.entity.medium_category,
+                              entity_small_category=mecab_item.entity.small_category,
+                              intent=mecab_item.intent.entity, intent_medium_category=mecab_item.intent.medium_category,
+                              intent_small_category=mecab_item.intent.medium_category)
+            bert_answer = get_bert_confirm_response(m_n_attr.json())
+            m_n_attr.bert_confirm = bert_answer
+            return_val.append(m_n_attr)
     return return_val
 
 
