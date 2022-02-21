@@ -42,11 +42,12 @@ class MecabNerResponse(BaseModel):
     system_response_time: datetime
 
 
-class ChatApiRequest(MecabNerAttribute):
+class ChatApiRequest(BaseModel):
 
     """ ChatApi 서버에 보내는 요청 """
 
-    request_time: datetime = datetime.now().isoformat(timespec='microseconds')
+    m_n_a: MecabNerAttribute
+    req: Request
 
 
 class ChatApiResponse(BaseModel):
