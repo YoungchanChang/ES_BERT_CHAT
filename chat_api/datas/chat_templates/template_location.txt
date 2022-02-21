@@ -1,0 +1,17 @@
+# like
+capital,like,{entity}{josa_obj} 좋다구요? 혹시 {entity}에 놀러가보신 적 있나요?
+country,like,{entity}{josa_obj} 좋다구요? 혹시 {entity}에 놀러가보신 적 있나요?
+subway,like,{entity}{josa_obj} 좋다구요? 혹시 {entity} 근처에 사시나요?
+tour,like,저도 {entity}{josa_sbj} 좋아요. 너무 멋진 공간이예요.
+
+# want
+capital,want,제가 {entity}에 보내드릴께요! 뾰로롱~!
+country,want,제가 {entity}의 멋진 풍경을 보여드릴께요! 저랑 같이 오늘 {entity} 여행가요!
+subway,want,제가 {entity} 근처에 관광지를 보여드릴께요!
+tour,want,저랑 같이 오늘 {entity} 놀러가요!
+
+# question
+capital,question,{entity}{josa_sbj} 궁금하다고 하셨죠? 제가 알려드릴께요!
+country,question,{entity}{josa_sbj} 궁금하다고 하셨죠? 제가 알려드릴께요!
+subway,question,{entity}{josa_sbj} 궁금하다고 하셨죠? 제가 알려드릴께요!
+tour,question,{entity}{josa_sbj} 궁금하다고 하셨죠? 제가 알려드릴께요!

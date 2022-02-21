@@ -1,0 +1,7 @@
+# like
+singer,like,오 저도 {entity}{josa_obj} 좋아해요! {entity}의 어떤 노래를 좋아하시나요?
+song,like,저도 {entity}{josa_obj} 자주 들어요! 가사가 저한테 딱 맞거든요.
+
+# want
+singer,want,잠시만요. 제가 {entity}{josa_sbj} 부른 노래 들려드릴께요.
+song,want,잠시만요. 제가 {entity} 들려드릴께요.
