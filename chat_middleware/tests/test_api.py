@@ -21,7 +21,7 @@ def test_request_from_django_web_wrong_time_format(fastapi_client, mock_django_r
     mock_django_request["user_request_time"] = date(2002, 12, 4).isoformat()
 
     with fastapi_client as client:
-        result = client.post(f"chat_middleware/middleware_response", json=mock_django_request)
+        result = client.post(f"chat_middleware/response_middleware", json=mock_django_request)
 
         assert result.status_code == 422
 

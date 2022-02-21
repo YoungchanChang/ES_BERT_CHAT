@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.post("/middleware_response")
+@router.post("/response_middleware")
 async def request_from_django_web(django_req: Request):
     try:
         c_m_res = ChatMiddlewareResponse(bot_response="Hello")
