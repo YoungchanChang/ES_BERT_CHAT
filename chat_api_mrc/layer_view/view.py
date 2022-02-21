@@ -2,7 +2,8 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
-from chat_middleware.layer_model.domain import ChatMiddlewareResponse, Request
+from chat_api_mrc.layer_control.control import get_mrc
+from chat_api_mrc.layer_model.domain import ChatApiRequest, ChatApiResponse
 
 router = APIRouter(
     prefix="/chat_api_mrc",
@@ -12,10 +13,12 @@ router = APIRouter(
 
 
 @router.post("/response_mrc")
-async def request_from_chat_api(django_req: Request):
+async def request_from_chat_api(chat_api_req: ChatApiRequest):
+
     try:
-        c_m_res = ChatMiddlewareResponse(bot_response="Hello")
+        mrc_res = get_mrc(chat_api_req.sentence_attributes)
+        c_a_res = ChatApiResponse(api_response=mrc_res, api_server="youtube_template")
+        return jsonable_encoder(c_a_res)
+
     except ValidationError as e:
         return e.json()
-
-    return jsonable_encoder(c_m_res)
