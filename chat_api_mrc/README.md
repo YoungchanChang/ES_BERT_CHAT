@@ -1,18 +1,16 @@
 
-
 # 동작 로직
 
-1. chat_middleware에서 요청 받음
-2. 카테고리에 따라 api서버 응답 요청.
-3. api서버 응답 바탕으로 템플릿에 답변 만들어서 반환
+1. chat_api에서 요청 받음
+2. SearchAPI에 데이터 요청
+3. SearchAPI에서 온 데이터를 MRC에 삽입
+4. MRC답변 정제 후 response
 
-- api서버에 응답 요청시 chat_middleware에 보낸 spec으로 request 요청
-
-# From chat_middleware To chat_api
+# From chat_api To chat_api_mrc
 
 RequestAPI:
 
-- chat_middleware 컨테이너 -> chat_api 컨테이너에 응답 요청
+- chat_middleware 컨테이너 -> chat_api_mrc 컨테이너에 응답 요청
 - chat_objects의 하나씩 받음
 
 | 파라미터                   | 타입        | 필수여부 | 설명             |
@@ -37,7 +35,7 @@ RequestAPI:
 
 ResponseAPI:
 
-- chat_middleware 컨테이너 <- chat_api 컨테이너에 응답
+- chat_middleware 컨테이너 <- chat_api_mrc 컨테이너에 응답
 
 | 파라미터                 | 타입        | 필수여부 | 설명          |
 |----------------------|-----------|------|-------------|
