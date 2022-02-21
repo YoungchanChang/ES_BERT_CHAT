@@ -21,7 +21,7 @@ async def request_from_chat_middleware(chat_api_req: ChatApiRequest):
                            entity=middle_m_n_a.entity, intent_small_category=middle_m_n_a.intent_small_category)
         api_template = get_template_data(t_r_d)
         if api_template:
-            c_a_res = ChatApiResponse(api_template=api_template, api_server="basic_template", system_response_time="2022-02-21T07:03:52.716025")
+            c_a_res = ChatApiResponse(api_response=api_template, api_server="basic_template", system_response_time="2022-02-21T07:03:52.716025")
             return jsonable_encoder(c_a_res)
     except ValidationError as e:
         return e.json()
