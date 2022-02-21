@@ -1,0 +1,3 @@
+
+class NoMusicData(Exception):
+    ...
