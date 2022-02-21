@@ -68,25 +68,24 @@ RequestAPI:
 - chat_middleware 컨테이너 -> chat_api 컨테이너에 응답 요청
 - chat_objects의 하나씩 응답 요청
 
-| 파라미터                   | 타입        | 필수여부 | 설명             |
-|------------------------|-----------|------|----------------|
-| m_n_a                  | Objects   | Y    | 사용자 발화 문장      |
-| req                    | Objects   | Y    | 사용자 발화 문장      |
-| m_n_a속성                | -         | -    | -              |
-| category_sentence      | string    | Y    | 사용자 발화 문장      |
-| main_category          | string    | N    | 엔티티-인텐트 대 카테고리 |
-| entity                 | string    | N    | 추출 엔티티         |
-| entity_medium_category | string    | N    | 엔티티 중 카테고리     |
-| entity_small_category  | string    | N    | 엔티티 소 카테고리     |
-| intent                 | string    | N    | 추출 인텐트         |
-| intent_medium_category | string    | N    | 인텐트 중 카테고리     |
-| intent_small_category  | string    | N    | 인텐트 소 카테고리     |
-| bert_confirm           | boolean   | Y    | 버트 확인여부        |
-| req 속성                 | -         | -    | -              |
-| user_sentence          | string    | Y    | 사용자 발화 문장      |
-| user_ip                | ip        | Y    | 사용자 ip정보       |
-| user_request_time      | timefield | Y    | 시스템 요청 시간      |
-
+| 파라미터                   | 타입             | 필수여부 | 설명                 |
+|------------------------|----------------|------|--------------------|
+| req                    | Objects        | Y    | 사용자 발화 문장          |
+| sentence_attributes    | ArrayOfObjects | Y    | 엔티티-인텐트 포함 객체      |
+| req 속성                 | -              | -    | -                  |
+| user_sentence          | string         | Y    | 사용자 발화 문장          |
+| user_ip                | ip             | Y    | 사용자 ip정보           |
+| user_request_time      | timefield      | Y    | 시스템 요청 시간          |
+| sentence_attributes 속성 | -              | -    | -                  |
+| category_sentence      | string         | Y    | 엔티티 많을 때 사용자 발화 문장 |
+| main_category          | string         | N    | 엔티티-인텐트 대 카테고리     |
+| entity                 | string         | N    | 추출 엔티티             |
+| entity_medium_category | string         | N    | 엔티티 중 카테고리         |
+| entity_small_category  | string         | N    | 엔티티 소 카테고리         |
+| intent                 | string         | N    | 추출 인텐트             |
+| intent_medium_category | string         | N    | 인텐트 중 카테고리         |
+| intent_small_category  | string         | N    | 인텐트 소 카테고리         |
+| bert_confirm           | boolean        | Y    | 버트 확인여부            |
 
 
 ResponseAPI:
