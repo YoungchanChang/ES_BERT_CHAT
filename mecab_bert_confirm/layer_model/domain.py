@@ -29,7 +29,7 @@ class MecabNerAttribute(BaseModel):
     intent: str
     intent_medium_category: str
     intent_small_category: str
-    bert_confirm: bool
+    bert_confirm: Optional[bool] = False
 
 
 class MecabNerResponse(Response):
