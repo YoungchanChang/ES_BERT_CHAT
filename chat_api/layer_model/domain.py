@@ -25,6 +25,13 @@ class MecabNerAttribute(BaseModel):
     bert_confirm: bool
 
 
+class TemplateRequestData(BaseModel):
+    main_category: str
+    entity_medium_category: str
+    entity: str
+    intent_small_category: str
+
+
 class ChatApiRequest(BaseModel):
 
     """ ChatApi 서버에 보내는 요청 """
