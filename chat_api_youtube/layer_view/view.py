@@ -25,6 +25,6 @@ async def request_from_chat_api(chat_api_req: ChatApiRequest):
         return e.json()
     except NoMusicData as e:
             ...
-    c_a_res = ChatApiResponse(api_response="나도 치킨이 좋아요", api_server="basic_template")
+    c_a_res = ChatApiResponse(api_response="음악을 준비중이예요. 조금만 기다려주세요.", api_server="basic_template")
     return jsonable_encoder(c_a_res)
 
