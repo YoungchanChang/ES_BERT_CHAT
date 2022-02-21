@@ -72,6 +72,7 @@ RequestAPI:
 |------------------------|----------------|------|--------------------|
 | req                    | Objects        | Y    | 사용자 발화 문장          |
 | sentence_attributes    | ArrayOfObjects | Y    | 엔티티-인텐트 포함 객체      |
+| is_atomic              | boolean        | Y    | 엔티티-인텐트 하나 여부      |
 | req 속성                 | -              | -    | -                  |
 | user_sentence          | string         | Y    | 사용자 발화 문장          |
 | user_ip                | ip             | Y    | 사용자 ip정보           |
