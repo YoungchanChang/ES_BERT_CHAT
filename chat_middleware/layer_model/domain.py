@@ -54,6 +54,6 @@ class ChatApiResponse(BaseModel):
 
     """ ChatApi 서버에 보내는 응답 """
 
-    api_template: str
+    api_response: str
     api_server: str
     system_response_time: datetime

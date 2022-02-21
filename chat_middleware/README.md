@@ -95,6 +95,6 @@ ResponseAPI:
 
 | 파라미터                 | 타입        | 필수여부 | 설명          |
 |----------------------|-----------|------|-------------|
-| api_template         | string    | Y    | 챗봇 템플릿 응답   |
+| api_response         | string    | Y    | 챗봇 템플릿 응답   |
 | api_server           | string    | Y    | 응답 API서버 종류 |
 | system_response_time | timefield | Y    | 시스템 응답 시간   |
