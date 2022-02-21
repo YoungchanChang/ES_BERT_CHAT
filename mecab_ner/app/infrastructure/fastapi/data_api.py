@@ -6,7 +6,7 @@ from app.domain.entity import CategoryItem, MecabWord
 
 router = APIRouter(
     prefix="/mecab_data",
-    tags=["mecab_ner"],
+    tags=["mecab_data"],
     responses={404: {"description": "Not found"}},
 )
 
