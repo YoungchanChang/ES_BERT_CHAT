@@ -1,7 +1,6 @@
 from typing import List
 
-from chat_api_mrc.layer_model.domain import MecabNerAttribute
-
+from chat_api_mrc.layer_model.chat_domain import MecabNerAttribute
 
 def get_mrc(sentence_attributes: List[MecabNerAttribute]):
 
