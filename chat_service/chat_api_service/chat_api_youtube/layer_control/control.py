@@ -1,7 +1,7 @@
 from typing import List
 
-from chat_service.chat_api_youtube.layer_model.domain import MecabNerAttribute
-from chat_service.chat_api_youtube.utility.custom_error import NoMusicData
+from chat_service.chat_api_service.chat_api_youtube.layer_model.domain import MecabNerAttribute
+from chat_service.chat_api_service.chat_api_youtube.utility.custom_error import NoMusicData
 
 FIRST_VALUE = 0
 

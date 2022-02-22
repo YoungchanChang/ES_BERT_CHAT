@@ -2,9 +2,9 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
-from chat_service.chat_api_youtube.layer_control.control import get_youtube_music
-from chat_service.chat_api_youtube.layer_model.domain import ChatApiRequest, ChatApiResponse
-from chat_service.chat_api_youtube.utility.custom_error import NoMusicData
+from chat_service.chat_api_service.chat_api_youtube.layer_control.control import get_youtube_music
+from chat_service.chat_api_service.chat_api_youtube.layer_model.domain import ChatApiRequest, ChatApiResponse
+from chat_service.chat_api_service.chat_api_youtube.utility.custom_error import NoMusicData
 
 router = APIRouter(
     prefix="/chat_api_youtube",

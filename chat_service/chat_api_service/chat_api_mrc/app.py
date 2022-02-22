@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
-from chat_service.chat_api_mrc.layer_view import view
+from chat_service.chat_api_service.chat_api_mrc.layer_view import view
 
 load_dotenv()
 
