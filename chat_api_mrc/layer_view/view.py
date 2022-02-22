@@ -5,10 +5,10 @@ from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
+from chat_api_mrc.config.settings import chat_log_ini
 from chat_api_mrc.layer_control.control import get_mrc
 from chat_api_mrc.layer_model.chat_domain import ChatApiRequest, ChatApiResponse
 
-chat_log_ini = Path(__file__).resolve().parent.parent.parent.joinpath('chat_log', 'chat_log.ini')
 logging.config.fileConfig(str(chat_log_ini))
 logger = logging.getLogger(__name__)
 
