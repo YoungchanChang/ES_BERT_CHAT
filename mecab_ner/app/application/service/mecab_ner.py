@@ -45,22 +45,27 @@ def integrate_many_entity_index(mecab_entity_category_list: List, length: int) -
     return blank
 
 def gen_integrated_entity(blank_list: List) -> Generator:
+
+    """
+    엔티티가 포함된 인덱스는 1로 색칠되어 있다. 없는 인덱스 반환
+    """
+
     start_idx = None
     end_idx = None
     switch_on = True
     for idx, item in enumerate(blank_list):
         if item == MeCabNer.FULL_WORD:
-            end_idx = idx
+            end_idx = idx # 한번은 0이 된다.
 
-            if switch_on:
+            if switch_on: # 스위치 켜지면 start_index를 시작점으로 잡는다.
                 start_idx = idx
 
             switch_on = False
 
-            if idx != len(blank_list) - 1:
+            if idx != len(blank_list) - 1: # 인덱스가 끝이 아니라면, 다음 단어를 탐색한다.
                 continue
 
-        if (switch_on is False) and end_idx:
+        if (switch_on is False) and (end_idx is not None):
             yield start_idx, end_idx
             start_idx = None
             end_idx = None
