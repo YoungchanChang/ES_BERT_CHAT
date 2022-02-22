@@ -3,6 +3,7 @@ import os
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 
+from app.application.service.mecab_parser import MeCabParser
 from app.controller.service.mecab_controller import get_data
 from app.domain.endpoint import ChatApiRequest, Request
 from app.domain.entity import Query
@@ -22,3 +23,10 @@ async def get_mecab_attribute(req: Request):
 
     return jsonable_encoder(return_json)
 
+
+@router.post("/mecab_analyzed")
+async def get_mecab_analyzed(req: Query):
+    mecab_parsed_list = list(MeCabParser(sentence=req.sentence).gen_mecab_compound_token_feature())
+    return_json = {"result": mecab_parsed_list}
+
+    return jsonable_encoder(return_json)
