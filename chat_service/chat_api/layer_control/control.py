@@ -1,6 +1,6 @@
-from chat_api.datas.data_reader import read_template
-from chat_api.layer_model.domain import TemplateRequestData
-from chat_api.utility import utility_string
+from chat_service.chat_api.datas.data_reader import read_template
+from chat_service.chat_api.layer_model.domain import TemplateRequestData
+from chat_service.chat_api.utility import utility_string
 
 ENTITY_SMALL_CATEGORY = 0
 INTENT_SMALL_CATEGORY = 1
