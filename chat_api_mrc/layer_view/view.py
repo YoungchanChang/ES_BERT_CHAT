@@ -1,5 +1,4 @@
 import logging.config
-from pathlib import Path
 
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
@@ -8,7 +7,7 @@ from pydantic import ValidationError
 from chat_api_mrc.config.settings import config_basic
 from chat_api_mrc.layer_control.control import get_mrc
 from chat_api_mrc.layer_model.chat_domain import ChatApiRequest, ChatApiResponse
-from chat_core.settings import chat_log_path
+from chat_service.chat_core.settings import chat_log_path
 
 config_basic['handlers']['access']['filename'] = str(chat_log_path.joinpath('chat_api_mrc', 'access', 'access.log'))
 config_basic['handlers']['error']['filename'] = str(chat_log_path.joinpath('chat_api_mrc', 'error', 'error.log'))
