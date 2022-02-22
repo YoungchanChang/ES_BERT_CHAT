@@ -1,10 +1,6 @@
 import pytest
-import json
-from starlette.testclient import TestClient
 
-from chat_middleware.app import app
-from chat_middleware.layer_model.domain import MecabNerAttribute, MecabNerResponse, ChatApiRequest, ChatApiResponse, \
-    Request
+from chat_service.chat_middleware.layer_model.domain import MecabNerAttribute, MecabNerResponse, ChatApiResponse
 
 
 @pytest.fixture(scope="function")

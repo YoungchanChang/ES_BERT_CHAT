@@ -1,9 +1,8 @@
 import pytest
-import json
 from starlette.testclient import TestClient
 
-from chat_middleware.app import app
-from chat_middleware.layer_model.domain import MecabNerAttribute, MecabNerResponse, ChatApiRequest, ChatApiResponse, \
+from chat_service.chat_middleware.app import app
+from chat_service.chat_middleware.layer_model.domain import MecabNerAttribute, MecabNerResponse, ChatApiRequest, ChatApiResponse, \
     Request
 
 

@@ -2,9 +2,6 @@ import os
 import json
 from datetime import date
 from dotenv import load_dotenv
-import requests_mock
-
-from chat_middleware.layer_model.domain import ChatApiResponse
 
 load_dotenv()
 

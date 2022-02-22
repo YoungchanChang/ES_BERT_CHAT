@@ -4,8 +4,8 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
-from chat_middleware.layer_model.domain import ChatMiddlewareResponse, Request, ChatApiRequest, ChatApiResponse
-from chat_middleware.utility.api_endpoint import get_chat_api_response, get_mecab_ner_response
+from chat_service.chat_middleware.layer_model.domain import ChatMiddlewareResponse, Request, ChatApiRequest, ChatApiResponse
+from chat_service.chat_middleware.utility.api_endpoint import get_chat_api_response, get_mecab_ner_response
 
 router = APIRouter(
     prefix="/chat_middleware",

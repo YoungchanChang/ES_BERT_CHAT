@@ -1,4 +1,3 @@
-import json
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
@@ -6,7 +5,6 @@ from pydantic import ValidationError
 from chat_api.layer_control.control import get_template_data
 from chat_api.layer_model.domain import ChatApiRequest, ChatApiResponse, TemplateRequestData
 from chat_api.utility.api_endpoint import get_youtube_api_response, get_mrc_api_response
-from chat_middleware.layer_model.domain import ChatMiddlewareResponse, Request
 
 BLANK_LIST = 0
 FIRST_VALUE = 0
