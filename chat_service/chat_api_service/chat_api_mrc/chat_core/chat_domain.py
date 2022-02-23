@@ -10,4 +10,5 @@ class MecabNerAttribute:
 class ChatApiRequest:
     ...
 
-
+class ChatApiResponse:
+    ...
