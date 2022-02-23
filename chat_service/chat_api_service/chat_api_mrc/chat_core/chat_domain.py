@@ -1,14 +1,1 @@
-
-class Request:
-    ...
-
-
-class MecabNerAttribute:
-    ...
-
-
-class ChatApiRequest:
-    ...
-
-class ChatApiResponse:
-    ...
+from chat_service.chat_core.chat_domain import *
