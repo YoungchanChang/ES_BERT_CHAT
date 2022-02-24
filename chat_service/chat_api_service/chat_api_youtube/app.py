@@ -10,8 +10,9 @@ from chat_core.chat_log_config import config_basic
 from chat_core.settings import chat_log_path
 
 
-config_basic['handlers']['access']['filename'] = str(chat_log_path.joinpath('chat_api_mrc', 'access', 'access.log'))
-config_basic['handlers']['error']['filename'] = str(chat_log_path.joinpath('chat_api_mrc', 'error', 'error.log'))
+config_basic['handlers']['access']['filename'] = str(chat_log_path.joinpath('chat_api_youtube', 'access', 'access.log'))
+config_basic['handlers']['warning']['filename'] = str(chat_log_path.joinpath('chat_api_youtube', 'warning', 'warning.log'))
+config_basic['handlers']['error']['filename'] = str(chat_log_path.joinpath('chat_api_youtube', 'error', 'error.log'))
 logging.config.dictConfig(config_basic)
 logger = logging.getLogger(__name__)
 
