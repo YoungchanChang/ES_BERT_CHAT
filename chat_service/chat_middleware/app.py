@@ -3,7 +3,8 @@ import logging.config
 import uvicorn
 from fastapi import FastAPI, Request
 from dotenv import load_dotenv
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from layer_view import view
 
@@ -19,6 +20,11 @@ app = FastAPI()
 app.include_router(view.router)
 
 
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
+
+
 @app.exception_handler(Exception)
 async def exception_general_handler(request: Request, exc: Exception):
     return JSONResponse(
@@ -28,5 +34,5 @@ async def exception_general_handler(request: Request, exc: Exception):
 
 if __name__ == "__main__":
     uvicorn.run(
-        "app:app", host="0.0.0.0", port=5000, reload=True
+        "app:app", host="0.0.0.0", port=5001, reload=True
     )
