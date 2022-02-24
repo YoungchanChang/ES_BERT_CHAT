@@ -9,7 +9,7 @@ class UserRequest(BaseModel):
 
     user_sentence: str
     user_ip: str
-    user_request_time: Optional[datetime] = datetime.now().isoformat(timespec='microseconds')
+    user_request_time: datetime
 
 
 class MecabNerAttribute(BaseModel):
