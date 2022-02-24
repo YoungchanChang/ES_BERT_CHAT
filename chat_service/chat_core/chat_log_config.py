@@ -3,6 +3,7 @@ config_basic = {
     'disable_existing_loggers': True,
     "formatters": {
         "simple": {"format": "[%(name)s] %(message)s"},
+        "decorator_format": {"format": "%(message)s"},
         "complex": {
             "format": "%(asctime)s %(levelname)s [%(name)s] [%(pathname)s:%(funcName)s:%(lineno)d] - %(message)s"
         },
@@ -11,6 +12,12 @@ config_basic = {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "simple",
+            "level": "DEBUG",
+            'stream': 'ext://sys.stdout',
+        },
+        "decorator_handler": {
+            "class": "logging.StreamHandler",
+            "formatter": "decorator_format",
             "level": "DEBUG",
             'stream': 'ext://sys.stdout',
         },
@@ -28,6 +35,7 @@ config_basic = {
         },
     },
     "loggers": {
-        "basic_logger": {"handlers": ["console", "access", "error"], "level": "DEBUG"},
+        "simple_log": {"handlers": ["console", "access", "error"], "level": "DEBUG"},
+        "decorator": {"handlers": ["decorator_handler"], "level": "DEBUG"},
         "parent": {"level": "DEBUG"}, "parent.child": {"level": "DEBUG"},},
 }
