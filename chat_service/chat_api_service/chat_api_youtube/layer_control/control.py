@@ -18,7 +18,6 @@ temp_dict = {
 
 @log_decorator.log_basic(logger=logger, path=file_path)
 def get_youtube_music(sentence_attributes: List[MecabNerAttribute]):
-    raise Exception
     youtube_music_entity = [x.entity for x in sentence_attributes]
 
     youtube_link = " ".join(youtube_music_entity)
