@@ -23,8 +23,7 @@ async def request_from_chat_api(chat_api_req: ChatApiRequest, request: Request):
     try:
         youtube_res = get_youtube_music(chat_api_req.sentence_attributes)
         c_a_res = ChatApiResponse(api_response=youtube_res, api_server="youtube_template")
-        logger.info(
-            {'status': 'success', 'user_ip': request.client.host, "request_path": request.url.path, "return": c_a_res})
+        logger.info({'status': 'success', 'user_ip': request.client.host, "request_path": request.url.path, "return": c_a_res})
         return jsonable_encoder(c_a_res)
 
     except ValidationError as ve:
@@ -35,6 +34,9 @@ async def request_from_chat_api(chat_api_req: ChatApiRequest, request: Request):
         logger.warning(
             {'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": me,
              "music_request": chat_api_req.sentence_attributes})
+    except Exception as e:
+        logger.critical(
+            {'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": e})
     c_a_res = ChatApiResponse(api_response="음악을 준비중이예요. 조금만 기다려주세요.", api_server="basic_template")
     return jsonable_encoder(c_a_res)
 
