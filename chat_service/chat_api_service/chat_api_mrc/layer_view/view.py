@@ -8,6 +8,9 @@ from pydantic import ValidationError
 from layer_control.control import get_mrc
 from chat_core.chat_domain import ChatApiRequest, ChatApiResponse
 
+from config.settings import config_basic
+
+logging.config.dictConfig(config_basic)
 logger = logging.getLogger('simple_log')
 
 router = APIRouter(

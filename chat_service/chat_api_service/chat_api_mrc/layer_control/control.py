@@ -1,11 +1,15 @@
-import logging
+import logging.config
 from typing import List
 from pathlib import Path
 
 from chat_core import log_decorator
 from chat_core.chat_domain import MecabNerAttribute
 
+from config.settings import config_basic
+
+logging.config.dictConfig(config_basic)
 logger = logging.getLogger('decorator')
+
 
 file_path = str(Path(__file__).resolve().relative_to(Path(__file__).cwd()))
 
