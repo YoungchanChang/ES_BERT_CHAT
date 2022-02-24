@@ -23,8 +23,5 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
-COPY . /code/
-
-# flask_environment
-ENV FLASK_APP app.py
-ENV FLASK_RUN_HOST 0.0.0.0
+COPY ./chat_api_service/chat_api_youtube /code/
+COPY ./chat_core /code/chat_core
