@@ -27,6 +27,12 @@ config_basic = {
             "formatter": "complex",
             "level": "INFO",
         },
+        "warning": {
+            "class": "logging.FileHandler",
+            "filename": "warning.log",
+            "formatter": "complex",
+            "level": "WARNING",
+        },
         "error": {
             "class": "logging.FileHandler",
             "filename": "error.log",
@@ -35,7 +41,7 @@ config_basic = {
         },
     },
     "loggers": {
-        "simple_log": {"handlers": ["console", "access", "error"], "level": "DEBUG"},
+        "simple_log": {"handlers": ["console", "access", "warning", "error"], "level": "DEBUG"},
         "decorator": {"handlers": ["decorator_handler"], "level": "DEBUG"},
         "parent": {"level": "DEBUG"}, "parent.child": {"level": "DEBUG"},},
 }
