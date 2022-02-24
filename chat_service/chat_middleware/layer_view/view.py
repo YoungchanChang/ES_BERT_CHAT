@@ -75,9 +75,9 @@ async def request_chat_api(chat_api_req: ChatApiRequest, request: Request) -> Bo
 
         return jsonable_encoder(c_m_res)
 
-    except ValidationError as e:
-        raise
     except DockerNetworkException as dne:
+        logger.error({'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": dne})
         raise HTTPException(status_code=418, detail=dne)
     except Exception as e:
         logger.critical({'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": e})
+        raise
