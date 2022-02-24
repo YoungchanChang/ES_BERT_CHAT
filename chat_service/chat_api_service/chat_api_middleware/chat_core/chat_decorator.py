@@ -1,0 +1,1 @@
+from chat_service.chat_core.log_decorator import *
