@@ -23,5 +23,5 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
-COPY ./chat_api_service/chat_middleware /code/
+COPY ./chat_middleware /code/
 COPY ./chat_core /code/chat_core
