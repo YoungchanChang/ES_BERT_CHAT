@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
-from chat_service.chat_api_service.chat_api_youtube.layer_view import view
+from layer_view import view
 
 from chat_core.chat_log_config import config_basic
 from chat_core.settings import chat_log_path

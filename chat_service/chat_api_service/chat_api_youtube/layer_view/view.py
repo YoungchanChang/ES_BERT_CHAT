@@ -4,8 +4,8 @@ from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
-from chat_service.chat_api_service.chat_api_youtube.layer_control.control import get_youtube_music
-from chat_service.chat_api_service.chat_api_youtube.utility.custom_error import NoMusicData
+from chat_api_youtube.layer_control.control import get_youtube_music
+from chat_api_youtube.utility.custom_error import NoMusicData
 from chat_core.chat_domain import ChatApiRequest, ChatApiResponse
 
 logger = logging.getLogger('simple_log')

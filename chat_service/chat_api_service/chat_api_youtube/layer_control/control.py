@@ -2,9 +2,9 @@ import logging
 from pathlib import Path
 from typing import List
 
-from chat_service.chat_core import log_decorator
+from chat_core import log_decorator
 from chat_core.chat_domain import MecabNerAttribute
-from chat_service.chat_api_service.chat_api_youtube.utility.custom_error import NoMusicData
+from utility.custom_error import NoMusicData
 logger = logging.getLogger('decorator')
 
 file_path = str(Path(__file__).resolve().relative_to(Path(__file__).cwd()))

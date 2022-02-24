@@ -2,7 +2,7 @@ import logging
 from typing import List
 from pathlib import Path
 
-from chat_service.chat_core import log_decorator
+from chat_core import log_decorator
 from chat_core.chat_domain import MecabNerAttribute
 
 logger = logging.getLogger('decorator')
