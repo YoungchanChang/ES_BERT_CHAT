@@ -9,7 +9,7 @@ class UserRequest(BaseModel):
 
     user_sentence: str
     user_ip: str
-    user_request_time: datetime
+    user_request_time: Optional[datetime] = datetime.now().isoformat(timespec='microseconds')
 
 
 class MecabNerAttribute(BaseModel):
@@ -24,7 +24,7 @@ class MecabNerAttribute(BaseModel):
     intent: str
     intent_medium_category: str
     intent_small_category: str
-    bert_confirm: bool
+    bert_confirm: bool = False
 
 
 class ChatApiRequest(BaseModel):
