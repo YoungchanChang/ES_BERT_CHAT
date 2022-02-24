@@ -9,6 +9,7 @@ from chat_core.chat_domain import ChatApiRequest, ChatApiResponse, TemplateReque
 from utility.api_endpoint import get_youtube_api_response, get_mrc_api_response
 
 from config.settings import config_basic
+from utility.custom_error import TemplateNotExist
 
 logging.config.dictConfig(config_basic)
 logger = logging.getLogger('simple_log')
@@ -58,10 +59,17 @@ async def request_from_chat_middleware(chat_api_req: ChatApiRequest, request: Re
             logger.info({'status': 'success', 'user_ip': request.client.host, "request_path": request.url.path,
                          "return": c_a_res})
             return jsonable_encoder(c_a_res)
+
     except ValidationError as ve:
         logger.error(
             {'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": ve})
         return ve.json()
+
+    except TemplateNotExist as fne:
+        logger.error(
+            {'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": fne})
+        raise TemplateNotExist(fne)
+
     except Exception as e:
         logger.critical({'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": e})
         return jsonable_encoder(e)
