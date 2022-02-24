@@ -3,7 +3,7 @@ config_basic = {
     'disable_existing_loggers': True,
     "formatters": {
         "simple": {"format": "[%(name)s] %(message)s"},
-        "decorator_format": {"format": "%(message)s"},
+        "decorator_format": {"format": "[%(name)s] %(message)s"},
         "complex": {
             "format": "%(asctime)s %(levelname)s [%(name)s] [%(pathname)s:%(funcName)s:%(lineno)d] - %(message)s"
         },
