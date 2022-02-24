@@ -6,7 +6,7 @@ chat_log_path = Path(__file__).resolve().parent.parent.joinpath('chat_log')
 chat_api_youtube = "chat_api_youtube"
 chat_api_mrc = "chat_api_mrc"
 mecab_ner = "mecab_ner"
-chat_api_response = "chat_api_response"
+chat_api_response = "chat_api_middleware"
 if platform.system() == "Darwin":
     chat_api_mrc = "localhost"
     chat_api_youtube = "localhost"
