@@ -8,6 +8,10 @@ from layer_control.control import get_youtube_music
 from utility.custom_error import NoMusicData
 from chat_core.chat_domain import ChatApiRequest, ChatApiResponse
 
+
+from config.settings import config_basic
+
+logging.config.dictConfig(config_basic)
 logger = logging.getLogger('simple_log')
 
 router = APIRouter(
