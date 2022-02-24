@@ -39,9 +39,15 @@ config_basic = {
             "formatter": "complex",
             "level": "ERROR",
         },
+        "critical": {
+            "class": "logging.FileHandler",
+            "filename": "critical.log",
+            "formatter": "complex",
+            "level": "ERROR",
+        },
     },
     "loggers": {
-        "simple_log": {"handlers": ["console", "access", "warning", "error"], "level": "DEBUG"},
+        "simple_log": {"handlers": ["console", "access", "warning", "error", "critical"], "level": "DEBUG"},
         "decorator": {"handlers": ["decorator_handler"], "level": "DEBUG"},
         "parent": {"level": "DEBUG"}, "parent.child": {"level": "DEBUG"},},
 }
