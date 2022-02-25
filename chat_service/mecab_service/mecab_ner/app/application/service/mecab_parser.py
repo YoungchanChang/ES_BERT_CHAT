@@ -82,7 +82,10 @@ class MeCabParser:
 
     def gen_mecab_token_feature(self) -> Generator:
 
-        """ 메캅으로 형태소 분석한 토큰 제너레이터로 반환 """
+        """
+        메캅으로 형태소 분석한 토큰 제너레이터로 반환
+        스페이스로 분석한 토큰의 정보와 형태소로 분석한 토큰의 정보 포함
+        """
 
         lattice = _create_lattice(self.sentence)
 
@@ -100,7 +103,9 @@ class MeCabParser:
 
     def gen_mecab_compound_token_feature(self) -> Generator:
 
-        """ 메캅으로 형태소 분석한 토큰 제너레이터로 반환 """
+        """
+        메캅으로 분석한 토큰 제너레이터로 반환 결과 중에 복합여, 굴절형태소 있는 경우 토큰화
+        """
 
         for compound_include_item in self.gen_mecab_token_feature():
             if compound_include_item.type in self.type_list:
@@ -112,7 +117,8 @@ class MeCabParser:
             else:
                 yield compound_include_item.word, compound_include_item
 
-    def get_word_from_feature(self, is_list=False):
+    def get_word_from_mecab_compound(self, is_list=False):
+
         """ 메캅 특성에서 단어만 검출"""
 
         if is_list:

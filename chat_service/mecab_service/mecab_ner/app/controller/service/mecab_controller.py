@@ -96,7 +96,7 @@ class MecabDataController:
     def insert_data(mecab_word: MecabWord):
 
         saving_word = mecab_word.word
-        parsed_word = MeCabParser(saving_word).get_word_from_feature()
+        parsed_word = MeCabParser(saving_word).get_word_from_mecab_compound()
 
         if mecab_word.type == "entity":
             mecab_entity_data = MecabEntity.get_or_none(MecabEntity.category == mecab_word.category,

@@ -77,7 +77,7 @@ class MecabGenerator:
             for data_item in MecabGenerator.read_category(txt_data):
                 small_category, contents = data_item
                 if need_parser:
-                    contents = [(x, MeCabParser(x).get_word_from_feature()) for x in contents]
+                    contents = [(x, MeCabParser(x).get_word_from_mecab_compound()) for x in contents]
                 dict_value = data_dict.get(small_category, None)
                 if dict_value is None:
                     data_dict[small_category] = contents
