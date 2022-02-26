@@ -7,6 +7,10 @@ from app.utility.data_reader import DataReader
 
 class MecabGenerator:
 
+    """
+
+    """
+
     ORIGIN_WORD = 0
     MECAB_WORD = 1
     FORMAT_LIMIT = 2
