@@ -23,7 +23,9 @@ def test_gen_mecab_token_feature(mock_mecab_parser_sentence: dict):
     assert len(mecab_parse_results) == 9
 
 
-def test_gen_mecab_token_type_feature(mock_mecab_parser_sentence: dict):
+def test_reverse_compound_tokens(mock_mecab_parser_sentence: dict):
+
+    """ 파싱 후 restore하는 기능 테스트"""
 
     mecab_parse_results = list(MeCabParser(mock_mecab_parser_sentence.get("compound_count_2")).gen_mecab_token_feature())
 
