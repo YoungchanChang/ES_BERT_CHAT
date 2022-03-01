@@ -6,7 +6,7 @@ import numpy as np
 from app.application.service.mecab_ner import MecabNer, MECAB_FEATURE
 from app.application.service.mecab_parser import MecabParser
 from app.application.service.mecab_storage import MecabStorage
-from app.domain.mecab_domain import BindResult, BindToken
+from app.domain.mecab_domain import BindResult, BindInfo
 from domain.mecab_domain import MecabNerFeature
 from domain.mecab_exception import MecabDataReaderException
 
@@ -149,16 +149,19 @@ class MecabBinder:
             if m_e_tmp is not None:
                 mc_in_include_list.append(m_i_ner)
                 mc_en_include_list.append(m_e_tmp)
-                m_i_bind.append([m_i_ner, m_e_tmp])
+                m_i_bind.append([m_i_ner, m_e_tmp, i_bind_category])
 
-        bind_result = [
-            (x[self.BIND_ENTITY_IDX].word, x[self.BIND_INTENT_IDX].word, x[self.BIND_ENTITY_IDX].end_idx) if x[
-                                                                                                                 self.BIND_ENTITY_IDX].end_idx >=
-                                                                                                             x[
-                                                                                                                 self.BIND_INTENT_IDX].end_idx else
-            (x[self.BIND_ENTITY_IDX].word, x[self.BIND_INTENT_IDX].word, x[self.BIND_INTENT_IDX].end_idx)
-            for x in m_i_bind]
-        return BindResult(bind_result=bind_result, intent_result=mc_it_ners, entity_result=mc_en_ners)
+        bind_info_list = [BindInfo(bind_category=x[2], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], end_idx=x[self.BIND_ENTITY_IDX].end_idx)
+             if x[self.BIND_ENTITY_IDX].end_idx >= x[self.BIND_INTENT_IDX].end_idx
+             else BindInfo(bind_category=x[2], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], end_idx=x[self.BIND_INTENT_IDX].end_idx)
+             for x in m_i_bind]
+
+        for mc_in_include_item in mc_in_include_list:
+            mc_it_ners.remove(mc_in_include_item)
+        for mc_en_include_item in mc_en_include_list:
+            mc_en_ners.remove(mc_en_include_item)
+
+        return BindResult(bind_list=bind_info_list, intent_list=mc_it_ners, entity_list=mc_en_ners)
 
     def split_multi_en_in(self, sentence: str, split_bind_result: List):
         mecab_parsed_list = list(MecabParser(sentence=sentence).gen_mecab_compound_token_feature())
@@ -166,12 +169,11 @@ class MecabBinder:
         split_sentence = []
         start_idx = 0
         for result_item in split_bind_result:
-            mecab_parsed_token = mecab_parsed_list[start_idx:result_item[self.BIND_SPLIT_IDX]]
-            start_idx = result_item[self.BIND_SPLIT_IDX]
+            mecab_parsed_token = mecab_parsed_list[start_idx:result_item.end_idx]
+            start_idx = result_item.end_idx
             restore_tokens = MecabStorage().reverse_compound_tokens(mecab_parsed_token)
-            split_sentence.append(BindToken(split_sentence=" ".join(restore_tokens),
-                                            entity=result_item[self.BIND_ENTITY_IDX],
-                                            intent=result_item[self.BIND_INTENT_IDX]))
+            result_item.split_sentence = " ".join(restore_tokens)
+            split_sentence.append(result_item)
         return split_sentence
 
 
