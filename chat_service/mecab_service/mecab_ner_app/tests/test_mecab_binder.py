@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from app.controller.service.mecab_binder import MecabEntity, MecabIntent, MecabBinder
-from app.domain.mecab_domain import BindResult, BindToken
+from app.domain.mecab_domain import BindResult, BindInfo
 from domain.mecab_domain import Category, MecabNerFeature
 
 
@@ -42,8 +42,8 @@ def test_get_bind():
     test_sentence = "진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다"
     bind_result = m_b.get_bind(test_sentence)
 
-    assert bind_result == BindResult(bind_result=[('진주 아이유', '듣는 것이 좋다', 8), ('아이묭', '듣는 것이 좋다', 16)], intent_result=[MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=2, end_idx=8, category=Category(large='music_like', small='듣는게 좋다')), MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=10, end_idx=16, category=Category(large='music_like', small='듣는게 좋다'))], entity_result=[MecabNerFeature(word='진주 아이유', pos='entity', start_idx=0, end_idx=2, category=Category(large='music_singer', small='가수')), MecabNerFeature(word='아이묭', pos='entity', start_idx=8, end_idx=10, category=Category(large='music_singer', small='가수'))])
+    assert bind_result == BindResult(bind_list=[BindInfo(bind_category='music', entity=MecabNerFeature(word='진주 아이유', pos='entity', start_idx=0, end_idx=2, category=Category(large='music_singer', small='가수')), intent=MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=2, end_idx=8, category=Category(large='music_like', small='듣는게 좋다')), end_idx=8, split_sentence=None), BindInfo(bind_category='music', entity=MecabNerFeature(word='아이묭', pos='entity', start_idx=8, end_idx=10, category=Category(large='music_singer', small='가수')), intent=MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=10, end_idx=16, category=Category(large='music_like', small='듣는게 좋다')), end_idx=16, split_sentence=None)], intent_list=[], entity_list=[])
 
-    multi_en_in = m_b.split_multi_en_in(test_sentence, bind_result.bind_result)
+    multi_en_in = m_b.split_multi_en_in(test_sentence, bind_result.bind_list)
 
-    assert multi_en_in == [BindToken(split_sentence='진주 아이유 듣는 것이 좋다', entity='듣는 것이 좋다', intent='진주 아이유'), BindToken(split_sentence='아이묭 듣는 것이 좋다', entity='듣는 것이 좋다', intent='아이묭')]
+    assert multi_en_in == [BindInfo(bind_category='music', entity=MecabNerFeature(word='진주 아이유', pos='entity', start_idx=0, end_idx=2, category=Category(large='music_singer', small='가수')), intent=MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=2, end_idx=8, category=Category(large='music_like', small='듣는게 좋다')), end_idx=8, split_sentence='진주 아이유 듣는 것이 좋다'), BindInfo(bind_category='music', entity=MecabNerFeature(word='아이묭', pos='entity', start_idx=8, end_idx=10, category=Category(large='music_singer', small='가수')), intent=MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=10, end_idx=16, category=Category(large='music_like', small='듣는게 좋다')), end_idx=16, split_sentence='아이묭 듣는 것이 좋다')]
