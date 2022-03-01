@@ -2,8 +2,8 @@ from typing import List, Generator
 from pathlib import Path
 from collections import defaultdict
 
-from mecab_ner_app.domain.mecab_exception import MecabDataReaderException
-from mecab_ner_app.app.application.service.mecab_parser import MecabParser
+from domain.mecab_exception import MecabDataReaderException
+from app.application.service.mecab_parser import MecabParser
 
 
 class CategoryData:

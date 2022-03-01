@@ -3,10 +3,10 @@ from typing import List, Generator, Iterable
 from pathlib import Path
 
 
-from mecab_ner_app.app.application.service.mecab_parser import MecabParser
-from mecab_ner_app.app.application.service.mecab_storage import MecabStorage
-from mecab_ner_app.app.application.service.mecab_reader import MecabDataController
-from mecab_ner_app.domain.mecab_domain import MecabWordCategory, Category, MecabPatternData, MecabNerFeature, NerFeature
+from app.application.service.mecab_parser import MecabParser
+from app.application.service.mecab_storage import MecabStorage
+from app.application.service.mecab_reader import MecabDataController
+from domain.mecab_domain import MecabWordCategory, Category, MecabPatternData, MecabNerFeature, NerFeature
 
 MECAB_READING_WORD = 0
 MECAB_FEATURE = 1
