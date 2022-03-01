@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import numpy as np
+
 from app.application.service.mecab_ner import MecabNer, MECAB_FEATURE
 from app.application.service.mecab_parser import MecabParser
 from domain.mecab_domain import MecabNerFeature
@@ -85,18 +87,33 @@ if __name__ == "__main__":
     entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
     m_e = MecabEntity(ner_path=str(entity_path), clear_mecab_dir=False)
 
-    test_sentence = "진주 아이유 들을려고 아이묭 듣는 것이 좋다"
-
-    print(m_e.parse(test_sentence))
-    print(m_e.morphs(test_sentence))
-    print(m_e.ners(test_sentence))
-
-    entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
-    m_n = MecabIntent(ner_path=str(entity_path), clear_mecab_dir=False, infer=False)
-
     test_sentence = "진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다"
 
-    print(m_n.parse(test_sentence))
-    print(m_n.morphs(test_sentence))
-    print(m_n.ners(test_sentence))
+    m_e_ners = m_e.ners(test_sentence)
+    print(m_e_ners)
 
+    entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
+    m_i = MecabIntent(ner_path=str(entity_path), clear_mecab_dir=False, infer=False)
+
+    m_i_ners = m_i.ners(test_sentence)
+    print(m_i_ners)
+
+    m_i_bind = []
+    for m_i_ner in m_i_ners:
+        m_inf = np.inf
+        m_e_tmp = None
+        m_i_idx = (m_i_ner.start_idx + m_i_ner.end_idx)/2
+
+        for m_e_ner in m_e_ners:
+            m_e_idx = (m_e_ner.start_idx + m_e_ner.end_idx)/2
+
+            m_e_i_diff = abs(m_e_idx - m_i_idx)
+            if m_e_i_diff < m_inf:
+                m_inf = m_e_i_diff
+                m_e_tmp = m_e_ner
+
+        m_i_bind.append([m_i_ner, m_e_tmp])
+
+    print(m_i_bind)
+    result = [(x[1].word, x[0].word) for x in m_i_bind]
+    print(result)
