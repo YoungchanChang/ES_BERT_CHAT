@@ -60,13 +60,15 @@ class NerFeature:
 
 @dataclass
 class BindResult:
-    bind_result: list
-    intent_result: list
-    entity_result: list
+    bind_list: list
+    intent_list: list
+    entity_list: list
 
 
 @dataclass
-class BindToken:
-    split_sentence: str
-    entity: str
-    intent: str
+class BindInfo:
+    bind_category: str
+    entity: MecabNerFeature
+    intent: MecabNerFeature
+    end_idx: Optional[int] = None
+    split_sentence: Optional[str] = None
