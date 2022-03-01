@@ -83,76 +83,124 @@ class MecabIntent(MecabCore):
             self._clear_dir()
 
 
+class MecabBinder:
+
+    LARGE_CLASSIFIER = "_"
+    LARGE_SEARCH_IDX = 0
+
+    def __init__(self):
+        entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
+        self.mecab_entity = MecabEntity(ner_path=str(entity_path), clear_mecab_dir=False)
+
+        entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
+        self.mecab_intent = MecabIntent(ner_path=str(entity_path), clear_mecab_dir=False, infer=False)
+
+    def get_large_category(self, mc_all_ners):
+        if self.LARGE_CLASSIFIER in mc_all_ners.category.large:
+            e_bind_category = mc_all_ners.category.large.split(self.LARGE_CLASSIFIER)[self.LARGE_SEARCH_IDX]
+        else:
+            e_bind_category = mc_all_ners.category.large
+        return e_bind_category
+
+    def get_bind(self, sentence: str):
+        mc_it_ners = self.mecab_intent.ners(sentence)
+        mc_en_ners = self.mecab_entity.ners(sentence)
+
+        m_i_bind = []
+        for m_i_ner in mc_it_ners:
+            m_inf = np.inf
+            m_e_tmp = None
+            m_i_idx = (m_i_ner.start_idx + m_i_ner.end_idx)/2
+
+            i_bind_category = self.get_large_category(m_i_ner)
+
+            for m_e_ner in mc_en_ners:
+
+                e_bind_category = self.get_large_category(m_e_ner)
+
+                if i_bind_category == e_bind_category:
+                    m_e_idx = (m_e_ner.start_idx + m_e_ner.end_idx)/2
+
+                    m_e_i_diff = abs(m_e_idx - m_i_idx)
+                    if m_e_i_diff < m_inf:
+                        m_inf = m_e_i_diff
+                        m_e_tmp = m_e_ner
+
+            if m_e_tmp is not None:
+                mc_it_ners.remove(m_i_ner)
+                mc_en_ners.remove(m_e_tmp)
+                m_i_bind.append([m_i_ner, m_e_tmp])
+
 if __name__ == "__main__":
     # 1. 경로 다르게
     # 2. 옵션 다르게
-
-
-    entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
-    m_e = MecabEntity(ner_path=str(entity_path), clear_mecab_dir=False)
-
-    test_sentence = "좋아 진주 아이유 듣는 것이 좋다 아이묭 좋아해"
-
-    entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
-    m_i = MecabIntent(ner_path=str(entity_path), clear_mecab_dir=False, infer=False)
-
-    m_i_ners = m_i.ners(test_sentence)
-    print(m_i_ners)
-
-
-    m_e_ners = m_e.ners(test_sentence)
-    print(m_e_ners)
-
-
-    m_i_bind = []
-    for m_i_ner in m_i_ners:
-        m_inf = np.inf
-        m_e_tmp = None
-        m_i_idx = (m_i_ner.start_idx + m_i_ner.end_idx)/2
-
-        if "_" in m_i_ner.category.large:
-            i_bind_category = m_i_ner.category.large.split("_")[0]
-        else:
-            i_bind_category = m_i_ner.category.large
-
-        for m_e_ner in m_e_ners:
-
-            if "_" in m_e_ner.category.large:
-                e_bind_category = m_e_ner.category.large.split("_")[0]
-            else:
-                e_bind_category = m_e_ner.category.large
-
-            if i_bind_category == e_bind_category:
-                m_e_idx = (m_e_ner.start_idx + m_e_ner.end_idx)/2
-
-                m_e_i_diff = abs(m_e_idx - m_i_idx)
-                if m_e_i_diff < m_inf:
-                    m_inf = m_e_i_diff
-                    m_e_tmp = m_e_ner
-
-        if m_e_tmp is not None:
-            m_i_ners.remove(m_i_ner)
-            m_e_ners.remove(m_e_tmp)
-            m_i_bind.append([m_i_ner, m_e_tmp])
-
-
-    print(m_i_bind)
-    result = [(x[1].word, x[0].word, x[1].end_idx) if x[1].end_idx >= x[0].end_idx else
-              (x[1].word, x[0].word, x[0].end_idx)
-              for x in m_i_bind]
-
-    mecab_parsed_list = list(MecabParser(sentence=test_sentence).gen_mecab_compound_token_feature())
-    print(mecab_parsed_list)
-
-    start_idx = 0
-    for result_item in result:
-
-        mecab_parsed_token = mecab_parsed_list[start_idx:result_item[2]]
-        start_idx = result_item[2]
-        # print([x[0] for x in mecab_parsed_list])
-        restore_tokens = MecabStorage().reverse_compound_tokens(mecab_parsed_token)
-        print(restore_tokens)
+    #
+    #
+    # entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
+    # m_e = MecabEntity(ner_path=str(entity_path), clear_mecab_dir=False)
+    #
+    # test_sentence = "좋아 진주 아이유 듣는 것이 좋다 아이묭 좋아해"
+    #
+    # entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
+    # m_i = MecabIntent(ner_path=str(entity_path), clear_mecab_dir=False, infer=False)
+    #
+    # m_i_ners = m_i.ners(test_sentence)
+    # print(m_i_ners)
+    #
+    # m_e_ners = m_e.ners(test_sentence)
+    # print(m_e_ners)
+    #
+    #
+    # m_i_bind = []
+    # for m_i_ner in m_i_ners:
+    #     m_inf = np.inf
+    #     m_e_tmp = None
+    #     m_i_idx = (m_i_ner.start_idx + m_i_ner.end_idx)/2
+    #
+    #     if "_" in m_i_ner.category.large:
+    #         i_bind_category = m_i_ner.category.large.split("_")[0]
+    #     else:
+    #         i_bind_category = m_i_ner.category.large
+    #
+    #     for m_e_ner in m_e_ners:
+    #
+    #         if "_" in m_e_ner.category.large:
+    #             e_bind_category = m_e_ner.category.large.split("_")[0]
+    #         else:
+    #             e_bind_category = m_e_ner.category.large
+    #
+    #         if i_bind_category == e_bind_category:
+    #             m_e_idx = (m_e_ner.start_idx + m_e_ner.end_idx)/2
+    #
+    #             m_e_i_diff = abs(m_e_idx - m_i_idx)
+    #             if m_e_i_diff < m_inf:
+    #                 m_inf = m_e_i_diff
+    #                 m_e_tmp = m_e_ner
+    #
+    #     if m_e_tmp is not None:
+    #         m_i_ners.remove(m_i_ner)
+    #         m_e_ners.remove(m_e_tmp)
+    #         m_i_bind.append([m_i_ner, m_e_tmp])
+    #
+    #
+    # print(m_i_bind)
+    # result = [(x[1].word, x[0].word, x[1].end_idx) if x[1].end_idx >= x[0].end_idx else
+    #           (x[1].word, x[0].word, x[0].end_idx)
+    #           for x in m_i_bind]
+    #
+    # mecab_parsed_list = list(MecabParser(sentence=test_sentence).gen_mecab_compound_token_feature())
+    # print(mecab_parsed_list)
+    #
+    # start_idx = 0
+    # for result_item in result:
+    #
+    #     mecab_parsed_token = mecab_parsed_list[start_idx:result_item[2]]
+    #     start_idx = result_item[2]
+    #     # print([x[0] for x in mecab_parsed_list])
+    #     restore_tokens = MecabStorage().reverse_compound_tokens(mecab_parsed_token)
+    #     print(restore_tokens)
 
     # print(result)
     # print(m_e_ners)
     # print(m_i_ners)
+    print("Y")
