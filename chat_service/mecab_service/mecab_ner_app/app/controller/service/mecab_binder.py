@@ -71,7 +71,7 @@ class MecabIntent(MecabBinder):
     NER_POS = "intent"
     ENTITY_POS_LIST = []
     INFER_ENTITY_POS_LIST = []
-    DUPLICATE = False
+    DUPLICATE = True
     START_IDX = True
 
     def _set_mecab_path(self, ner_path: str) -> None:
@@ -109,15 +109,28 @@ if __name__ == "__main__":
         m_e_tmp = None
         m_i_idx = (m_i_ner.start_idx + m_i_ner.end_idx)/2
 
+        if "_" in m_i_ner.category.large:
+            i_bind_category = m_i_ner.category.large.split("_")[0]
+        else:
+            i_bind_category = m_i_ner.category.large
+
         for m_e_ner in m_e_ners:
-            m_e_idx = (m_e_ner.start_idx + m_e_ner.end_idx)/2
 
-            m_e_i_diff = abs(m_e_idx - m_i_idx)
-            if m_e_i_diff < m_inf:
-                m_inf = m_e_i_diff
-                m_e_tmp = m_e_ner
+            if "_" in m_e_ner.category.large:
+                e_bind_category = m_e_ner.category.large.split("_")[0]
+            else:
+                e_bind_category = m_e_ner.category.large
 
-        m_i_bind.append([m_i_ner, m_e_tmp])
+            if i_bind_category == e_bind_category:
+                m_e_idx = (m_e_ner.start_idx + m_e_ner.end_idx)/2
+
+                m_e_i_diff = abs(m_e_idx - m_i_idx)
+                if m_e_i_diff < m_inf:
+                    m_inf = m_e_i_diff
+                    m_e_tmp = m_e_ner
+
+        if m_e_tmp is not None:
+            m_i_bind.append([m_i_ner, m_e_tmp])
 
     print(m_i_bind)
     result = [(x[1].word, x[0].word) for x in m_i_bind]
