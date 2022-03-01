@@ -92,12 +92,15 @@ class MecabBinder:
     BIND_INTENT_IDX = 0
     BIND_SPLIT_IDX = 2
 
-    def __init__(self):
-        entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
+    def __init__(self, entity_path: str = None, intent_path: str = None):
+        if entity_path is None:
+            entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
         self.mecab_entity = MecabEntity(ner_path=str(entity_path), clear_mecab_dir=False)
 
-        entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
-        self.mecab_intent = MecabIntent(ner_path=str(entity_path), clear_mecab_dir=False, infer=False)
+        if intent_path is None:
+            intent_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
+
+        self.mecab_intent = MecabIntent(ner_path=str(intent_path), clear_mecab_dir=False, infer=False)
 
     def get_large_category(self, mc_all_ner):
         if self.LARGE_CLASSIFIER in mc_all_ner.category.large:
@@ -112,9 +115,14 @@ class MecabBinder:
     def get_bind(self, sentence: str):
         mc_it_ners = self.mecab_intent.ners(sentence)
         mc_en_ners = self.mecab_entity.ners(sentence)
+        mc_in_include_list = []
+        mc_en_include_list = []
 
         m_i_bind = []
         for m_i_ner in mc_it_ners:
+            if m_i_ner in mc_in_include_list:
+                continue
+
             m_inf = np.inf
             m_e_tmp = None
 
@@ -122,6 +130,8 @@ class MecabBinder:
             i_bind_category = self.get_large_category(m_i_ner)
 
             for m_e_ner in mc_en_ners:
+                if m_e_ner in mc_en_include_list:
+                    continue
 
                 m_e_idx = self.get_mean(m_e_ner)
                 e_bind_category = self.get_large_category(m_e_ner)
@@ -134,8 +144,8 @@ class MecabBinder:
                         m_e_tmp = m_e_ner
 
             if m_e_tmp is not None:
-                mc_it_ners.remove(m_i_ner)
-                mc_en_ners.remove(m_e_tmp)
+                mc_in_include_list.append(m_i_ner)
+                mc_en_include_list.append(m_e_tmp)
                 m_i_bind.append([m_i_ner, m_e_tmp])
                 
         bind_result = [(x[self.BIND_ENTITY_IDX].word, x[self.BIND_INTENT_IDX].word, x[self.BIND_ENTITY_IDX].end_idx) if x[self.BIND_ENTITY_IDX].end_idx >= x[self.BIND_INTENT_IDX].end_idx else
@@ -145,7 +155,6 @@ class MecabBinder:
 
 
     def split_multi_en_in(self, sentence: str):
-
 
         mecab_parsed_list = list(MecabParser(sentence=sentence).gen_mecab_compound_token_feature())
 
