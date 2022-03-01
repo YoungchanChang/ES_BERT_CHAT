@@ -66,9 +66,12 @@ class MecabEntity(MecabBinder):
             self._clear_dir()
 
 class MecabIntent(MecabBinder):
-    MIN_MEANING = 2
+
+    MIN_MEANING = 1
     NER_POS = "intent"
-    DUPLICATE = True
+    ENTITY_POS_LIST = []
+    INFER_ENTITY_POS_LIST = []
+    DUPLICATE = False
     START_IDX = True
 
     def _set_mecab_path(self, ner_path: str) -> None:
@@ -87,16 +90,18 @@ if __name__ == "__main__":
     entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
     m_e = MecabEntity(ner_path=str(entity_path), clear_mecab_dir=False)
 
-    test_sentence = "진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다"
-
-    m_e_ners = m_e.ners(test_sentence)
-    print(m_e_ners)
+    test_sentence = "좋아 진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다"
 
     entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
     m_i = MecabIntent(ner_path=str(entity_path), clear_mecab_dir=False, infer=False)
 
     m_i_ners = m_i.ners(test_sentence)
     print(m_i_ners)
+
+
+    m_e_ners = m_e.ners(test_sentence)
+    print(m_e_ners)
+
 
     m_i_bind = []
     for m_i_ner in m_i_ners:
