@@ -52,10 +52,13 @@ class MecabCore(MecabNer):
                                                                        pos=mecab_parse_item[MECAB_FEATURE].pos)))
         return parse_result
 
-    def ners(self, sentence: str):
+    def get_intent_ners(self, sentence: str):
         result = [x[MECAB_FEATURE] for x in self.parse(sentence=sentence) if x[MECAB_FEATURE].pos == self.NER_POS]
         return result
 
+    def get_entity_ners(self, sentence: str):
+        result = [x[MECAB_FEATURE] for x in self.parse(sentence=sentence) if (x[MECAB_FEATURE].pos == self.NER_POS) or (x[MECAB_FEATURE].pos in self.ENTITY_POS_LIST)]
+        return result
 
 class MecabEntity(MecabCore):
     MIN_MEANING = 2
@@ -92,6 +95,7 @@ class MecabBinder:
     BIND_ENTITY_IDX = 1
     BIND_INTENT_IDX = 0
     BIND_SPLIT_IDX = 2
+    BIND_CATEGORY_IDX = 2
 
     def __init__(self, entity_path: str = None, intent_path: str = None):
         if entity_path is None:
@@ -116,8 +120,10 @@ class MecabBinder:
         return (mc_all_ner.start_idx + mc_all_ner.end_idx) / 2
 
     def get_bind(self, sentence: str):
-        mc_it_ners = self.mecab_intent.ners(sentence)
-        mc_en_ners = self.mecab_entity.ners(sentence)
+        mc_it_ners = self.mecab_intent.get_intent_ners(sentence)
+        mc_en_ners_nouns = self.mecab_entity.get_entity_ners(sentence)
+        mc_en_ners = [x for x in mc_en_ners_nouns if x.pos == MecabEntity.NER_POS]
+        mc_en_nouns = [x for x in mc_en_ners_nouns if x.pos in MecabEntity.ENTITY_POS_LIST]
         mc_in_include_list = []
         mc_en_include_list = []
 
@@ -151,9 +157,9 @@ class MecabBinder:
                 mc_en_include_list.append(m_e_tmp)
                 m_i_bind.append([m_i_ner, m_e_tmp, i_bind_category])
 
-        bind_info_list = [BindInfo(bind_category=x[2], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], end_idx=x[self.BIND_ENTITY_IDX].end_idx)
+        bind_info_list = [BindInfo(bind_category=x[self.BIND_CATEGORY_IDX], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], end_idx=x[self.BIND_ENTITY_IDX].end_idx)
              if x[self.BIND_ENTITY_IDX].end_idx >= x[self.BIND_INTENT_IDX].end_idx
-             else BindInfo(bind_category=x[2], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], end_idx=x[self.BIND_INTENT_IDX].end_idx)
+             else BindInfo(bind_category=x[self.BIND_CATEGORY_IDX], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], end_idx=x[self.BIND_INTENT_IDX].end_idx)
              for x in m_i_bind]
 
         for mc_in_include_item in mc_in_include_list:
@@ -161,7 +167,7 @@ class MecabBinder:
         for mc_en_include_item in mc_en_include_list:
             mc_en_ners.remove(mc_en_include_item)
 
-        return BindResult(bind_list=bind_info_list, intent_list=mc_it_ners, entity_list=mc_en_ners)
+        return BindResult(bind_list=bind_info_list, intent_list=mc_it_ners, entity_list=mc_en_ners, noun_list=mc_en_nouns)
 
     def split_multi_en_in(self, sentence: str, split_bind_result: List):
         mecab_parsed_list = list(MecabParser(sentence=sentence).gen_mecab_compound_token_feature())
@@ -184,9 +190,14 @@ if __name__ == "__main__":
     entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
     m_e = MecabEntity(ner_path=str(entity_path), clear_mecab_dir=False)
 
-    test_sentence = "좋아 진주 아이유 듣는 것이 좋다 아이묭 좋아해"
+    test_sentence = "좋아 진주 아이유 듣는 것이 좋다 아이묭 좋아해 동대문"
 
     m_b = MecabBinder()
-    bind_result = m_b.get_bind("진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다")
-    # multi_en_in = m_b.split_multi_en_in("진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다")
-    a = 3
+    bind_result = m_b.get_bind(test_sentence)
+
+    bind_result.bind_list = m_b.split_multi_en_in(test_sentence, bind_result.bind_list)
+
+    print(bind_result.bind_list)
+    print(bind_result.intent_list)
+    print(bind_result.entity_list)
+    print(bind_result.noun_list)
