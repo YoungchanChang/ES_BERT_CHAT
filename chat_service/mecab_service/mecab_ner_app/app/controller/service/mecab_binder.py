@@ -4,6 +4,7 @@ import numpy as np
 
 from app.application.service.mecab_ner import MecabNer, MECAB_FEATURE
 from app.application.service.mecab_parser import MecabParser
+from app.application.service.mecab_storage import MecabStorage
 from domain.mecab_domain import MecabNerFeature
 from domain.mecab_exception import MecabDataReaderException
 
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "entities", "entity_data")
     m_e = MecabEntity(ner_path=str(entity_path), clear_mecab_dir=False)
 
-    test_sentence = "좋아 진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다"
+    test_sentence = "좋아 진주 아이유 듣는 것이 좋다 아이묭 좋아해"
 
     entity_path = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data", "intents", "intent_data")
     m_i = MecabIntent(ner_path=str(entity_path), clear_mecab_dir=False, infer=False)
@@ -130,8 +131,28 @@ if __name__ == "__main__":
                     m_e_tmp = m_e_ner
 
         if m_e_tmp is not None:
+            m_i_ners.remove(m_i_ner)
+            m_e_ners.remove(m_e_tmp)
             m_i_bind.append([m_i_ner, m_e_tmp])
 
+
     print(m_i_bind)
-    result = [(x[1].word, x[0].word) for x in m_i_bind]
-    print(result)
+    result = [(x[1].word, x[0].word, x[1].end_idx) if x[1].end_idx >= x[0].end_idx else
+              (x[1].word, x[0].word, x[0].end_idx)
+              for x in m_i_bind]
+
+    mecab_parsed_list = list(MecabParser(sentence=test_sentence).gen_mecab_compound_token_feature())
+    print(mecab_parsed_list)
+
+    start_idx = 0
+    for result_item in result:
+
+        mecab_parsed_token = mecab_parsed_list[start_idx:result_item[2]]
+        start_idx = result_item[2]
+        # print([x[0] for x in mecab_parsed_list])
+        restore_tokens = MecabStorage().reverse_compound_tokens(mecab_parsed_token)
+        print(restore_tokens)
+
+    # print(result)
+    # print(m_e_ners)
+    # print(m_i_ners)
