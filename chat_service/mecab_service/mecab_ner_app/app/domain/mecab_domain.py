@@ -56,3 +56,17 @@ class NerFeature:
     word: str
     pos: str
     category: Optional[Category] = None
+
+
+@dataclass
+class BindResult:
+    bind_result: list
+    intent_result: list
+    entity_result: list
+
+
+@dataclass
+class BindToken:
+    split_sentence: str
+    entity: str
+    intent: str
