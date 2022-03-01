@@ -39,15 +39,11 @@ def test_get_bind():
     intent_path = Path(__file__).resolve().parent.parent.joinpath("data", "intents", "intent_data")
 
     m_b = MecabBinder(entity_path=str(entity_path), intent_path=str(intent_path))
-    bind_result = m_b.get_bind("진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다")
+    test_sentence = "진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다"
+    bind_result = m_b.get_bind(test_sentence)
 
-    assert bind_result == BindResult(bind_result=[('진주 아이유', '듣는 것이 좋다', 8)], intent_result=[MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=10, end_idx=16, category=Category(large='music_like', small='듣는게 좋다'))], entity_result=[MecabNerFeature(word='아이묭', pos='entity', start_idx=8, end_idx=10, category=Category(large='music_singer', small='가수'))])
+    assert bind_result == BindResult(bind_result=[('진주 아이유', '듣는 것이 좋다', 8), ('아이묭', '듣는 것이 좋다', 16)], intent_result=[MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=2, end_idx=8, category=Category(large='music_like', small='듣는게 좋다')), MecabNerFeature(word='듣는 것이 좋다', pos='intent', start_idx=10, end_idx=16, category=Category(large='music_like', small='듣는게 좋다'))], entity_result=[MecabNerFeature(word='진주 아이유', pos='entity', start_idx=0, end_idx=2, category=Category(large='music_singer', small='가수')), MecabNerFeature(word='아이묭', pos='entity', start_idx=8, end_idx=10, category=Category(large='music_singer', small='가수'))])
 
+    multi_en_in = m_b.split_multi_en_in(test_sentence, bind_result.bind_result)
 
-def test_split_multi_en_in():
-    entity_path = Path(__file__).resolve().parent.parent.joinpath("data", "entities", "entity_data")
-    intent_path = Path(__file__).resolve().parent.parent.joinpath("data", "intents", "intent_data")
-
-    m_b = MecabBinder(entity_path=str(entity_path), intent_path=str(intent_path))
-    multi_en_in = m_b.split_multi_en_in("진주 아이유 듣는 것이 좋다 아이묭 듣는 것이 좋다")
     assert multi_en_in == [BindToken(split_sentence='진주 아이유 듣는 것이 좋다', entity='듣는 것이 좋다', intent='진주 아이유'), BindToken(split_sentence='아이묭 듣는 것이 좋다', entity='듣는 것이 좋다', intent='아이묭')]
