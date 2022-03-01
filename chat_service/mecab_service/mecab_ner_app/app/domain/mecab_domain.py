@@ -63,7 +63,7 @@ class BindResult:
     bind_list: list
     intent_list: list
     entity_list: list
-
+    noun_list: list
 
 @dataclass
 class BindInfo:
