@@ -9,7 +9,7 @@ from domain.mecab_domain import MecabNerFeature
 from domain.mecab_exception import MecabDataReaderException
 
 
-class MecabBinder(MecabNer):
+class MecabCore(MecabNer):
 
     def parse(self, sentence: str):
         """
@@ -53,7 +53,7 @@ class MecabBinder(MecabNer):
         return result
 
 
-class MecabEntity(MecabBinder):
+class MecabEntity(MecabCore):
     MIN_MEANING = 2
     NER_POS = "entity"
     DUPLICATE = False
@@ -66,7 +66,7 @@ class MecabEntity(MecabBinder):
         if self._clear_mecab_dir:
             self._clear_dir()
 
-class MecabIntent(MecabBinder):
+class MecabIntent(MecabCore):
 
     MIN_MEANING = 1
     NER_POS = "intent"
