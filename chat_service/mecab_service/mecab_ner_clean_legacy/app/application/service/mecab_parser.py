@@ -80,7 +80,7 @@ class MeCabParser:
 
         return False
 
-    def gen_mecab_token_feature(self) -> Generator[MecabWordFeature]:
+    def gen_mecab_token_feature(self) -> Generator:
 
         """
         메캅으로 형태소 분석한 토큰 제너레이터로 반환
@@ -101,7 +101,7 @@ class MeCabParser:
                 mecab_token_feature.space_token_idx = space_token_idx
                 yield mecab_token_feature
 
-    def gen_mecab_compound_token_feature(self) -> Generator[str, MecabWordFeature]:
+    def gen_mecab_compound_token_feature(self) -> Generator:
 
         """
         메캅으로 분석한 토큰 제너레이터로 반환 결과 중에 복합여, 굴절형태소 있는 경우 토큰화
