@@ -23,10 +23,5 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
-COPY . /code/
-
-# flask_environment
-ENV FLASK_APP app.py
-ENV FLASK_RUN_HOST 0.0.0.0
-
-CMD gunicorn app:app -b 0.0.0.0:6300 -w 2 --threads 2 --timeout 600
+COPY ./mecab_service/mecab_bert_confirm /code/
+COPY ./chat_core /code/chat_core

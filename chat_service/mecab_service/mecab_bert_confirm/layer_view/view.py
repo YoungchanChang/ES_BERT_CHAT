@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 
-from chat_service.chat_core.chat_domain import ChatApiRequest
+from chat_core.chat_domain import ChatApiRequest
 
 router = APIRouter(
     prefix="/mecab_bert",
