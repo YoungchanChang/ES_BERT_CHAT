@@ -9,12 +9,13 @@ from chat_service.chat_core.chat_domain import MecabFeature, MecabSimpleFeature,
 INTENT_POSSIBLE_CATEGORY = []
 
 
-def get_mecab_bind_feature(sentence):
+def get_mecab_bind_feature(sentence: str, mecab_binder: MecabBinder =None):
 
-    m_b = MecabBinder()
-    bind_result = m_b.get_bind(sentence)
+    if mecab_binder is None:
+        mecab_binder = MecabBinder()
+    bind_result = mecab_binder.get_bind(sentence)
 
-    bind_result.bind_list = m_b.split_multi_en_in(sentence, bind_result.bind_list)
+    bind_result.bind_list = mecab_binder.split_multi_en_in(sentence, bind_result.bind_list)
 
     m_b_d_list = [MecabBertBindFeature(bind_category=x.bind_category, bind_sentence=x.bind_sentence,
                                        entity=MecabFeature(value=x.entity.word,
