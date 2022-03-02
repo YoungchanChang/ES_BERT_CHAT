@@ -177,7 +177,7 @@ class MecabBinder:
         for result_item in split_bind_result:
             mecab_parsed_token = mecab_parsed_list[result_item.start_idx:result_item.end_idx]
             restore_tokens = MecabStorage().reverse_compound_tokens(mecab_parsed_token)
-            result_item.split_sentence = " ".join(restore_tokens)
+            result_item.bind_sentence = " ".join(restore_tokens)
             split_sentence.append(result_item)
         return split_sentence
 

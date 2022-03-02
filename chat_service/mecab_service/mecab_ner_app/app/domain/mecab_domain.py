@@ -72,4 +72,4 @@ class BindInfo:
     intent: MecabNerFeature
     start_idx: Optional[int] = None
     end_idx: Optional[int] = None
-    split_sentence: Optional[str] = None
+    bind_sentence: Optional[str] = None
