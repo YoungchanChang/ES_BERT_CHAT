@@ -10,7 +10,7 @@ chat_api_response = "chat_api_middleware"
 entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner_app/data/entities/mecab_data"
 intent_path = "/Users/youngchan/Desktop/ES_BERT_CHAT"
 entity_path = "/Users/youngchan/Desktop/ES_BERT_CHAT"
-bert_confirm = "bert_confirm"
+bert_confirm = "mecab_bert_confirm"
 
 if platform.system() == "Darwin":
     chat_api_mrc = "localhost"
