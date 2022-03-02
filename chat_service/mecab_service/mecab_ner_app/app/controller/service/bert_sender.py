@@ -7,10 +7,14 @@ from app.controller.service.mecab_binder import MecabBinder
 from chat_service.chat_core.chat_domain import MecabFeature, MecabSimpleFeature, MecabBertBindFeature
 
 
-def get_mecab_bind_feature(sentence: str, mecab_binder: MecabBinder = None, intent_category: List = []):
+def get_mecab_bind_feature(sentence: str, mecab_binder: MecabBinder = None, intent_category: List = None):
 
     if mecab_binder is None:
         mecab_binder = MecabBinder()
+
+    if intent_category is None:
+        intent_category = []
+
     bind_result = mecab_binder.get_bind(sentence)
 
     bind_result.bind_list = mecab_binder.split_multi_en_in(sentence, bind_result.bind_list)
