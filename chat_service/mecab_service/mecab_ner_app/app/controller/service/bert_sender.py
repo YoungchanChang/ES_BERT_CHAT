@@ -6,10 +6,8 @@ import numpy as np
 from app.controller.service.mecab_binder import MecabBinder
 from chat_service.chat_core.chat_domain import MecabFeature, MecabSimpleFeature, MecabBertBindFeature
 
-INTENT_POSSIBLE_CATEGORY = []
 
-
-def get_mecab_bind_feature(sentence: str, mecab_binder: MecabBinder =None):
+def get_mecab_bind_feature(sentence: str, mecab_binder: MecabBinder = None, intent_category: List = []):
 
     if mecab_binder is None:
         mecab_binder = MecabBinder()
@@ -29,7 +27,7 @@ def get_mecab_bind_feature(sentence: str, mecab_binder: MecabBinder =None):
                                 small_category=x.category.small) for x in bind_result.entity_list]
     intent_list = [MecabSimpleFeature(user_sentence=sentence, value=x.word, large_category=x.category.large,
                                       small_category=x.category.small) for x in bind_result.intent_list if
-                   x.category.large in INTENT_POSSIBLE_CATEGORY]
+                   x.category.large in intent_category]
     return m_b_d_list, entity_list, intent_list
 
 if __name__ == "__main__":
