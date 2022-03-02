@@ -12,21 +12,6 @@ class UserRequest(BaseModel):
     user_request_time: datetime
 
 
-class MecabNerAttribute(BaseModel):
-
-    """ MecabNer 추출 정보 """
-
-    category_sentence: str
-    main_category: str
-    entity: str
-    entity_medium_category: str
-    entity_small_category: str
-    intent: str
-    intent_medium_category: str
-    intent_small_category: str
-    bert_confirm: bool = False
-
-
 class MecabFeature(BaseModel):
     value: str
     large_category: str
