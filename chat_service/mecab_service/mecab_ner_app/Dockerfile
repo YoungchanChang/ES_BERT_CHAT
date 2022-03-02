@@ -54,13 +54,16 @@ RUN pip install python-mecab-ko
 ## 4-1. install other package
 WORKDIR /user/local
 RUN pip install --upgrade pip
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+#COPY requirements.txt requirements.txt
+#RUN pip3 install -r requirements.txt
+
 
 WORKDIR /user/local
-RUN mkdir mecab_ner
-WORKDIR ./mecab_ner
-COPY . .
+COPY ./mecab_service/mecab_ner_app/requirements.txt /user/local/
+RUN pip install -r requirements.txt
+COPY ./mecab_service/mecab_ner_app /user/local/
+COPY ./chat_core /user/local/app/chat_core
+
 
 ## 4-2. 환경설정
 RUN apt-get install -y locales
@@ -69,7 +72,4 @@ ENV LANG en_US.UTF-8
 ENV PYTHONIOENCODING=UTF-8
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
-ENV FLASK_APP app_start.py
-ENV FLASK_RUN_HOST 0.0.0.0
-
-CMD ["uvicorn", "app.infrastructure.fastapi.main:app", "--host", "0.0.0.0", "--port", "9090"]
+#CMD ["uvicorn", "app.infrastructure.fastapi.main:app", "--host", "0.0.0.0", "--port", "5100"]
