@@ -27,12 +27,32 @@ class MecabNerAttribute(BaseModel):
     bert_confirm: bool = False
 
 
-class ChatApiRequest(BaseModel):
+class MecabFeature(BaseModel):
+    value: str
+    large_category: str
+    small_category: str
 
+
+class MecabBertBindFeature(BaseModel):
+
+    bind_category: str
+    bind_sentence: str
+    entity: MecabFeature
+    intent: MecabFeature
+    bert_confirm: bool = False
+
+
+class MecabSimpleFeature(MecabFeature):
+    user_sentence: str
+    bert_confirm: bool = False
+
+class ChatApiRequest(BaseModel):
     """ ChatApi 서버에 보내는 요청 """
 
     user_info: UserRequest
-    sentence_attributes: List[MecabNerAttribute]
+    mecab_bert_bind: List[MecabBertBindFeature]
+    entities: List[MecabSimpleFeature]
+    intents: List[MecabSimpleFeature]
 
 
 class ChatApiResponse(BaseModel):
