@@ -6,7 +6,7 @@ import requests
 from dotenv import load_dotenv
 
 from app.domain.mecab_exception import BertConfirmException
-from chat_service.chat_core.settings import bert_confirm_url
+from app.chat_core.settings import bert_confirm_url
 
 load_dotenv()
 

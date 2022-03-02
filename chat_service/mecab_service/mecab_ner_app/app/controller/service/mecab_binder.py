@@ -8,7 +8,6 @@ from app.application.service.mecab_parser import MecabParser
 from app.application.service.mecab_storage import MecabStorage
 from app.domain.mecab_domain import BindResult, BindInfo
 from domain.mecab_domain import MecabNerFeature
-from domain.mecab_exception import MecabDataReaderException
 
 
 class MecabCore(MecabNer):

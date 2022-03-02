@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 
 from app.controller.service.mecab_binder import MecabBinder
-from chat_service.chat_core.chat_domain import MecabFeature, MecabSimpleFeature, MecabBertBindFeature
+from app.chat_core.chat_domain import MecabFeature, MecabSimpleFeature, MecabBertBindFeature
 
 
 def get_mecab_bind_feature(sentence: str, mecab_binder: MecabBinder = None, intent_category: List = None):

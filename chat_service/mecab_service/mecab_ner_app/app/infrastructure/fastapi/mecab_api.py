@@ -6,7 +6,7 @@ from fastapi.encoders import jsonable_encoder
 from app.application.service.mecab_parser import MecabParser
 from app.controller.service.bert_sender import get_mecab_bind_feature
 from app.infrastructure.network.api_endpoint import get_bert_confirm_response
-from chat_service.chat_core.chat_domain import UserRequest, ChatApiRequest
+from app.chat_core.chat_domain import UserRequest, ChatApiRequest
 
 router = APIRouter(
     prefix="/mecab_ner",
