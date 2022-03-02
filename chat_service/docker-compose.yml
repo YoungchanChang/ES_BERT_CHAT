@@ -1,0 +1,116 @@
+version: '3.5'
+
+services:
+
+  mecab_bert_confirm:
+    build:
+      context: ./
+      dockerfile: ./mecab_service/mecab_bert_confirm/Dockerfile
+    container_name: mecab_bert_confirm
+    image: mecab_bert_confirm:v1
+    restart: always
+    volumes:
+      - ./chat_log:/code/chat_log
+      - /etc/localtime:/etc/localtime
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5110"]
+    ports:
+      - '5110:5110'
+    networks:
+      - es_bert_chat
+
+  mecab_ner_app:
+    depends_on:
+      - mecab_bert_confirm
+    build:
+      context: ./
+      dockerfile: ./mecab_service/mecab_ner_app/Dockerfile
+    container_name: mecab_ner_app
+    image: mecab_ner_app:v1
+    restart: always
+    volumes:
+      - ./chat_log:/code/app/chat_log
+      - /etc/localtime:/etc/localtime
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5100"]
+    ports:
+      - '5100:5100'
+    networks:
+      - es_bert_chat
+
+  chat_middleware:
+    depends_on:
+      - chat_api_middleware
+    build:
+      context: ./
+      dockerfile: ./chat_middleware/Dockerfile
+    container_name: chat_middleware
+    image: chat_middleware:v1
+    restart: always
+    volumes:
+      - ./chat_log:/code/chat_log
+      - /etc/localtime:/etc/localtime
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
+    ports:
+      - '5000:5000'
+    networks:
+      - es_bert_chat
+
+  chat_api_middleware:
+    depends_on:
+      - chat_api_mrc
+      - chat_api_youtube
+    build:
+      context: ./
+      dockerfile: ./chat_api_service/chat_api_middleware/Dockerfile
+    container_name: chat_api_middleware
+    image: chat_api_middleware:v1
+    restart: always
+    volumes:
+      - ./chat_log:/code/chat_log
+      - /etc/localtime:/etc/localtime
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5200"]
+    ports:
+      - '5200:5200'
+    networks:
+      - es_bert_chat
+
+  chat_api_mrc:
+    build:
+      context: ./
+      dockerfile: ./chat_api_service/chat_api_mrc/Dockerfile
+    container_name: chat_api_mrc
+    image: chat_api_mrc:v1
+    restart: always
+    volumes:
+      - ./chat_log:/code/chat_log
+      - /etc/localtime:/etc/localtime
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5220"]
+    ports:
+      - '5220:5220'
+    networks:
+      - es_bert_chat
+
+  chat_api_youtube:
+    build:
+      context: ./
+      dockerfile: ./chat_api_service/chat_api_youtube/Dockerfile
+    container_name: chat_api_youtube
+    image: chat_api_youtube:v1
+    restart: always
+    volumes:
+      - ./chat_log:/code/chat_log
+      - /etc/localtime:/etc/localtime
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5210"]
+    ports:
+      - '5210:5210'
+    networks:
+      - es_bert_chat
+
+
+networks:
+  es_bert_chat:
+    name: es_bert_chat-net
+    driver: bridge
+
+volumes:
+  mysql_db:
+    driver: local
