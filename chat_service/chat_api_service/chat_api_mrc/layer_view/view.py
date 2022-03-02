@@ -24,8 +24,8 @@ router = APIRouter(
 async def request_from_chat_api(chat_api_req: ChatApiRequest, request: Request):
     try:
 
-        mrc_res = get_mrc(chat_api_req.sentence_attributes)
-        c_a_res = ChatApiResponse(api_response=mrc_res, api_server="youtube_template")
+        mrc_res = get_mrc(chat_api_req.mecab_bert_bind[0].bind_sentence)
+        c_a_res = ChatApiResponse(api_response=mrc_res, api_server="mrc_template")
 
         logger.info({'status': 'success', 'user_ip': request.client.host, "request_path": request.url.path, "return": c_a_res})
         return jsonable_encoder(c_a_res)
