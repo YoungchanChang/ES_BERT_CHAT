@@ -1,0 +1,17 @@
+version: '3.5'
+services:
+  mecab_ner_fastapi:
+    build: .
+    container_name: mecab_ner_fastapi
+    image: mecab_ner_fastapi:v1
+    volumes:
+      - /etc/localtime:/etc/localtime
+    ports:
+      - '9090:9090'
+    networks:
+      - chatbot-net
+
+networks:
+  chatbot-net:
+    name: chatbot-net
+    driver: bridge
