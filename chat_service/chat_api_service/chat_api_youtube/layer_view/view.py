@@ -25,7 +25,7 @@ router = APIRouter(
 async def request_from_chat_api(chat_api_req: ChatApiRequest, request: Request):
 
     try:
-        youtube_res = get_youtube_music(chat_api_req.sentence_attributes)
+        youtube_res = get_youtube_music(chat_api_req.mecab_bert_bind)
         c_a_res = ChatApiResponse(api_response=youtube_res, api_server="youtube_template")
         logger.info({'status': 'success', 'user_ip': request.client.host, "request_path": request.url.path, "return": c_a_res})
         return jsonable_encoder(c_a_res)
@@ -37,7 +37,7 @@ async def request_from_chat_api(chat_api_req: ChatApiRequest, request: Request):
     except NoMusicData as me:
         logger.warning(
             {'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": me,
-             "music_request": chat_api_req.sentence_attributes})
+             "music_request": chat_api_req.user_info.user_sentence})
     except Exception as e:
         logger.critical(
             {'status': 'fail', 'user_ip': request.client.host, "request_path": request.url.path, "message": e})

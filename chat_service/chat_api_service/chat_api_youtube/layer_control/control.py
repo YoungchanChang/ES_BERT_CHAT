@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List
 import logging.config
 from chat_core import log_decorator
-from chat_core.chat_domain import MecabNerAttribute
+from chat_core.chat_domain import MecabBertBindFeature
 from utility.custom_error import NoMusicData
 from config.settings import config_basic
 
@@ -20,8 +20,8 @@ temp_dict = {
 
 
 @log_decorator.log_basic(logger=logger, path=file_path)
-def get_youtube_music(sentence_attributes: List[MecabNerAttribute]):
-    youtube_music_entity = [x.entity for x in sentence_attributes]
+def get_youtube_music(sentence_attributes: List[MecabBertBindFeature]):
+    youtube_music_entity = [x.entity.value for x in sentence_attributes]
 
     youtube_link = " ".join(youtube_music_entity)
     youtube_data = temp_dict.get(youtube_link, None)
