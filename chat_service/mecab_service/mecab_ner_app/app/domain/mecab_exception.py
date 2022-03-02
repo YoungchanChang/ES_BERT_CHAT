@@ -5,3 +5,7 @@ class MecabError(Exception):
 
 class MecabDataReaderException(Exception):
     ...
+
+
+class BertConfirmException(Exception):
+    ...
