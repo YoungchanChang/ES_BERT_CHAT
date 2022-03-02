@@ -30,6 +30,12 @@ class DataReader:
 class DjangoDataController:
     BASE_DIR_PATH = Path(__file__).resolve().parent.parent.parent.parent.joinpath("data")
 
+    MECAB_PATH = "mecab_data"
+    ENTITY_DATA = "entity_data"
+    INTENT_DATA = "intent_data"
+    ENTITY = "entities"
+    INTENT = "intents"
+
     @classmethod
     def create_index(cls, category_index: CategoryIndex):
         """
@@ -42,13 +48,20 @@ class DjangoDataController:
 
         BASE_DIR_PATH = ""
         if category_index.type == "entity":
-            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath("entities", "entity_data").joinpath(category_name)
+            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath(cls.ENTITY, cls.ENTITY_DATA).joinpath(category_name)
 
         elif category_index.type == "intent":
-            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath("intents", "intent_data").joinpath(category_name)
+            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath(cls.INTENT, cls.INTENT_DATA).joinpath(category_name)
 
         if not BASE_DIR_PATH.exists():
             DataReader.write_txt(str(BASE_DIR_PATH), [small_category_name])
+
+            if category_index.type == "entity":
+                EntityCategoryItem.create(large_category=category_index.large_category, medium_category=category_index.medium_category,
+                                          small_category=category_index.small_category)
+            elif category_index.type == "intent":
+                IntentCategoryItem.create(large_category=category_index.large_category, medium_category=category_index.medium_category,
+                                          small_category=category_index.small_category)
 
         if BASE_DIR_PATH.exists():
             return True
@@ -77,11 +90,11 @@ class DjangoDataController:
             small_category = "\n" + "#" + value.small_category
             category_name = value.large_category + "_" + value.medium_category + ".txt"
 
-            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath("entities", "storage").joinpath(category_name)
+            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath(cls.ENTITY, cls.ENTITY_DATA).joinpath(category_name)
 
             DataReader.write_txt(str(BASE_DIR_PATH), [small_category, saving_word])
 
-            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath("entities", "mecab_storage").joinpath(category_name)
+            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath(cls.ENTITY, cls.MECAB_PATH).joinpath(category_name)
 
             DataReader.write_txt(str(BASE_DIR_PATH), [small_category, saving_word + "," + parsed_word])
 
@@ -99,11 +112,11 @@ class DjangoDataController:
             small_category = "\n" + "#" + value.small_category
             category_name = value.large_category + "_" + value.medium_category + ".txt"
 
-            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath("intents", "storage").joinpath(category_name)
+            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath(cls.INTENT, cls.INTENT_DATA).joinpath(category_name)
 
             DataReader.write_txt(str(BASE_DIR_PATH), [small_category, saving_word])
 
-            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath("intents", "mecab_storage").joinpath(category_name)
+            BASE_DIR_PATH = cls.BASE_DIR_PATH.joinpath(cls.INTENT, cls.MECAB_PATH).joinpath(category_name)
 
             DataReader.write_txt(str(BASE_DIR_PATH), [small_category, saving_word + "," + parsed_word])
 
