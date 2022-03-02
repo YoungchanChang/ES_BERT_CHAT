@@ -157,9 +157,9 @@ class MecabBinder:
                 mc_en_include_list.append(m_e_tmp)
                 m_i_bind.append([m_i_ner, m_e_tmp, i_bind_category])
 
-        bind_info_list = [BindInfo(bind_category=x[self.BIND_CATEGORY_IDX], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], end_idx=x[self.BIND_ENTITY_IDX].end_idx)
+        bind_info_list = [BindInfo(bind_category=x[self.BIND_CATEGORY_IDX], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], start_idx=x[self.BIND_INTENT_IDX].start_idx, end_idx=x[self.BIND_ENTITY_IDX].end_idx)
              if x[self.BIND_ENTITY_IDX].end_idx >= x[self.BIND_INTENT_IDX].end_idx
-             else BindInfo(bind_category=x[self.BIND_CATEGORY_IDX], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], end_idx=x[self.BIND_INTENT_IDX].end_idx)
+             else BindInfo(bind_category=x[self.BIND_CATEGORY_IDX], entity=x[self.BIND_ENTITY_IDX], intent=x[self.BIND_INTENT_IDX], start_idx=x[self.BIND_ENTITY_IDX].start_idx, end_idx=x[self.BIND_INTENT_IDX].end_idx)
              for x in m_i_bind]
 
         for mc_in_include_item in mc_in_include_list:
@@ -173,10 +173,9 @@ class MecabBinder:
         mecab_parsed_list = list(MecabParser(sentence=sentence).gen_mecab_compound_token_feature())
 
         split_sentence = []
-        start_idx = 0
+
         for result_item in split_bind_result:
-            mecab_parsed_token = mecab_parsed_list[start_idx:result_item.end_idx]
-            start_idx = result_item.end_idx
+            mecab_parsed_token = mecab_parsed_list[result_item.start_idx:result_item.end_idx]
             restore_tokens = MecabStorage().reverse_compound_tokens(mecab_parsed_token)
             result_item.split_sentence = " ".join(restore_tokens)
             split_sentence.append(result_item)
