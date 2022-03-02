@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 
-from mecab_bert_confirm.layer_model.domain import BertConfirmResponse, MecabNerAttribute
+from chat_service.chat_core.chat_domain import ChatApiRequest
 
 router = APIRouter(
     prefix="/mecab_bert",
@@ -11,6 +11,15 @@ router = APIRouter(
 
 
 @router.post("/bert_confirm")
-async def get_bert_confirm(m_n_attr: MecabNerAttribute):
-    b_c_res = BertConfirmResponse(bert_confirm=True)
-    return jsonable_encoder(b_c_res)
+async def get_bert_confirm(c_a_req: ChatApiRequest):
+
+    for x_bert_item in c_a_req.mecab_bert_bind:
+        x_bert_item.bert_confirm = True
+
+    for x_bert_item in c_a_req.entities:
+        x_bert_item.bert_confirm = True
+
+    for x_bert_item in c_a_req.intents:
+        x_bert_item.bert_confirm = True
+
+    return jsonable_encoder(c_a_req)
