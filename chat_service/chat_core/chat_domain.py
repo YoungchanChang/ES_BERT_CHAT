@@ -39,12 +39,12 @@ class MecabBertBindFeature(BaseModel):
     bind_sentence: str
     entity: MecabFeature
     intent: MecabFeature
-    bert_confirm: bool = False
+    bert_confirm: bool = True
 
 
 class MecabSimpleFeature(MecabFeature):
     user_sentence: str
-    bert_confirm: bool = False
+    bert_confirm: bool = True
 
 class ChatApiRequest(BaseModel):
     """ ChatApi 서버에 보내는 요청 """
