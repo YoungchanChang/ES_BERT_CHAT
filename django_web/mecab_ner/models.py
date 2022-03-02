@@ -1,7 +1,8 @@
 from django.db import models
 from core import models as core_models
 # Create your models here.
-from mecab_ner_clean_legacy.docker_api import create_mecab_index, insert_mecab_data
+from mecab_ner.docker_api import create_mecab_index, insert_mecab_data
+
 
 
 class AbstractItem(core_models.TimeStampedModel):
