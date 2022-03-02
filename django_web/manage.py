@@ -27,18 +27,18 @@ if __name__ == '__main__':
         os.environ["RDS_PORT"] = "3307"
         os.environ["RDS_HOST"] = "127.0.0.1"
         bot_response_url = "localhost"
-        mecab_create_index = "localhost"
-        mecab_insert_data = "localhost"
+        mecab_create_index = "localhost:5101"
+        mecab_insert_data = "localhost:5101"
     else:
         os.environ["RDS_PORT"] = "3306"
         os.environ["RDS_HOST"] = "mysql_db"
         bot_response_url = "chat_middleware"
-        mecab_create_index = "mecab_ner_app"
-        mecab_insert_data = "localhost"
+        mecab_create_index = "mecab_ner_app:5100"
+        mecab_insert_data = "mecab_insert_data:5100"
 
     os.environ["bot_response"] = f"http://{bot_response_url}:5000/chat_middleware/response_middleware"
-    os.environ["mecab_create_index"] = f"http://{mecab_create_index}:5100/mecab_data/create_index"
-    os.environ["mecab_insert_data"] = f"http://{mecab_insert_data}:5100/mecab_data/insert_data"
+    os.environ["mecab_create_index"] = f"http://{mecab_create_index}/mecab_data/create_index"
+    os.environ["mecab_insert_data"] = f"http://{mecab_insert_data}/mecab_data/insert_data"
 
 
     main()
