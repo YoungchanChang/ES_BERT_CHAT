@@ -3,8 +3,7 @@ import os
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 
-
-
+from app.application.service.mecab_parser import MecabParser
 from app.controller.service.bert_sender import get_mecab_bind_feature
 from app.infrastructure.network.api_endpoint import get_bert_confirm_response
 from chat_service.chat_core.chat_domain import UserRequest, ChatApiRequest
@@ -26,10 +25,10 @@ async def get_mecab_attribute(req: UserRequest):
 
     return jsonable_encoder(youtube_response)
 
-#
-# @router.post("/mecab_analyzed")
-# async def get_mecab_analyzed(req: Query):
-#     mecab_parsed_list = list(MeCabParser(sentence=req.sentence).gen_mecab_compound_token_feature())
-#     return_json = {"result": mecab_parsed_list}
-#
-#     return jsonable_encoder(return_json)
+
+@router.post("/mecab_analyzed")
+async def get_mecab_analyzed(req: UserRequest):
+    mecab_parsed_list = list(MecabParser(sentence=req.user_sentence).gen_mecab_compound_token_feature())
+    return_json = {"result": mecab_parsed_list}
+
+    return jsonable_encoder(return_json)

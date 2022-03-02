@@ -18,7 +18,7 @@ def get_bert_confirm_response(json_data):
             bert_confirm_url, headers={'content-type': 'application/json'}, data=json_data
         )
         if utility_answer.status_code == 200:
-            bert_confirm_response = json.loads(utility_answer.text).get("bert_confirm")
+            bert_confirm_response = json.loads(utility_answer.text)
             return bert_confirm_response
         raise BertConfirmException
 
