@@ -28,9 +28,8 @@ services:
     image: mecab_ner_app:v1
     restart: always
     volumes:
-      - ./chat_log:/code/app/chat_log
       - /etc/localtime:/etc/localtime
-    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5100"]
+    command: ["uvicorn", "app.infrastructure.fastapi.main:app", "--host", "0.0.0.0", "--port", "5100"]
     ports:
       - '5100:5100'
     networks:
@@ -105,6 +104,33 @@ services:
     networks:
       - es_bert_chat
 
+
+
+#  mecab_ner:
+#    build: ./mecab_service/mecab_ner
+#    container_name: mecab_ner
+#    image: mecab_ner:v1
+#    restart: always
+#    volumes:
+#      - /etc/localtime:/etc/localtime
+#    ports:
+#      - '9090:9090'
+#    networks:
+#      - es_bert_chat
+#
+#  bert_chat:
+#    depends_on:
+#      - mecab_ner
+#    build: bert_chat_legacy
+#    container_name: bert_chat
+#    image: bert_chat:v1
+#    restart: always
+#    volumes:
+#      - /etc/localtime:/etc/localtime
+#    ports:
+#      - '9092:9092'
+#    networks:
+#      - es_bert_chat
 
 networks:
   es_bert_chat:
