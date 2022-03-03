@@ -1,7 +1,8 @@
 from pathlib import Path
 
 from app.application.service.mecab_reader import MecabDataController
-from app.domain.data_domain import EntityCategoryItem, MecabEntityItem, MecabIntentItem, IntentCategoryItem
+from app.domain.data_domain import EntityCategoryItem, MecabEntityItem, MecabIntentItem, IntentCategoryItem, \
+    EntityIntentItemTemplate, EntityIntentCategoryTemplate
 from domain.mecab_exception import MecabDataReaderException
 
 
@@ -116,6 +117,10 @@ def insert_intent_data():
                 MecabIntentItem.create(word=word, mecab_word=mecab_word, category=entity_val.id)
 
 if __name__ == "__main__":
+
+    EntityIntentItemTemplate.drop_table()
+    EntityIntentCategoryTemplate.drop_table()
+
     set_entity_table()
     insert_entity_data()
 
