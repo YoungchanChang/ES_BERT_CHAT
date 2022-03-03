@@ -37,8 +37,9 @@ async def request_from_chat_middleware(chat_api_req: ChatApiRequest, request: Re
 
         middle_m_n_a = chat_api_req.mecab_bert_bind[FIRST_VALUE]
         entity_medium_category = middle_m_n_a.entity.large_category.split("_")[1]
+        intent_small_category = middle_m_n_a.intent.large_category.split("_")[1]
         t_r_d = TemplateRequestData(main_category=middle_m_n_a.bind_category, entity_medium_category=entity_medium_category,
-                           entity=middle_m_n_a.entity.value, intent_small_category=middle_m_n_a.intent.small_category)
+                           entity=middle_m_n_a.entity.value, intent_small_category=intent_small_category)
 
         bind_large_category = middle_m_n_a.bind_category.split("_")[0]
 

@@ -27,8 +27,7 @@ router = APIRouter(
 async def request_from_django_web(django_req: SimpleRequest, request: Request) -> BotResponse:
 
     try:
-        print(django_req)
-        print(request)
+
         user_request = UserRequest(user_sentence=django_req.user_sentence, user_ip=request.client.host, user_request_time=django_req.user_request_time)
 
         mecab_ner_response = get_mecab_ner_response(user_request.json())
