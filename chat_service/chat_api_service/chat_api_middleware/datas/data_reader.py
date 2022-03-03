@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from chat_service.chat_core.chat_domain import TemplateItemRequestData
+from chat_core.chat_domain import TemplateItemRequestData
 from utility.custom_error import TemplateNotExist
 
 TEMPLATE_SEP = 2

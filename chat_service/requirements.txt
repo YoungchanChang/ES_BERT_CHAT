@@ -67,3 +67,4 @@ uvicorn==0.17.4
 Werkzeug==2.0.2
 zipp==3.7.0
 zope.interface==5.4.0
+peewee==3.14.9
