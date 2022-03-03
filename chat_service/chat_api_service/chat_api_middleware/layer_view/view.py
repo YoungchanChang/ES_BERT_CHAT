@@ -4,7 +4,8 @@ from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 
-from layer_control.control import get_template_data
+from chat_core.chat_domain import TemplateItemRequestData
+from layer_control.control import get_template_data, get_template_item
 from chat_core.chat_domain import ChatApiRequest, ChatApiResponse, TemplateRequestData
 from layer_control.django_data import DjangoDataController
 from layer_model.fastapi_domain import TemplateCategoryRequest, TemplateItemRequest
@@ -73,6 +74,12 @@ async def request_from_chat_middleware(chat_api_req: ChatApiRequest, request: Re
             c_a_res = ChatApiResponse(api_response="MRC 응답입니다.", api_server="mrc_template")
             logger.info({'status': 'success', 'user_ip': request.client.host, "request_path": request.url.path,
                          "return": c_a_res})
+            return jsonable_encoder(c_a_res)
+
+        t_item_req = TemplateItemRequestData(entity=middle_m_n_a.entity.value, intent=middle_m_n_a.intent.value)
+        tmp_item = get_template_item(t_item_req)
+        if tmp_item:
+            c_a_res = ChatApiResponse(api_response=tmp_item, api_server="basic_template")
             return jsonable_encoder(c_a_res)
 
         api_template = get_template_data(t_r_d)
