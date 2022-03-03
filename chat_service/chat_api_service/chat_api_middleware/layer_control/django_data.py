@@ -51,9 +51,6 @@ class DjangoDataController:
             category_name = "template_" + temp_cat_req.bind_category + ".txt"
             item_path = cls.BASE_DIR_PATH.joinpath("chat_templates", category_name)
 
-            if not Path(item_path).exists():
-                Path(item_path).mkdir()
-
             save_str = temp_cat_req.entity_category + "," + temp_cat_req.intent_category + "," + temp_cat_req.template
             e_i_cat_tmp = EntityIntentCategoryTemplate.get_or_create(bind_category=temp_cat_req.bind_category,
                                                             entity_category=temp_cat_req.entity_category,
