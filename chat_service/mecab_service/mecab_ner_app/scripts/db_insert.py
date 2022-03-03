@@ -79,7 +79,7 @@ def set_intent_table():
 
 
 def insert_intent_data():
-    ENTITY_DIR_PATH = Path(__file__).resolve().parent.parent.joinpath("data", 'entities', 'entity_data')
+    ENTITY_DIR_PATH = Path(__file__).resolve().parent.parent.joinpath("data", 'intents', 'intent_data')
     m_g = MecabIntentInsert(ner_path=str(ENTITY_DIR_PATH))
     for data_item in m_g.gen_all_mecab_category_data(m_g.ner_path, use_mecab_parser=True):
         large_category, data_dict = data_item
