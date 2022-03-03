@@ -6,10 +6,14 @@ from pydantic import ValidationError
 
 from layer_control.control import get_template_data
 from chat_core.chat_domain import ChatApiRequest, ChatApiResponse, TemplateRequestData
+from layer_control.django_data import DjangoDataController
+from layer_model.fastapi_domain import TemplateCategoryRequest, TemplateItemRequest
 from utility.api_endpoint import get_youtube_api_response, get_mrc_api_response
 
 from config.settings import config_basic
 from utility.custom_error import TemplateNotExist
+
+
 
 logging.config.dictConfig(config_basic)
 logger = logging.getLogger('simple_log')
@@ -23,6 +27,20 @@ router = APIRouter(
     tags=["chat_api"],
     responses={404: {"description": "Not found"}},
 )
+
+
+@router.post("/insert_template_item")
+async def insert_template_item(temp_item_req: TemplateItemRequest):
+    is_index_created = DjangoDataController.insert_template_item(temp_item_req)
+    return_json = {"result": is_index_created}
+    return jsonable_encoder(return_json)
+
+
+@router.post("/insert_template_category")
+async def insert_template_category(temp_cat_req: TemplateCategoryRequest):
+    is_index_created = DjangoDataController.insert_template_category(temp_cat_req)
+    return_json = {"result": is_index_created}
+    return jsonable_encoder(return_json)
 
 
 @router.post("/response_api")
