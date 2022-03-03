@@ -1,7 +1,7 @@
 import logging.config
 from pathlib import Path
 
-from chat_core import chat_decorator
+from chat_core import log_decorater
 
 from config.settings import config_basic
 
