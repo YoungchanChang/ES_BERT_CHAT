@@ -1,4 +1,4 @@
-from chat_service.chat_core.chat_domain import TemplateItemRequestData
+from chat_core.chat_domain import TemplateItemRequestData
 from datas.data_reader import read_template, read_template_item
 from chat_core.chat_domain import TemplateRequestData
 from utility import utility_string
