@@ -100,14 +100,9 @@ class EntityIntentCategoryTemplate(BaseModel):
 
     """ Item Model Definition """
 
-    entity_category = ForeignKeyField(
-        EntityCategoryItem, backref='entity_cat_template', on_delete='CASCADE'
-    )
-
-    intent_category = ForeignKeyField(
-        IntentCategoryItem, backref='intent_cat_template', on_delete='CASCADE'
-    )
-
+    bind_category = CharField(max_length=80)
+    entity_category = CharField(max_length=100)
+    intent_category = CharField(max_length=100)
     template = TextField()
 
     class Meta:
