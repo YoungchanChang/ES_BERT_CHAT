@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import platform
 
@@ -12,6 +13,12 @@ intent_path = "/Users/youngchan/Desktop/ES_BERT_CHAT"
 entity_path = "/Users/youngchan/Desktop/ES_BERT_CHAT"
 bert_confirm = "mecab_bert_confirm"
 
+os.environ["RDS_NAME"] = "mecab_ner"
+os.environ["RDS_USER"] = "mecab_ner"
+os.environ["RDS_PASSWORD"] = "mecab_ner"
+os.environ["RDS_PORT"] = "3306"
+os.environ["RDS_HOST"] = "mysql_db"
+
 if platform.system() == "Darwin":
     chat_api_mrc = "localhost"
     chat_api_youtube = "localhost"
@@ -21,7 +28,8 @@ if platform.system() == "Darwin":
     intent_path = "/user/local"
     entity_path = "/user/local"
 
-
+    os.environ["RDS_PORT"] = "3307"
+    os.environ["RDS_HOST"] = "127.0.0.1"
 
 youtube_response_url = f"http://{chat_api_youtube}:5210/chat_api_youtube/response_youtube"
 mrc_response_url = f"http://{chat_api_mrc}:5220/chat_api_mrc/response_mrc"
