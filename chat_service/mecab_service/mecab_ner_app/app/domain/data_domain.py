@@ -93,3 +93,39 @@ class MecabIntentItem(BaseModel):
 
     class Meta:
         table_name = "mecab_ner_mecabintent"
+
+
+
+class EntityIntentCategoryTemplate(BaseModel):
+
+    """ Item Model Definition """
+
+    entity_category = ForeignKeyField(
+        EntityCategoryItem, backref='entity_cat_template', on_delete='CASCADE'
+    )
+
+    intent_category = ForeignKeyField(
+        IntentCategoryItem, backref='intent_cat_template', on_delete='CASCADE'
+    )
+
+    template = TextField()
+
+    class Meta:
+        table_name = "mecab_ner_entityintentcategorytemplate"
+
+
+class EntityIntentItemTemplate(BaseModel):
+
+    entity_item = ForeignKeyField(
+        MecabEntityItem, backref='entity_item_template', on_delete='CASCADE'
+    )
+
+    intent_item = ForeignKeyField(
+        MecabIntentItem, backref='intent_item_template', on_delete='CASCADE'
+    )
+
+    template = TextField()
+
+
+    class Meta:
+        table_name = "mecab_ner_entityintentitemtemplate"
