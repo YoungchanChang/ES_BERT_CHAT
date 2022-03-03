@@ -3,6 +3,7 @@ from core import models as core_models
 # Create your models here.
 from mecab_ner.docker_api import create_mecab_index, insert_mecab_data
 
+from mecab_ner.docker_api import insert_template_item, insert_template_category
 
 
 class AbstractItem(core_models.TimeStampedModel):
@@ -139,16 +140,16 @@ class EntityIntentCategoryTemplate(core_models.TimeStampedModel):
 
 
     class Meta:
-        verbose_name_plural = "template"
+        verbose_name_plural = "category_template"
 
     def show_pk(self):
         return self.pk
 
     def save(self, *args, **kwargs):
-        json_data = {'word': self.word, "category": self.category_id,
-                     "type": "intent"}
+        json_data = {'bind_category': self.bind_category, "entity_category": self.entity_category,
+                     "intent_category": self.intent_category, "template": self.template}
 
-        answer = insert_mecab_data(json_data)
+        answer = insert_template_category(json_data)
 
         if not answer:
             return
@@ -163,11 +164,11 @@ class EntityIntentItemTemplate(core_models.TimeStampedModel):
     """ 카테고리로 데이터 관리 """
 
     entity_item = models.ForeignKey(
-        "MecabEntity", related_name="entity_template", on_delete=models.CASCADE
+        "MecabEntity", related_name="entity_item_template", on_delete=models.CASCADE
     )
 
     intent_item = models.ForeignKey(
-        "MecabIntent", related_name="intent_template", on_delete=models.CASCADE
+        "MecabIntent", related_name="intent_item_template", on_delete=models.CASCADE
     )
 
     template = models.TextField(blank=True, default="")
@@ -181,10 +182,10 @@ class EntityIntentItemTemplate(core_models.TimeStampedModel):
         return self.pk
 
     def save(self, *args, **kwargs):
-        json_data = {'word': self.word, "category": self.category_id,
-                     "type": "intent"}
+        json_data = {'entity_item_id': self.entity_item.id, "intent_item_id": self.intent_item.id,
+                     "template": self.template}
 
-        answer = insert_mecab_data(json_data)
+        answer = insert_template_item(json_data)
 
         if not answer:
             return
