@@ -131,14 +131,9 @@ class EntityIntentCategoryTemplate(core_models.TimeStampedModel):
 
     """ 카테고리로 데이터 관리 """
 
-    entity_category = models.ForeignKey(
-        "EntityCategoryItem", related_name="entity_template", on_delete=models.CASCADE
-    )
-
-    intent_category = models.ForeignKey(
-        "IntentCategoryItem", related_name="intent_template", on_delete=models.CASCADE
-    )
-
+    bind_category = models.CharField(max_length=80, default="")
+    entity_category = models.CharField(max_length=100, default="")
+    intent_category = models.CharField(max_length=100, default="")
     template = models.TextField(blank=True, default="")
 
 
