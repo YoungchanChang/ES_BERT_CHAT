@@ -49,7 +49,6 @@ class MecabEntityAdmin(admin.ModelAdmin):
     )
     list_display = (
         "word",
-        "mecab_word",
         "show_small_category",
         "show_medium_category",
         'show_large_category',
@@ -86,7 +85,6 @@ class MecabIntentAdmin(admin.ModelAdmin):
     )
     list_display = (
         "word",
-        "mecab_word",
         "show_small_category",
         "show_medium_category",
         'show_large_category',
@@ -109,3 +107,72 @@ class MecabIntentAdmin(admin.ModelAdmin):
         "category__medium_category",
         "category__small_category",
     )
+
+
+@admin.register(models.EntityIntentCategoryTemplate)
+class EntityIntentCategoryTemplateAdmin(admin.ModelAdmin):
+
+    # fieldsets = (
+    #     (
+    #         "Basic Info",
+    #         {"fields": ("word",)}
+    #     ),
+    #     ("Last Details", {"fields": ("category",)}),
+    # )
+    list_display = (
+        "entity_category",
+        "intent_category",
+        "template",
+    )
+
+    # def show_small_category(self, obj):
+    #     return obj.category.small_category
+    #
+    # def show_medium_category(self, obj):
+    #     return obj.category.medium_category
+    #
+    # def show_large_category(self, obj):
+    #     return obj.category.large_category
+
+    # search_fields = ("word", )
+    # raw_id_fields = ("category",)
+    #
+    # list_filter = (
+    #     "category__large_category",
+    #     "category__medium_category",
+    #     "category__small_category",
+    # )
+
+@admin.register(models.EntityIntentItemTemplate)
+class EntityIntentItemTemplateAdmin(admin.ModelAdmin):
+
+    # fieldsets = (
+    #     (
+    #         "Basic Info",
+    #         {"fields": ("word",)}
+    #     ),
+    #     ("Last Details", {"fields": ("category",)}),
+    # )
+    list_display = (
+        "entity_item",
+        "intent_item",
+        "template",
+    )
+
+    # def show_small_category(self, obj):
+    #     return obj.category.small_category
+    #
+    # def show_medium_category(self, obj):
+    #     return obj.category.medium_category
+    #
+    # def show_large_category(self, obj):
+    #     return obj.category.large_category
+
+    # search_fields = ("word", )
+    # raw_id_fields = ("category",)
+    #
+    # list_filter = (
+    #     "category__large_category",
+    #     "category__medium_category",
+    #     "category__small_category",
+    # )

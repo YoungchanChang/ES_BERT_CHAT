@@ -23,7 +23,7 @@ class AbstractItem(core_models.TimeStampedModel):
 class EntityCategoryItem(AbstractItem):
 
     class Meta:
-        verbose_name_plural = "entity_categories"
+        verbose_name_plural = "Entity Category"
 
     def save(self, *args, **kwargs):
         json_data = {"large_category": self.large_category, "medium_category": self.medium_category,
@@ -34,6 +34,9 @@ class EntityCategoryItem(AbstractItem):
         if not answer:
             return
 
+    def __str__(self):
+        return self.large_category + "_" + self.medium_category + "_" + self.small_category
+
     def delete(self, using=None, keep_parents=False):
         """ Temporary disable """
         pass
@@ -41,7 +44,7 @@ class EntityCategoryItem(AbstractItem):
 class IntentCategoryItem(AbstractItem):
 
     class Meta:
-        verbose_name_plural = "intent_categories"
+        verbose_name_plural = "Intent Category"
 
     def save(self, *args, **kwargs):
         json_data = {'large_category': self.large_category, "medium_category": self.medium_category,
@@ -51,6 +54,9 @@ class IntentCategoryItem(AbstractItem):
 
         if not answer:
             return
+
+    def __str__(self):
+        return self.large_category + "_" + self.medium_category + "_" + self.small_category
 
     def delete(self, using=None, keep_parents=False):
         """ Temporary disable """
@@ -67,7 +73,10 @@ class MecabEntity(core_models.TimeStampedModel):
     )
 
     class Meta:
-        verbose_name_plural = "mecab_entities"
+        verbose_name_plural = "Entity"
+
+    def __str__(self):
+        return self.word
 
     def show_pk(self):
         return self.pk
@@ -96,7 +105,82 @@ class MecabIntent(core_models.TimeStampedModel):
     )
 
     class Meta:
-        verbose_name_plural = "mecab_intents"
+        verbose_name_plural = "Intent"
+
+    def show_pk(self):
+        return self.pk
+
+    def __str__(self):
+        return self.word
+
+    def save(self, *args, **kwargs):
+        json_data = {'word': self.word, "category": self.category_id,
+                     "type": "intent"}
+
+        answer = insert_mecab_data(json_data)
+
+        if not answer:
+            return
+
+    def delete(self, using=None, keep_parents=False):
+        """ Temporary disable """
+        pass
+
+
+class EntityIntentCategoryTemplate(core_models.TimeStampedModel):
+
+    """ 카테고리로 데이터 관리 """
+
+    entity_category = models.ForeignKey(
+        "EntityCategoryItem", related_name="entity_template", on_delete=models.CASCADE
+    )
+
+    intent_category = models.ForeignKey(
+        "IntentCategoryItem", related_name="intent_template", on_delete=models.CASCADE
+    )
+
+    template = models.TextField(blank=True, default="")
+
+
+
+    class Meta:
+        verbose_name_plural = "template"
+
+    def show_pk(self):
+        return self.pk
+
+    def save(self, *args, **kwargs):
+        json_data = {'word': self.word, "category": self.category_id,
+                     "type": "intent"}
+
+        answer = insert_mecab_data(json_data)
+
+        if not answer:
+            return
+
+    def delete(self, using=None, keep_parents=False):
+        """ Temporary disable """
+        pass
+
+
+class EntityIntentItemTemplate(core_models.TimeStampedModel):
+
+    """ 카테고리로 데이터 관리 """
+
+    entity_item = models.ForeignKey(
+        "MecabEntity", related_name="entity_template", on_delete=models.CASCADE
+    )
+
+    intent_item = models.ForeignKey(
+        "MecabIntent", related_name="intent_template", on_delete=models.CASCADE
+    )
+
+    template = models.TextField(blank=True, default="")
+
+
+
+    class Meta:
+        verbose_name_plural = "item_template"
 
     def show_pk(self):
         return self.pk
