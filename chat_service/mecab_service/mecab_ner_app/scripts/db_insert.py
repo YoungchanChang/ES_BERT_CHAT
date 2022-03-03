@@ -116,6 +116,39 @@ def insert_intent_data():
                 word, mecab_word = data_dict_val
                 MecabIntentItem.create(word=word, mecab_word=mecab_word, category=entity_val.id)
 
+
+def read_txt(path):
+    """텍스트 파일 읽는 메소드"""
+    with open(path, "r", encoding='utf-8-sig') as file:
+        txt_list = file.read().splitlines()
+        text_template = [x for x in txt_list if len(x.split(",")) == 3]
+        return text_template
+
+def insert_template_item_data():
+    TEMPLATE_BASIC_PATH = Path(__file__).resolve().parent.parent.parent.parent.joinpath("chat_api_service", 'chat_api_middleware', 'datas')
+    ENTITY_DIR_PATH = TEMPLATE_BASIC_PATH.joinpath("chat_templates")
+
+    template_item = TEMPLATE_BASIC_PATH.joinpath("template_item.txt")
+
+    for text_item in read_txt(str(template_item)):
+        entity_item, intent_item, template_sentence = text_item.split(",")
+
+        entity_item_val = MecabEntityItem.get_or_none(MecabEntityItem.word == entity_item)
+        intent_item_val = MecabIntentItem.get_or_none(MecabIntentItem.word == intent_item)
+
+        if (entity_item_val is not None) and (intent_item_val is not None):
+            EntityIntentItemTemplate.get_or_create(entity_item=entity_item_val, intent_item=intent_item_val, template=template_sentence)
+
+    for path_item in ENTITY_DIR_PATH.iterdir():
+        split_template_path = path_item.stem.split("_")
+        large_category = split_template_path[0]
+        bind_category = split_template_path[1]
+        for text_item in read_txt(str(path_item)):
+            entity_category, intent_category, template_sentence = text_item.split(",")
+            EntityIntentCategoryTemplate.get_or_create(bind_category=bind_category, entity_category=entity_category,
+                                            intent_category=intent_category,
+                                            template=template_sentence)
+
 if __name__ == "__main__":
 
     EntityIntentItemTemplate.drop_table()
@@ -126,3 +159,7 @@ if __name__ == "__main__":
 
     set_intent_table()
     insert_intent_data()
+
+    EntityIntentItemTemplate.create_table()
+    EntityIntentCategoryTemplate.create_table()
+    insert_template_item_data()
