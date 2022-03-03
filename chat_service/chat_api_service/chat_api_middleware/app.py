@@ -4,16 +4,17 @@ import uvicorn
 from fastapi import FastAPI, Request
 from dotenv import load_dotenv
 from fastapi.responses import JSONResponse
+from config.settings import config_basic
+load_dotenv()
 
 from layer_view import view
 
-from config.settings import config_basic
+
 from utility.custom_error import TemplateNotExist
 
 logging.config.dictConfig(config_basic)
 logger = logging.getLogger(__name__)
 
-load_dotenv()
 
 app = FastAPI()
 
