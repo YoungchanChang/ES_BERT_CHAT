@@ -55,3 +55,9 @@ class TemplateRequestData(BaseModel):
     entity_medium_category: str
     entity: str
     intent_small_category: str
+
+
+class TemplateItemRequestData(BaseModel):
+
+    entity: str
+    intent: str
