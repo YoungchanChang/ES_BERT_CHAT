@@ -1,10 +1,20 @@
-from datas.data_reader import read_template
+from chat_service.chat_core.chat_domain import TemplateItemRequestData
+from datas.data_reader import read_template, read_template_item
 from chat_core.chat_domain import TemplateRequestData
 from utility import utility_string
 
 ENTITY_SMALL_CATEGORY = 0
 INTENT_SMALL_CATEGORY = 1
 TEMPLATE_IDX = 2
+
+
+def get_template_item(template_item: TemplateItemRequestData):
+
+    """엔티티 대분류, 중분류에 따라 인텐트 템플릿에 넣고 반환하는함수"""
+
+    return read_template_item(template_item=template_item)
+
+
 
 
 def get_template_data(template_request_data: TemplateRequestData):
