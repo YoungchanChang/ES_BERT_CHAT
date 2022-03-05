@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% load static i18n %}
+{% load static %}
+
+
+{% block content %}
+
+    <div class="container mx-auto pb-10">
+
+        <div class="w-full mt-32 mb-12 flex flex justify-between">
+            <div class="w-1/3 ml-6">
+                <form method="get" class="flex items-center" id="form-id" action='{% url "mecab_ner:entity_category_search" %}'>
+                    <input class="h-12" name="entity_category" placeholder="Search By Category" />
+                    <a href="#" onclick="document.getElementById('form-id').submit();" class="ml-6 text-black">
+                        <i class="fa fa-search fa-2x" aria-hidden="true"></i>
+                   </a>
+                </form>
+
+            </div>
+
+            <div class="flex items-center justify-center w-1/12 mr-6 bg-blue-300 rounded-xl" onClick="location.href ='{% url "mecab_ner:entity_category_add" %}'" onmouseover="" style="cursor: pointer;">
+                <div>
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                </div>
+                <div class="ml-2">
+                    Add
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex flex-col items-center justify-center mx-auto">
+            <ul class="flex justify-around items-center w-full h-12 bg-blue-300">
+                <li>
+                    <h3 class="text-lg text-center font-highlight font-bold">Small Category</h3>
+                </li>
+                <li>
+                    <h3 class="text-lg text-center font-highlight font-bold">Medium Category</h3>
+                </li>
+                <li>
+                    <h3 class="text-lg text-center font-highlight font-bold">Large Category</h3>
+                </li>
+            </ul>
+
+            <tbody class="flex flex-col">
+
+                {% for item in entity_category_items %}
+
+                    <div class="flex justify-around items-center w-full h-12 {% if forloop.counter|divisibleby:2 %}bg-gray-200{% else %}bg-white{% endif %}">
+                        <div class="flex justify-center items-center w-1/3">
+                            <h3 class="text-lg text-center font-highlight font-bold">{{item.small_category}}</h3>
+                        </div>
+                        <div class="flex justify-center items-center w-1/3">
+                            <h3 class="text-lg text-center font-highlight font-bold">{{item.medium_category}}</h3>
+                        </div>
+                        <div class="flex justify-center items-center w-1/3">
+                            <h3 class="text-lg text-center font-highlight font-bold">{{item.large_category}}</h3>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </tbody>
+
+        </div>
+
+        <div class="flex items-center justify-center mx-auto container mt-12">
+            {% if entity_category_items.has_previous %}
+                <a href="?entity_category={{entity_search_item}}&page={{entity_category_items.number|add:-1}}" class="text-teal-500">
+                    <i class="fas fa-arrow-left fa-lg"></i>
+                </a>
+            {% endif %}
+
+            Page {{entity_category_items.number}} of {{entity_category_items.paginator.num_pages}}
+
+            {% if entity_category_items.has_next  %}
+                <a href="?entity_category={{entity_search_item}}&page={{entity_category_items.number|add:1}}" class="text-teal-500">
+                    <i class="fas fa-arrow-right fa-lg"></i>
+                </a>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock content %}
