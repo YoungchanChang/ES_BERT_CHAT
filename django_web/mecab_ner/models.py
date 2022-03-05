@@ -77,7 +77,7 @@ class MecabEntity(core_models.TimeStampedModel):
         verbose_name_plural = "Entity"
 
     def __str__(self):
-        return self.word
+        return self.category.large_category + ":" + self.word
 
     def show_pk(self):
         return self.pk
@@ -112,7 +112,7 @@ class MecabIntent(core_models.TimeStampedModel):
         return self.pk
 
     def __str__(self):
-        return self.word
+        return self.category.large_category + ":" + self.word
 
     def save(self, *args, **kwargs):
         json_data = {'word': self.word, "category": self.category_id,
