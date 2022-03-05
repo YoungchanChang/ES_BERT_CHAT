@@ -1,7 +1,10 @@
 from django.urls import path
 from . import views
-from .views import index
 
 app_name = "mecab_ner"
 
-urlpatterns = [path("", index, name="list"),]
+urlpatterns = [path("", views.index, name="list"),
+               path("entity_category", views.EntityCategoryItemView.as_view(), name="entity_category"),
+               path("entity_category_search/", views.EntityCategorySearchView.as_view(), name="entity_category_search"),
+               path("entity_category_add/", views.EntityCategoryAddView.as_view(), name="entity_category_add"),
+               ]
