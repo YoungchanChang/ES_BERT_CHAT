@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+    <div class="h-screen w-10/12 container mx-auto flex justify-between">
+        <div class="w-6/12 flex justify-center items-center bg-contain bg-no-repeat bg-center rounded-lg" style="background-image: url({{item.get_main_photo_url}});">
+        </div>
+
+        <div class="w-6/12 mb-10 px-2 flex flex-col justify-center items-start">
+            <h3 class="text-lg font-highlight font-bold">목록 리스트</h3>
+            <h3 class="text-lg font-highlight font-bold">링크입니다.</h3>
+        </div>
+    </div>
+
+
+
+{% endblock content %}
