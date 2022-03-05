@@ -4,16 +4,45 @@
 
 {% block content %}
 
-    <div class="h-screen w-10/12 container mx-auto flex justify-between">
-        <div class="w-6/12 flex justify-center items-center bg-contain bg-no-repeat bg-center rounded-lg" style="background-image: url({{item.get_main_photo_url}});">
+    <div class="container mx-auto flex flex-col h-screen justify-evenly">
+        <div class="app_mecab_ner">
+            <ul class="h-32">
+                <li class="flex flex-col justify-center bg-blue-300 h-16">
+                    <h1 class="ml-6 text-white text-2xl">엔티티</h1>
+                </li>
+                <li class="flex flex-col justify-center border-b-2 h-12 my-2">
+                    <h3 class="ml-6 text-blue-300"><a href="/">엔티티 카테고리</a></h3>
+                </li>
+                <li class="flex flex-col justify-center border-b-2 h-12 my-2">
+                    <h3 class="ml-6 text-blue-300"><a href="/">엔티티 리스트</a></h3>
+                </li>
+            </ul>
         </div>
 
-        <div class="w-6/12 mb-10 px-2 flex flex-col justify-center items-start">
-            <h3 class="text-lg font-highlight font-bold">목록 리스트</h3>
-            <h3 class="text-lg font-highlight font-bold">링크입니다.</h3>
+        <div class="app_mecab_ner">
+            <ul class="h-32">
+                <li class="flex flex-col justify-center bg-blue-300 h-16">
+                    <h1 class="ml-6 text-white text-2xl">인텐트</h1>
+                </li>
+                <li class="flex flex-col justify-center border-b-2 h-12 my-2">
+                    <h3 class="ml-6 text-blue-300"><a href="/">인텐트 카테고리</a></h3>
+                </li>
+                <li class="flex flex-col justify-center border-b-2 h-12 my-2">
+                    <h3 class="ml-6 text-blue-300"><a href="/">인텐트 리스트</a></h3>
+                </li>
+            </ul>
+        </div>
+
+        <div class="app_mecab_ner">
+            <ul class="h-32">
+                <li class="flex flex-col justify-center bg-blue-300 h-16">
+                    <h1 class="ml-6 text-white text-2xl">프렌즈 톡</h1>
+                </li>
+                <li class="flex flex-col justify-center border-b-2 h-12 my-2">
+                    <h3 class="ml-6 text-blue-300"><a href="/">프렌즈 톡 리스트</a></h3>
+                </li>
+            </ul>
         </div>
     </div>
-
-
 
 {% endblock content %}
