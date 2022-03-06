@@ -9,7 +9,7 @@ def create_mecab_index(json_data):
         os.getenv("mecab_create_index"), headers={'content-type': 'application/json'}, data=json.dumps(json_data), timeout=3
     )
 
-    answer = json.loads(utility_answer.text).get("answer")
+    answer = json.loads(utility_answer.text).get("result")
 
     return answer
 
