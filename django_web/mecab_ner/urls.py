@@ -21,5 +21,6 @@ urlpatterns = [path("", views.index, name="list"),
 
                path("entity_intent_item/", views.EntityIntentItemTemplateView.as_view(), name="entity_intent_item"),
                path("entity_intent_item_search/", views.EntityIntentItemTemplateSearchView.as_view(), name="entity_intent_item_search"),
-               # path("intent_item_add/", views.IntentItemAddView.as_view(), name="intent_item_add"),
+               path("entity_intent_item_add/", views.EntityIntentItemTemplateItemAddView.as_view(), name="entity_intent_item_add"),
+               path("entity_category_add_sentence/", views.EntityIntentItemTemplateItemAddSentenceView.as_view(), name="entity_category_add_sentence"),
                ]

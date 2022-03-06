@@ -33,7 +33,7 @@ class EntityItemAddForm(forms.Form):
     )
 
     category_id = forms.ModelChoiceField(
-        required=False, empty_label="Any kind", queryset=models.EntityCategoryItem.objects.all()
+        required=True, empty_label="Any kind", queryset=models.EntityCategoryItem.objects.all()
     )
 
 
@@ -67,7 +67,7 @@ class IntentItemAddForm(forms.Form):
     )
 
     category_id = forms.ModelChoiceField(
-        required=False, empty_label="Any kind", queryset=models.IntentCategoryItem.objects.all()
+        required=True, empty_label="Any kind", queryset=models.IntentCategoryItem.objects.all()
     )
 
 
@@ -76,12 +76,32 @@ class EntityIntentItemTemplateSearchForm(forms.Form):
     entity_intent_item_template = forms.CharField(initial="AnyIntentItem")
 
 
+entity_category_items = models.EntityCategoryItem.objects.all().distinct().values('large_category')
+a = [x['large_category'] for x in entity_category_items]
+intent_category_items = models.IntentCategoryItem.objects.filter(large_category__in=a).distinct().values('large_category')
+b = [(x['large_category'], x['large_category']) for x in intent_category_items]
 class EntityIntentItemTemplateAddForm(forms.Form):
 
-    word = forms.CharField(
+    large_category = forms.ChoiceField(widget=forms.Select, required=True, choices=b)
+
+
+class EntityIntentItemTemplateAddCategoryForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        category = kwargs.pop('category')
+        qs_ent = models.MecabEntity.objects.filter(category__large_category=category).values('id', 'word')
+        qs_int = models.MecabIntent.objects.filter(category__large_category=category).values('id', 'word')
+        qs_int_list = [(x['id'], x['word']) for x in qs_int]
+        qs_ent_list = [(x['id'], x['word']) for x in qs_ent]
+        super(EntityIntentItemTemplateAddCategoryForm, self).__init__(*args, **kwargs)
+        self.fields['entity_word_id'].choices = qs_ent_list
+        self.fields['intent_word_id'].choices = qs_int_list
+
+
+    entity_word_id = forms.ChoiceField(widget=forms.Select, required=True, choices=[])
+    intent_word_id = forms.ChoiceField(widget=forms.Select, required=True, choices=[])
+
+    sentence = forms.CharField(
         widget=forms.TextInput(attrs={"placeholder": "Sentence"})
     )
 
-    category_id = forms.ModelChoiceField(
-        required=False, empty_label="Any kind", queryset=models.EntityIntentCategoryTemplate.objects.all()
-    )
