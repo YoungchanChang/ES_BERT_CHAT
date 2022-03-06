@@ -69,3 +69,19 @@ class IntentItemAddForm(forms.Form):
     category_id = forms.ModelChoiceField(
         required=False, empty_label="Any kind", queryset=models.IntentCategoryItem.objects.all()
     )
+
+
+class EntityIntentItemTemplateSearchForm(forms.Form):
+
+    entity_intent_item_template = forms.CharField(initial="AnyIntentItem")
+
+
+class EntityIntentItemTemplateAddForm(forms.Form):
+
+    word = forms.CharField(
+        widget=forms.TextInput(attrs={"placeholder": "Sentence"})
+    )
+
+    category_id = forms.ModelChoiceField(
+        required=False, empty_label="Any kind", queryset=models.EntityIntentCategoryTemplate.objects.all()
+    )

@@ -395,3 +395,73 @@ class IntentItemAddView(View):
 
         return render(request, "mecab_ner/mecabintent_add.html", {"form": form})
 
+
+
+class EntityIntentItemTemplateView(ListView):
+
+    """ HomeView Definition """
+
+    model = models.EntityIntentItemTemplate
+    ordering = "-created"
+    paginate_by = 10
+    context_object_name = "entity_intent_item_templates"
+    template_name_suffix = '_list'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+
+class EntityIntentItemTemplateSearchView(View):
+
+    """ SearchView Definition """
+
+    def get(self, request):
+
+        entity_intent_item_template = request.GET.get("entity_intent_item_template")
+        page = request.GET.get("page", 1)
+        if entity_intent_item_template:
+
+            form = forms.EntityIntentItemTemplateSearchForm(request.GET)
+
+            if form.is_valid():
+                try:
+                    entity_intent_item_template = form.cleaned_data.get("entity_intent_item_template")
+
+                    filter_args = {}
+
+                    if entity_intent_item_template != "AnyIntentItem":
+                        filter_args["entity_item__category__large_category__contains"] = entity_intent_item_template
+
+                    qs = models.EntityIntentItemTemplate.objects.filter(**filter_args).order_by("-created")
+                    if qs.count() == 0:
+                        filter_args = {}
+                        filter_args["entity_item__word__contains"] = entity_intent_item_template
+                        qs = models.EntityIntentItemTemplate.objects.filter(**filter_args).order_by("-created")
+
+                    if qs.count() == 0:
+                        filter_args = {}
+                        filter_args["intent_item__word__contains"] = entity_intent_item_template
+                        qs = models.EntityIntentItemTemplate.objects.filter(**filter_args).order_by("-created")
+
+                    if qs.count() == 0:
+                        filter_args = {}
+                        filter_args["intent_item__template__contains"] = entity_intent_item_template
+                        qs = models.EntityIntentItemTemplate.objects.filter(**filter_args).order_by("-created")
+                except Exception as e:
+                    print(e)
+
+                paginator = Paginator(qs, 10, orphans=5)
+
+                qs = paginator.get_page(page)
+
+                return render(
+                    request, "mecab_ner/entityintentitemtemplate_search.html", {"form": form, "entity_intent_item_templates": qs,
+                                                                          "entity_intent_item_template": entity_intent_item_template}
+                )
+
+        else:
+            form = forms.EntityIntentItemTemplateSearchForm()
+
+        return render(request, "mecab_ner/entityintentitemtemplate_search.html", {"form": form})
