@@ -31,12 +31,6 @@ class EntityItemAddForm(forms.Form):
         widget=forms.TextInput(attrs={"placeholder": "Word"})
     )
 
-    large_category = forms.CharField(
-        widget=forms.TextInput(attrs={"placeholder": "Large Category"})
-    )
-    medium_category = forms.CharField(
-        widget=forms.TextInput(attrs={"placeholder": "Medium Category"})
-    )
-    small_category = forms.CharField(
-        widget=forms.TextInput(attrs={"placeholder": "Small Category"})
+    category_id = forms.ModelChoiceField(
+        required=False, empty_label="Any kind", queryset=models.EntityCategoryItem.objects.all()
     )
