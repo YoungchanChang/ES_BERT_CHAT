@@ -15,7 +15,7 @@
         <div class="w-3/4">
             <form method="POST" action='{% url "mecab_ner:entity_item_add" %}' class="w-full" enctype="multipart/form-data">
 
-                {% include 'mixins/entity_category_add.html' with form=form cta="Add Entity Item" %}
+                {% include 'mixins/category_add.html' with form=form cta="Add Entity Item" %}
 
             </form>
         </div>
