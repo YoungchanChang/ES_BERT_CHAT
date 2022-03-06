@@ -20,7 +20,7 @@ def insert_mecab_data(json_data):
         os.getenv("mecab_insert_data"), headers={'content-type': 'application/json'}, data=json.dumps(json_data), timeout=3
     )
 
-    answer = json.loads(utility_answer.text).get("answer")
+    answer = json.loads(utility_answer.text).get("result")
 
     return answer
 
