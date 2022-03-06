@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load static i18n %}
+{% load static %}
+
+
+{% block content %}
+
+    <div class="container lg:w-5/12 md:w-1/2 xl:w-2/5 h-128 mx-auto my-10 flex flex-col justify-center items-center border p-6 border-gray-400 bg-blue-100">
+
+        <div class="h-12 my-6">
+            <p class="text-bold text-black text-2xl">Entity Item Add</p>
+        </div>
+
+        <div class="w-3/4">
+            <form method="POST" action='{% url "mecab_ner:entity_item_add" %}' class="w-full" enctype="multipart/form-data">
+
+                {% include 'mixins/entity_category_add.html' with form=form cta="Add Entity Item" %}
+
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}
