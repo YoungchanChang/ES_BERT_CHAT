@@ -1,6 +1,6 @@
 from django.core.exceptions import MultipleObjectsReturned
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, View
 from . import models, forms
 # Create your views here.
@@ -18,7 +18,7 @@ class EntityCategoryItemView(ListView):
 
     model = models.EntityCategoryItem
     paginate_by = 10
-    ordering = "created"
+    ordering = "-created"
     context_object_name = "entity_category_items"
     template_name_suffix = '_list'
 
@@ -31,7 +31,7 @@ class EntityItemView(ListView):
     """ HomeView Definition """
 
     model = models.MecabEntity
-    ordering = "created"
+    ordering = "-created"
     paginate_by = 10
     context_object_name = "mecab_entity_items"
     template_name_suffix = '_list'
@@ -161,7 +161,7 @@ class EntityCategoryAddView(View):
         if not answer:
             return render(request, "mecab_ner/entitycategoryitem_add.html", {"form": form})
 
-        return render(request, "mecab_ner/entitycategoryitem_list.html", {"form": form})
+        return redirect('mecab_ner:entity_category')
 
 
     def get(self, request):
@@ -182,33 +182,26 @@ class EntityItemAddView(View):
         form = forms.EntityItemAddForm()
 
         word = request.POST.get("word")
-        large_category = request.POST.get("large_category")
-        medium_category = request.POST.get("medium_category")
-        small_category = request.POST.get("small_category")
+        category_id = request.POST.get("category_id")
 
         try:
-            en_ca_item = EntityCategoryItem.objects.get(large_category=large_category, medium_category=medium_category,
-                                               small_category=small_category)
-            json_data = {'word': word, "category": en_ca_item.id,
+
+            json_data = {'word': word, "category": category_id,
                          "type": "entity"}
 
             answer = insert_mecab_data(json_data)
-            if answer:
-                return render(request, "mecab_ner/mecabentity_list.html", {"form": form})
+            if not answer:
+                return render(request, "mecab_ner/mecabentity_add.html", {"form": form})
 
-            # TODO 이미 등록된 경우에 대한 처리
-            return render(request, "mecab_ner/mecabentity_list.html", {"form": form})
         except MultipleObjectsReturned as mor:
             print(mor)
         except Exception as e:
             print(e)
 
-        return render(request, "mecab_ner/mecabentity_add.html", {"form": form})
-
+        return redirect('mecab_ner:entity_item')
 
     def get(self, request):
 
         form = forms.EntityItemAddForm()
-
 
         return render(request, "mecab_ner/mecabentity_add.html", {"form": form})
