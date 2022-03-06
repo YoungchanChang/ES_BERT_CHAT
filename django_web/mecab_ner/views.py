@@ -396,7 +396,6 @@ class IntentItemAddView(View):
         return render(request, "mecab_ner/mecabintent_add.html", {"form": form})
 
 
-
 class EntityIntentItemTemplateView(ListView):
 
     """ HomeView Definition """
@@ -465,3 +464,43 @@ class EntityIntentItemTemplateSearchView(View):
             form = forms.EntityIntentItemTemplateSearchForm()
 
         return render(request, "mecab_ner/entityintentitemtemplate_search.html", {"form": form})
+
+
+
+class EntityIntentItemTemplateItemAddView(View):
+
+    """ SearchView Definition """
+
+    def get(self, request):
+
+        form = forms.EntityIntentItemTemplateAddForm()
+
+        return render(request, "mecab_ner/entityintentitemtemplate_add.html", {"form": form})
+
+
+class EntityIntentItemTemplateItemAddSentenceView(View):
+
+    """ SearchView Definition """
+
+    def post(self, request):
+
+        large_category = request.POST.get("large_category")
+
+        form = forms.EntityIntentItemTemplateAddCategoryForm(category=large_category)
+
+        try:
+
+            return render(request, "mecab_ner/mecabintent_add.html", {"form": form})
+
+        except MultipleObjectsReturned as mor:
+            print(mor)
+        except Exception as e:
+            print(e)
+
+        return redirect('mecab_ner:entity_intent_item')
+
+    def get(self, request):
+
+        form = forms.EntityIntentItemTemplateAddCategoryForm()
+
+        return render(request, "mecab_ner/entityintentitemtemplate_add.html", {"form": form})
