@@ -1,9 +1,12 @@
+from django.core.exceptions import MultipleObjectsReturned
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views.generic import ListView, View
 from . import models, forms
 # Create your views here.
 from mecab_ner.docker_api import create_mecab_index, insert_mecab_data
+from .models import EntityCategoryItem
+
 
 def index(request):
     return render(request, 'mecab_ner/ner_list.html', {})
@@ -37,6 +40,58 @@ class EntityItemView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class EntityItemSearchView(View):
+
+    """ SearchView Definition """
+
+    def get(self, request):
+
+        entity_item = request.GET.get("entity_item")
+        page = request.GET.get("page", 1)
+        if entity_item:
+
+            form = forms.EntityItemSearchForm(request.GET)
+
+            if form.is_valid():
+
+                entity_item = form.cleaned_data.get("entity_item")
+
+                filter_args = {}
+
+                if entity_item != "AnyEntityItem":
+                    filter_args["word__contains"] = entity_item
+
+                qs = models.MecabEntity.objects.filter(**filter_args).order_by("-created")
+                if qs.count() == 0:
+                    filter_args = {}
+                    filter_args["category__large_category__contains"] = entity_item
+                    qs = models.MecabEntity.objects.filter(**filter_args).order_by("-created")
+
+                if qs.count() == 0:
+                    filter_args = {}
+                    filter_args["category__medium_category__contains"] = entity_item
+                    qs = models.MecabEntity.objects.filter(**filter_args).order_by("-created")
+
+                if qs.count() == 0:
+                    filter_args = {}
+                    filter_args["category__small_category__contains"] = entity_item
+                    qs = models.MecabEntity.objects.filter(**filter_args).order_by("-created")
+
+                paginator = Paginator(qs, 10, orphans=5)
+
+                qs = paginator.get_page(page)
+
+                return render(
+                    request, "mecab_ner/mecabentity_search.html", {"form": form, "mecab_entity_items": qs,
+                                                                          "entity_item": entity_item}
+                )
+
+        else:
+            form = forms.EntityItemSearchForm()
+
+        return render(request, "mecab_ner/mecabentity_search.html", {"form": form})
 
 
 class EntityCategorySearchView(View):
@@ -115,3 +170,45 @@ class EntityCategoryAddView(View):
 
 
         return render(request, "mecab_ner/entitycategoryitem_add.html", {"form": form})
+
+
+
+class EntityItemAddView(View):
+
+    """ SearchView Definition """
+
+    def post(self, request):
+
+        form = forms.EntityItemAddForm()
+
+        word = request.POST.get("word")
+        large_category = request.POST.get("large_category")
+        medium_category = request.POST.get("medium_category")
+        small_category = request.POST.get("small_category")
+
+        try:
+            en_ca_item = EntityCategoryItem.objects.get(large_category=large_category, medium_category=medium_category,
+                                               small_category=small_category)
+            json_data = {'word': word, "category": en_ca_item.id,
+                         "type": "entity"}
+
+            answer = insert_mecab_data(json_data)
+            if answer:
+                return render(request, "mecab_ner/mecabentity_list.html", {"form": form})
+
+            # TODO 이미 등록된 경우에 대한 처리
+            return render(request, "mecab_ner/mecabentity_list.html", {"form": form})
+        except MultipleObjectsReturned as mor:
+            print(mor)
+        except Exception as e:
+            print(e)
+
+        return render(request, "mecab_ner/mecabentity_add.html", {"form": form})
+
+
+    def get(self, request):
+
+        form = forms.EntityItemAddForm()
+
+
+        return render(request, "mecab_ner/mecabentity_add.html", {"form": form})
