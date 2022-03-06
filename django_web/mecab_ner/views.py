@@ -18,7 +18,21 @@ class EntityCategoryItemView(ListView):
     ordering = "created"
     context_object_name = "entity_category_items"
     template_name_suffix = '_list'
-    ordering = "-created"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+class EntityItemView(ListView):
+
+    """ HomeView Definition """
+
+    model = models.MecabEntity
+    ordering = "created"
+    paginate_by = 10
+    context_object_name = "mecab_entity_items"
+    template_name_suffix = '_list'
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
