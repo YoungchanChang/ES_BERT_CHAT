@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, View
 from . import models, forms
 # Create your views here.
-from mecab_ner.docker_api import create_mecab_index, insert_mecab_data
+from mecab_ner.docker_api import create_mecab_index, insert_mecab_data, insert_template_item
 from .models import EntityCategoryItem
 
 
@@ -486,11 +486,23 @@ class EntityIntentItemTemplateItemAddSentenceView(View):
 
         large_category = request.POST.get("large_category")
 
-        form = forms.EntityIntentItemTemplateAddCategoryForm(category=large_category)
+        if large_category:
+            form = forms.EntityIntentItemTemplateAddCategoryForm(category=large_category)
+            return render(request, "mecab_ner/entityintentitemtemplate_add_sentence.html", {"form": form})
 
         try:
+            entity_word_id = request.POST.get("entity_word_id")
+            intent_word_id = request.POST.get("intent_word_id")
+            sentence = request.POST.get("sentence")
+            json_data = {'entity_item_id': entity_word_id, "intent_item_id": intent_word_id,
+                         "template": sentence}
 
-            return render(request, "mecab_ner/mecabintent_add.html", {"form": form})
+            answer = insert_template_item(json_data)
+
+            if answer:
+                return redirect('mecab_ner:entity_intent_item')
+
+            return render(request, "mecab_ner/entityintentitemtemplate_list.html", {"form": form})
 
         except MultipleObjectsReturned as mor:
             print(mor)
@@ -503,4 +515,4 @@ class EntityIntentItemTemplateItemAddSentenceView(View):
 
         form = forms.EntityIntentItemTemplateAddCategoryForm()
 
-        return render(request, "mecab_ner/entityintentitemtemplate_add.html", {"form": form})
+        return render(request, "mecab_ner/entityintentitemtemplate_list.html", {"form": form})
