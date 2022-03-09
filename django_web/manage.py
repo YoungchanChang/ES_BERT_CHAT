@@ -26,7 +26,7 @@ if __name__ == '__main__':
     os.environ["RDS_NAME"] = "mecab_ner"
     os.environ["RDS_USER"] = "mecab_ner"
     os.environ["RDS_PASSWORD"] = "mecab_ner"
-    os.environ["IS_DEBUG"] = FALSE
+    os.environ["IS_DEBUG"] = TRUE
 
     if platform.system() == "Darwin":
         os.environ["RDS_PORT"] = "3307"
