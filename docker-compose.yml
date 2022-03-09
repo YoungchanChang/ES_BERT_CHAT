@@ -29,24 +29,27 @@ services:
     container_name: nginx
     ports:
       - "80:80"
+      - "443:443"
     restart: always
     volumes:
+      - ./myweb:/usr/share/nginx/html
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/myweb:/usr/share/nginx/html
+      - ./certbot-etc:/etc/letsencrypt
     networks:
       - es_bert_chat
 
-#  certbot:
-#    depends_on:
-#      - nginx
-#    image: certbot/certbot
-#    container_name: certbot
-#    volumes:
-#      - ./certbot-etc:/etc/letsencrypt
-#      - ./myweb:/usr/share/nginx/html
-#    command: certonly --webroot --dry-run --webroot-path=/usr/share/nginx/html --email test@test.com --agree-tos --no-eff-email --keep-until-expiring -d bargonara.com -d www.bargonara.com --force-renewal
-#    networks:
-#      - es_bert_chat
+  certbot:
+    depends_on:
+      - nginx
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot-etc:/etc/letsencrypt
+      - ./nginx/myweb:/usr/share/nginx/html
+    command: certonly --webroot --dry-run --webroot-path=/usr/share/nginx/html --email test@test.com --agree-tos --no-eff-email --keep-until-expiring -d friendstalk.co.kr -d www.friendstalk.co.kr --force-renewal
+    networks:
+      - es_bert_chat
 
   django_web:
     build: ./django_web
