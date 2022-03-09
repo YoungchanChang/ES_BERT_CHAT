@@ -5,6 +5,9 @@ import sys
 from dotenv import load_dotenv
 import platform
 
+TRUE = "1"
+FALSE = "0"
+
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
     try:
@@ -32,8 +35,14 @@ if __name__ == '__main__':
         insert_template_category = "localhost:5201"
         insert_template_item = "localhost:5201"
     else:
-        os.environ["RDS_PORT"] = "3307"
-        os.environ["RDS_HOST"] = "127.0.0.1"
+        os.environ["IS_DEBUG"] = TRUE
+        if bool(int(os.environ.get("IS_DEBUG"))):
+            os.environ["RDS_PORT"] = "3307"
+            os.environ["RDS_HOST"] = "127.0.0.1"
+        else:
+            os.environ["RDS_PORT"] = "3306"
+            os.environ["RDS_HOST"] = "mysql_db"
+
         bot_response_url = "chat_middleware:5000"
         mecab_create_index = "mecab_ner_app:5100"
         mecab_insert_data = "mecab_insert_data:5100"
