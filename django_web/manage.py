@@ -26,6 +26,8 @@ if __name__ == '__main__':
     os.environ["RDS_NAME"] = "mecab_ner"
     os.environ["RDS_USER"] = "mecab_ner"
     os.environ["RDS_PASSWORD"] = "mecab_ner"
+    os.environ["IS_DEBUG"] = TRUE
+
     if platform.system() == "Darwin":
         os.environ["RDS_PORT"] = "3307"
         os.environ["RDS_HOST"] = "127.0.0.1"
@@ -35,7 +37,7 @@ if __name__ == '__main__':
         insert_template_category = "localhost:5201"
         insert_template_item = "localhost:5201"
     else:
-        os.environ["IS_DEBUG"] = TRUE
+
         if bool(int(os.environ.get("IS_DEBUG"))):
             os.environ["RDS_PORT"] = "3307"
             os.environ["RDS_HOST"] = "127.0.0.1"
