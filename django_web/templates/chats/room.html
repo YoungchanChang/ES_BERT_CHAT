@@ -41,9 +41,9 @@
 
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
         const chatSocket = new WebSocket(
-            'wss://141.164.55.30:8000/ws/chat/'
+            (ws_scheme + '://' + window.location.host + '/ws/chat/'
             + roomName
             + '/'
         );
