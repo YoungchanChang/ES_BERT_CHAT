@@ -1,0 +1,72 @@
+version: '3.5'
+
+services:
+
+  mysql_db:
+    image: mysql:5.7
+    container_name: mysql_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mecab_ner
+      MYSQL_DATABASE: mecab_ner
+      MYSQL_USER: mecab_ner
+      MYSQL_PASSWORD: mecab_ner
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+    networks:
+      - es_bert_chat
+
+  nginx:
+    depends_on:
+      - django_web
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/myweb:/usr/share/nginx/html
+    networks:
+      - es_bert_chat
+
+#  certbot:
+#    depends_on:
+#      - nginx
+#    image: certbot/certbot
+#    container_name: certbot
+#    volumes:
+#      - ./certbot-etc:/etc/letsencrypt
+#      - ./myweb:/usr/share/nginx/html
+#    command: certonly --webroot --dry-run --webroot-path=/usr/share/nginx/html --email test@test.com --agree-tos --no-eff-email --keep-until-expiring -d bargonara.com -d www.bargonara.com --force-renewal
+#    networks:
+#      - es_bert_chat
+
+  django_web:
+    build: ./django_web
+    container_name: django_web
+    image: django_web:v1
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./django_web:/code
+      - ./nginx/myweb:/usr/share/nginx/html
+    ports:
+      - "8000:8000"
+    networks:
+      - es_bert_chat
+
+networks:
+  es_bert_chat:
+    name: es_bert_chat-net
+    driver: bridge
+
+volumes:
+  mysql_db:
+    driver: local
