@@ -4,9 +4,8 @@ import os
 import sys
 from dotenv import load_dotenv
 import platform
+from django.conf import settings
 
-TRUE = "1"
-FALSE = "0"
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
@@ -26,7 +25,6 @@ if __name__ == '__main__':
     os.environ["RDS_NAME"] = "mecab_ner"
     os.environ["RDS_USER"] = "mecab_ner"
     os.environ["RDS_PASSWORD"] = "mecab_ner"
-    os.environ["IS_DEBUG"] = FALSE
 
     if platform.system() == "Darwin":
         os.environ["RDS_PORT"] = "3307"
@@ -38,7 +36,7 @@ if __name__ == '__main__':
         insert_template_item = "localhost:5201"
     else:
 
-        if bool(int(os.environ.get("IS_DEBUG"))):
+        if settings.DEBUG:
             os.environ["RDS_PORT"] = "3307"
             os.environ["RDS_HOST"] = "127.0.0.1"
         else:
