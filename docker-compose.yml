@@ -55,7 +55,7 @@ services:
     container_name: django_web
     image: django_web:v1
     restart: always
-    command: python manage.py runserver 0.0.0.0:8000 --insecure
+    command: python manage.py runsslserver 0.0.0.0:8000 --insecure --certificate /etc/letsencrypt/live/friendstalk.co.kr/fullchain.pem --key /etc/letsencrypt/live/friendstalk.co.kr/privkey.pem
     volumes:
       - ./django_web:/code
       - ./nginx/myweb:/usr/share/nginx/html

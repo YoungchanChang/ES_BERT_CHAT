@@ -65,3 +65,4 @@ zope.interface==5.4.0
 PyMySQL==1.0.2
 mysqlclient==2.0.3
 psycopg2==2.8
+django-sslserver==0.22
