@@ -37,7 +37,8 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels'
+    'channels',
+    'sslserver'
 ]
 
 PROJECT_APPS = ["core.apps.CoreConfig", "friends.apps.FriendsConfig",
