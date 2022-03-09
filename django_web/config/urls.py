@@ -20,9 +20,9 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path("", include("core.urls", namespace="core")),
-    path('admin_mysite_no_one_allow/', include('mecab_ner.urls', namespace="mecab_ner")),
-    path('chat/', include('chats.urls', namespace="chat")),
+    # path("", include("core.urls", namespace="core")),
+    # path('admin_mysite_no_one_allow/', include('mecab_ner.urls', namespace="mecab_ner")),
+    # path('chat/', include('chats.urls', namespace="chat")),
     path('admin/', admin.site.urls),
 ]
 
