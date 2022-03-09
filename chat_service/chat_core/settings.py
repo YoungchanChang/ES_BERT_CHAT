@@ -6,7 +6,7 @@ chat_log_path = Path(__file__).resolve().parent.parent.joinpath('chat_log')
 
 chat_api_youtube = "chat_api_youtube"
 chat_api_mrc = "chat_api_mrc"
-mecab_ner = "mecab_ner"
+mecab_ner = "mecab_ner_app"
 chat_api_response = "chat_api_middleware"
 entity_storage_path = "/Users/youngchan/Desktop/ES_BERT_CHAT/mecab_ner_app/data/entities/mecab_data"
 intent_path = "/Users/youngchan/Desktop/ES_BERT_CHAT"
