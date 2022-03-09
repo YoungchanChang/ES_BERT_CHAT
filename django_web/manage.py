@@ -32,7 +32,7 @@ if __name__ == '__main__':
         insert_template_category = "localhost:5201"
         insert_template_item = "localhost:5201"
     else:
-        os.environ["RDS_PORT"] = "3306"
+        os.environ["RDS_PORT"] = "3307"
         os.environ["RDS_HOST"] = "127.0.0.1"
         bot_response_url = "chat_middleware:5000"
         mecab_create_index = "mecab_ner_app:5100"
