@@ -53,7 +53,7 @@ services:
     container_name: django_web
     image: django_web:v1
     restart: always
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000 --insecure
     volumes:
       - ./django_web:/code
       - ./nginx/myweb:/usr/share/nginx/html
