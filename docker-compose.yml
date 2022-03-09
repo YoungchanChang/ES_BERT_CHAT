@@ -46,7 +46,7 @@ services:
     volumes:
       - ./certbot-etc:/etc/letsencrypt
       - ./nginx/myweb:/usr/share/nginx/html
-    command: certonly --webroot --dry-run --webroot-path=/usr/share/nginx/html --email test@test.com --agree-tos --no-eff-email --keep-until-expiring -d friendstalk.co.kr -d www.friendstalk.co.kr --force-renewal
+    command: certonly --webroot --webroot-path=/usr/share/nginx/html --email test@test.com --agree-tos --no-eff-email --keep-until-expiring -d friendstalk.co.kr -d www.friendstalk.co.kr --force-renewal
     networks:
       - es_bert_chat
 
