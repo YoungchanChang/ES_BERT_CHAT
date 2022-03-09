@@ -4,7 +4,7 @@ import os
 import sys
 from dotenv import load_dotenv
 import platform
-from django.conf import settings
+
 
 
 def main():
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         insert_template_category = "localhost:5201"
         insert_template_item = "localhost:5201"
     else:
-
+        from django.conf import settings
         if settings.DEBUG:
             os.environ["RDS_PORT"] = "3307"
             os.environ["RDS_HOST"] = "127.0.0.1"
