@@ -59,6 +59,7 @@ services:
     volumes:
       - ./django_web:/code
       - ./nginx/myweb:/usr/share/nginx/html
+      - ./certbot-etc:/etc/letsencrypt
     ports:
       - "8000:8000"
     networks:
