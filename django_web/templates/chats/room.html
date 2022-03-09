@@ -43,7 +43,7 @@
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
-            'wss://141.164.55.30:80/ws/chat/'
+            'wss://141.164.55.30:8000/ws/chat/'
             + roomName
             + '/'
         );
