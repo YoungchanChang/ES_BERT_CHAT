@@ -4,8 +4,7 @@ import os
 import sys
 from dotenv import load_dotenv
 import platform
-import pymysql
-pymysql.install_as_MySQLdb()
+
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
     try:
