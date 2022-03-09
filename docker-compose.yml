@@ -46,7 +46,7 @@ services:
     volumes:
       - ./certbot-etc:/etc/letsencrypt
       - ./nginx/myweb:/usr/share/nginx/html
-    command: certonly --webroot --webroot-path=/usr/share/nginx/html --email test@test.com --agree-tos --no-eff-email --keep-until-expiring -d friendstalk.co.kr -d www.friendstalk.co.kr --force-renewal
+    command: certonly --webroot --dry-wet --webroot-path=/usr/share/nginx/html --email test@test.com --agree-tos --no-eff-email --keep-until-expiring -d friendstalk.co.kr -d www.friendstalk.co.kr --force-renewal
     networks:
       - es_bert_chat
 
@@ -55,11 +55,10 @@ services:
     container_name: django_web
     image: django_web:v1
     restart: always
-    command: python manage.py runsslserver 0.0.0.0:8000 --certificate /etc/letsencrypt/live/friendstalk.co.kr/fullchain.pem --key /etc/letsencrypt/live/friendstalk.co.kr/privkey.pem
+    command: python manage.py runserver 0.0.0.0:8000 --insecure
     volumes:
       - ./django_web:/code
       - ./nginx/myweb:/usr/share/nginx/html
-      - ./certbot-etc:/etc/letsencrypt
     ports:
       - "8000:8000"
     networks:
