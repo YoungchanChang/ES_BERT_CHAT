@@ -1,0 +1,41 @@
+version: '3.5'
+services:
+  elasticsearch:
+    build:
+      context: ./elasticsearch_docker
+      dockerfile: ./Dockerfile
+    container_name: elasticsearch
+    image: elasticsearch:v1
+    restart: always
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    volumes:
+      - elastic_docker_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - es_bert_chat
+
+  kibana:
+    depends_on:
+      - elasticsearch
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.9.3
+    ports:
+      - 5601:5601
+    restart: always
+    networks:
+      - es_bert_chat
+    volumes:
+      - ./kibana_docker/kibana.yml:/usr/share/kibana/config/kibana.yml
+
+volumes:
+  elastic_docker_data:
+    driver: local
+
+networks:
+  es_bert_chat:
+    name: es_bert_chat-net
+    driver: bridge
