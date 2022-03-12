@@ -26,7 +26,7 @@ if __name__ == '__main__':
     os.environ["RDS_NAME"] = "mecab_ner"
     os.environ["RDS_USER"] = "mecab_ner"
     os.environ["RDS_PASSWORD"] = "mecab_ner"
-    os.environ["IS_DEBUG"] = FALSE
+    os.environ["IS_DEBUG"] = TRUE
 
     if platform.system() == "Darwin":
         os.environ["RDS_PORT"] = "3307"
@@ -47,9 +47,9 @@ if __name__ == '__main__':
 
         bot_response_url = "chat_middleware:5000"
         mecab_create_index = "mecab_ner_app:5100"
-        mecab_insert_data = "mecab_insert_data:5100"
-        insert_template_category = "localhost:5200"
-        insert_template_item = "localhost:5200"
+        mecab_insert_data = "chat_api_middleware:5100"
+        insert_template_category = "chat_api_middleware:5200"
+        insert_template_item = "chat_api_middleware:5200"
 
     os.environ["bot_response"] = f"http://{bot_response_url}/chat_middleware/response_middleware"
     os.environ["mecab_create_index"] = f"http://{mecab_create_index}/mecab_data/create_index"
