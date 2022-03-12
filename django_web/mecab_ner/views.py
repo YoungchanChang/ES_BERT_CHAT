@@ -494,7 +494,7 @@ class EntityIntentItemTemplateItemAddSentenceView(View):
             entity_word_id = request.POST.get("entity_word_id")
             intent_word_id = request.POST.get("intent_word_id")
             sentence = request.POST.get("sentence")
-            json_data = {'entity_item_id': entity_word_id, "intent_item_id": intent_word_id,
+            json_data = {'entity_item_id': int(entity_word_id), "intent_item_id": int(intent_word_id),
                          "template": sentence}
 
             answer = insert_template_item(json_data)
