@@ -3,13 +3,10 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from chats.api_docker import get_bot_response
-import logging
-formatter = "%(asctime)s.%(msecs)03d\t%(levelname)s\t[%(name)s]\t%(message)s"
-logging.basicConfig(level=logging.DEBUG, format=formatter, datefmt='%m/%d/%Y %I:%M:%S')
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        logging.warning({'message': self.scope['headers'][6]})
         await self.accept()
         await self.send(text_data=json.dumps({
             'message': "안녕!",
