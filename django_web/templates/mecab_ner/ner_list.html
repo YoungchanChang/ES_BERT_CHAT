@@ -8,13 +8,10 @@
         <div class="app_mecab_ner">
             <ul class="h-32">
                 <li class="flex flex-col justify-center bg-blue-300 h-16">
-                    <h1 class="ml-6 text-white text-2xl">엔티티</h1>
+                    <h1 class="ml-6 text-white text-2xl">프렌즈 톡 대화 목록</h1>
                 </li>
                 <li class="flex flex-col justify-center border-b-2 h-12 my-2">
-                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:entity_category" %}'>엔티티 카테고리</a></h3>
-                </li>
-                <li class="flex flex-col justify-center border-b-2 h-12 my-2">
-                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:entity_item" %}'>엔티티 리스트</a></h3>
+                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:entity_intent_item" %}'>프렌즈 톡 대화 가능 리스트</a></h3>
                 </li>
             </ul>
         </div>
@@ -22,13 +19,13 @@
         <div class="app_mecab_ner">
             <ul class="h-32">
                 <li class="flex flex-col justify-center bg-blue-300 h-16">
-                    <h1 class="ml-6 text-white text-2xl">인텐트</h1>
+                    <h1 class="ml-6 text-white text-2xl">프렌즈 톡 단어</h1>
                 </li>
                 <li class="flex flex-col justify-center border-b-2 h-12 my-2">
-                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:intent_category" %}'>인텐트 카테고리</a></h3>
+                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:entity_category" %}'>단어 카테고리</a></h3>
                 </li>
                 <li class="flex flex-col justify-center border-b-2 h-12 my-2">
-                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:intent_item" %}'>인텐트 리스트</a></h3>
+                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:entity_item" %}'>단어 리스트</a></h3>
                 </li>
             </ul>
         </div>
@@ -36,13 +33,18 @@
         <div class="app_mecab_ner">
             <ul class="h-32">
                 <li class="flex flex-col justify-center bg-blue-300 h-16">
-                    <h1 class="ml-6 text-white text-2xl">프렌즈 톡</h1>
+                    <h1 class="ml-6 text-white text-2xl">프렌즈 톡 듣고싶은 말</h1>
                 </li>
                 <li class="flex flex-col justify-center border-b-2 h-12 my-2">
-                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:entity_intent_item" %}'>프렌즈 톡 리스트</a></h3>
+                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:intent_category" %}'>듣고싶은 말 카테고리</a></h3>
+                </li>
+                <li class="flex flex-col justify-center border-b-2 h-12 my-2">
+                    <h3 class="ml-6 text-blue-300"><a href='{% url "mecab_ner:intent_item" %}'>듣고싶은 말 리스트</a></h3>
                 </li>
             </ul>
         </div>
+
+
     </div>
 
 {% endblock content %}
