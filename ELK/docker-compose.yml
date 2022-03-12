@@ -11,7 +11,7 @@ services:
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
     volumes:
-      - elastic_docker_data:/usr/share/elasticsearch/data
+      - elastic_data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
       - 9300:9300
@@ -32,7 +32,7 @@ services:
       - ./kibana_docker/kibana.yml:/usr/share/kibana/config/kibana.yml
 
 volumes:
-  elastic_docker_data:
+  elastic_data:
     driver: local
 
 networks:
