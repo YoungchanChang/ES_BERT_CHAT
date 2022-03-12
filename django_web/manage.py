@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
         bot_response_url = "chat_middleware:5000"
         mecab_create_index = "mecab_ner_app:5100"
-        mecab_insert_data = "chat_api_middleware:5100"
+        mecab_insert_data = "mecab_ner_app:5100"
         insert_template_category = "chat_api_middleware:5200"
         insert_template_item = "chat_api_middleware:5200"
 
