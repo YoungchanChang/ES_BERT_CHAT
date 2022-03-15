@@ -1,4 +1,4 @@
-FROM elasticsearch:7.9.3
+FROM elasticsearch:8.1.0
 
 ### 노리 설치
 RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch analysis-nori
