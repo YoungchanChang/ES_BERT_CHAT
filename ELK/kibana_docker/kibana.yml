@@ -1,3 +1,5 @@
+### >>>>>>> BACKUP START: Kibana interactive setup (2022-03-14T09:57:48.694Z)
+
 # Kibana is served by a back end server. This setting specifies the port to use.
 server.port: 5601
 
@@ -25,7 +27,7 @@ server.host: "0.0.0.0"
 #server.name: "your-hostname"
 
 # The URLs of the Elasticsearch instances to use for all your queries.
-elasticsearch.hosts: ["http://elasticsearch:9200"]
+#elasticsearch.hosts: ["http://elasticsearch:9200"]
 
 # When this setting's value is true Kibana uses the hostname specified in the server.host
 # setting. When the value of this setting is false, Kibana uses the hostname of the host
@@ -113,3 +115,11 @@ elasticsearch.hosts: ["http://elasticsearch:9200"]
 # Specifies locale to be used for all localizable strings, dates and number formats.
 # Supported languages are the following: English - en , by default , Chinese - zh-CN .
 #i18n.locale: "en"
+
+
+# This section was automatically generated during setup.
+elasticsearch.hosts: ['https://172.20.0.6:9200']
+elasticsearch.serviceAccountToken: AAEAAWVsYXN0aWMva2liYW5hL2Vucm9sbC1wcm9jZXNzLXRva2VuLTE2NDczMTAxMDg1OTg6NF9ORXktSFdRaXlKdXFFdEFEeFhidw
+elasticsearch.ssl.certificateAuthorities: [/usr/share/kibana/data/ca_1647310109258.crt]
+xpack.fleet.outputs: [{id: fleet-default-output, name: default, is_default: true, is_default_monitoring: true, type: elasticsearch, hosts: ['https://172.20.0.6:9200'], ca_trusted_fingerprint: 19fdb3e7085fe18dd77e8aac9003d94f5c381779ff3c481487034bdfd84e57b9}]
+
